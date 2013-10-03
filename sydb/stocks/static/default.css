@@ -1,503 +1,416 @@
-	html, body
-	{
-		height: 100%;
-	}
-	
-	body
-	{
-		margin: 0px;
-		padding: 0px;
-		background: #F6F4F3;
-		font-family: 'Source Sans Pro', sans-serif;
-		font-size: 12pt;
-		font-weight: 400;
-		color: #4E4D4D;
-	}
-	
-	
-	h1, h2, h3
-	{
-		margin: 0;
-		padding: 0;
-	}
-	
-	p, ol, ul
-	{
-		margin-top: 0;
-	}
-	
-	ol, ul
-	{
-		padding: 0;
-		list-style: none;
-	}
-	
-	p
-	{
-		line-height: 180%;
-	}
-	
-	strong
-	{
-	}
-	
-	a
-	{
-		color: #383838;
-	}
-	
-	a:hover
-	{
-		text-decoration: none;
-	}
-	
-	.container
-	{
-		width: 1200px;
-		margin: 0px auto;
-	}
+html,
+body {
+    height: 100%
+}
+body {
+    margin: 0px;
+    padding: 0px;
+    background: #F6F4F3;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12pt;
+    font-weight: 400;
+    color: #4E4D4D;
+}
+h1,
+h2,
+h3 {
+    margin: 0;
+    padding: 0;
+}
+p,
+ol,
+ul {
+    margin-top: 0
+}
+ol,
+ul {
+    padding: 0;
+    list-style: none;
+}
+p {
+    line-height: 180%
+}
+strong {
 
+}
+a {
+    color: #383838
+}
+a:hover {
+    text-decoration: none
+}
+.container {
+    width: 1200px;
+    margin: 0px auto;
+}
 /*********************************************************************************/
 /* Image Style                                                                   */
 /*********************************************************************************/
-
-	.image
-	{
-		display: inline-block;
-	}
-	
-	.image img
-	{
-		display: block;
-		width: 100%;
-	}
-	
-	.image-full
-	{
-		display: block;
-		width: 100%;
-		margin: 0 0 0 0;
-	}
-	
-	.image-left
-	{
-		float: left;
-		margin: 0 2em 2em 0;
-	}
-	
-	.image-centered
-	{
-		display: block;
-		margin: 0 0 2em 0;
-	}
-	
-	.image-centered img
-	{
-		margin: 0 auto;
-		width: auto;
-	}
-
+.image {
+    display: inline-block
+}
+.image img {
+    display: block;
+    width: 100%;
+}
+.image-full {
+    display: block;
+    width: 100%;
+    margin: 0 0 0 0;
+}
+.image-left {
+    float: left;
+    margin: 0 2em 2em 0;
+}
+.image-centered {
+    display: block;
+    margin: 0 0 2em 0;
+}
+.image-centered img {
+    margin: 0 auto;
+    width: auto;
+}
 /*********************************************************************************/
 /* List Styles                                                                   */
 /*********************************************************************************/
+ul.style1 {
 
-	ul.style1
-	{
-	}
-
-
+}
 /*********************************************************************************/
 /* Social Icon Styles                                                            */
 /*********************************************************************************/
-
-	ul.contact
-	{
-		overflow:  hidden;
-		margin: 0em 0 3em 0;
-		padding-top: 1em;
-		text-align: center;
-	}
-	
-	ul.contact li
-	{
-		display: inline-block;
-		padding: 0em 0.30em;
-		font-size: 1em;
-	}
-	
-	ul.contact li span
-	{
-		display: none;
-		margin: 0;
-		padding: 0;
-	}
-	
-	ul.contact li a
-	{
-		color: #FFF;
-	}
-	
-	ul.contact li a:before
-	{
-		display: inline-block;
-		background: #3f3f3f;
-		width: 40px;
-		height: 40px;
-		line-height: 40px;
-		border-radius: 20px;
-		text-align: center;
-		color: #FFFFFF;
-	}
-
+ul.contact {
+    overflow: hidden;
+    margin: 0em 0 3em 0;
+    padding-top: 1em;
+    text-align: center;
+}
+ul.contact li {
+    display: inline-block;
+    padding: 0em 0.30em;
+    font-size: 1em;
+}
+ul.contact li span {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+ul.contact li a {
+    color: #FFF
+}
+ul.contact li a:before {
+    display: inline-block;
+    background: #3f3f3f;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 20px;
+    text-align: center;
+    color: #FFFFFF;
+}
 /*********************************************************************************/
 /* Major Styles                                                                  */
 /*********************************************************************************/
-
-	.major
-	{
-		overflow: hidden;
-		margin-bottom: 4em;
-		text-align: center;
-	}
-	
-	.major h2
-	{
-		letter-spacing: 0.10em;
-		text-transform: uppercase;
-		font-size: 3em;
-		font-weight: 700;
-		color: #3f3f3f;
-	}
-
-	.major .byline
-	{
-		display: block;
-		padding-top: 0.2em;
-		font-weight: 300;
-		font-size: 2em;
-	}
-
+.major {
+    overflow: hidden;
+    margin-bottom: 4em;
+    text-align: center;
+}
+.major h2 {
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    font-size: 3em;
+    font-weight: 700;
+    color: #3f3f3f;
+}
+.major .byline {
+    display: block;
+    padding-top: 0.2em;
+    font-weight: 300;
+    font-size: 2em;
+}
 /*********************************************************************************/
 /* Title Styles                                                                  */
 /*********************************************************************************/
-
-	.title
-	{
-		text-align: center;
-	}
-	
-	.title h2
-	{
-		letter-spacing: 0.10em;
-		text-transform: uppercase;
-		font-weight: 700;
-		color: #3f3f3f;
-	}
-
-	.title .byline
-	{
-		display: block;
-		padding-top: 1em;
-		font-weight: 300;
-		font-size: 1.1em;
-	}
-
-
+.title {
+    text-align: center
+}
+.title h2 {
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #3f3f3f;
+}
+.title .byline {
+    display: block;
+    padding-top: 1em;
+    font-weight: 300;
+    font-size: 1.1em;
+}
 /*********************************************************************************/
 /* Button Style                                                                  */
 /*********************************************************************************/
+.button {
+    display: inline-block;
+    margin: 1em 0em;
+    padding: 1em 3em 1em 3em;
+    background: #3f3f3f;
+    letter-spacing: 0.20em;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 0.90em;
+    color: #FFF;
+    border: none;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+.button:before {
 
-	.button
-	{
-		display: inline-block;
-		margin: 1em 0em;
-		padding: 1em 3em 1em 3em;
-		background: #3f3f3f;
-		letter-spacing: 0.20em;
-		text-decoration: none;
-		text-align: center;
-		text-transform: uppercase;
-		font-weight: 400;
-		font-size: 0.90em;
-		color: #FFF;
-		border: none;
-		-webkit-border-radius: 2px;
-		-moz-border-radius: 2px;
-	}
-	
-	.button:before
-	{
-	}
-		
+}
 /*********************************************************************************/
 /* Header                                                                        */
 /*********************************************************************************/
-
-	#header
-	{
-		background: #3f3f3f;
-	}
-
+#header {
+    background: #3f3f3f
+}
 /*********************************************************************************/
 /* Logo                                                                          */
 /*********************************************************************************/
+#logo {
+    padding: 4em 0em;
+    text-transform: uppercase;
+}
+#logo h1 {
+    text-align: center;
+    font-weight: 900;
+    font-size: 2.5em;
+}
+#logo h1 a {
 
-	#logo
-	{
-		padding: 4em 0em;
-		text-transform: uppercase;
-	}
+}
+#logo span {
+    padding: 0em 0em 0em 0.5em
+}
+#logo h1:before {
 
-	#logo h1
-	{
-		text-align: center;
-		font-weight: 900;
-		font-size: 2.5em;
-	}
-	
-	#logo h1 a
-	{
-	}
-
-	#logo span
-	{
-		padding: 0em 0em 0em 0.5em;
-	}
-	
-	#logo h1:before
-	{
-		
-	}
-	
-	#logo a 
-	{
-		color: #3f3f3f;
-	}
-
-
+}
+#logo a {
+    color: #3f3f3f
+}
 /*********************************************************************************/
 /* Menu                                                                          */
 /*********************************************************************************/
+#menu ul {
+    margin: 0;
+    /* padding: 20px 0px 20px 0px; */
+    list-style: none;
+    line-height: normal;
+    text-align: center;
+}
+#menu li {
+    display: inline-block
+}
+#menu a {
+    display: block;
+    padding: 2.5em 2em;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 700;
+    color: #FFF;
+}
+#menu .current_page_item a {
 
-	#menu ul
-	{
-		margin: 0;
-		padding: 20px 0px 20px 0px;
-		list-style: none;
-		line-height: normal;
-		text-align: center;
-	}
-	
-	#menu li
-	{
-		display: inline-block;
-	}
-	
-	#menu a
-	{
-		display: block;
-		padding: 1em 2em;
-		letter-spacing: 1px;
-		text-decoration: none;
-		text-transform: uppercase;
-		font-size: 1em;
-		font-weight: 700;
-		color: #FFF;
-	}
-	
-	#menu .current_page_item a
-	{
-	}
-	
-	#menu a:hover
-	{
-	}
-
-/*********************************************************************************/
-/* Banner                                                                        */
-/*********************************************************************************/
-
-	#banner
-	{
-	}
-
+}
+#menu a:hover {
+    color: #b5bd68
+}
+#nav ul {
+    background: #ffffff; /* Adding a background makes the dropdown work properly in IE7+. */
+    list-style: none;
+    text-align: left;
+    top: 100px;
+    position: absolute;
+    left: -9999px; /*Hide off-screen when not needed */
+}
+#nav ul li {
+    padding-top: 1px; /* Introducing a padding between the li and the a give the illusion spaced items */
+    float: none;
+    width: 130px;
+    display: list-item;
+}
+#nav ul a {
+    white-space: nowrap; /* Stop text wrapping and creating multi-line dropdown items */
+}
+#nav li:hover ul {
+    box-shadow: 1px 1px 1px 1px #bec3c2
+}
+#nav li:hover #n1 {
+    /* Display the dropdown on hover */
+    left: 388px; /* Bring back on-screen when needed */
+}
+#nav li:hover #n2 {
+    left: 529px
+}
+#nav li:hover #n3 {
+    left: 690px
+}
+#nav li:hover #n4 {
+    left: 815px
+}
+#nav li:hover #n5 {
+    left: 973px
+}
+#nav li:hover a {
+    /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+    color: #b5bd68;
+}
+#nav li:hover ul a {
+    /* The persistent hover state does however create a global style for links even before they're hovered. Here we undo these effects. */
+    text-decoration: none;
+    font-size: 15px;
+    margin: 0;
+    padding: 13px 20px 12px 6px;
+    border: none;
+}
+#nav li:hover ul li a:hover {
+    /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+    background: #EAEAEA;
+    padding: 13px 20px 12px 10px;
+    /*********************************************************************************/
+    /* Banner                                                                        */
+    /*********************************************************************************/
+    #banner: ;
+    {: ;
+}
 /*********************************************************************************/
 /* Page                                                                          */
 /*********************************************************************************/
-
-	#page
-	{
-		overflow: hidden;
-		padding: 3em 0em 0em 0em;
-		border-top: 1px solid #E5E5E5;
-	}
-
+#page {
+    overflow: hidden;
+    padding: 3em 0em 0em 0em;
+    border-top: 1px solid #E5E5E5;
+}
 /*********************************************************************************/
 /* Content                                                                       */
 /*********************************************************************************/
-
-	#content
-	{
-		float: left;
-		width: 1200px;
-	}
-	
-	#content .title
-	{
-		padding-bottom: 0.5em;
-		text-align: left;
-	}
-	
-	#content h2
-	{
-		font-size: 2em;
-	}
-	
-	#content .byline
-	{
-		padding-top: 0;
-		font-size: 1.5em;
-	}
-
+#content {
+    float: left;
+    width: 1200px;
+}
+#content .title {
+    padding-bottom: 0.5em;
+    text-align: left;
+}
+#content h2 {
+    font-size: 2em
+}
+#content .byline {
+    padding-top: 0;
+    font-size: 1.5em;
+}
 /*********************************************************************************/
 /* Sidebar                                                                       */
 /*********************************************************************************/
-
-	#sidebar
-	{
-		float: right;
-		width: 588px;
-	}
-
+#sidebar {
+    float: right;
+    width: 588px;
+}
 /*********************************************************************************/
 /* Footer                                                                        */
 /*********************************************************************************/
+#footer {
 
-	#footer
-	{
-	}
-
+}
 /*********************************************************************************/
 /* Copyright                                                                     */
 /*********************************************************************************/
-
-	#copyright
-	{
-		overflow: hidden;
-		padding: 5em 0em;
-	}
-	
-	#copyright p
-	{
-		letter-spacing: 0.20em;
-		text-align: center;
-		text-transform: uppercase;
-		font-size: 0.80em;
-		color: #6F6F6F;
-	}
-	
-	#copyright a
-	{
-		text-decoration: none;
-		color: #8C8C8C;
-	}
-
+#copyright {
+    overflow: hidden;
+    padding: 5em 0em;
+}
+#copyright p {
+    letter-spacing: 0.20em;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.80em;
+    color: #6F6F6F;
+}
+#copyright a {
+    text-decoration: none;
+    color: #8C8C8C;
+}
 /*********************************************************************************/
 /* Featured                                                                      */
 /*********************************************************************************/
-
-	#featured-wrapper
-	{
-		overflow: hidden;
-		padding: 5em 0em;
-		background: #FFF;
-	}
-	
-	#featured h2
-	{
-		text-align: center;
-	}
-
-	#featured .icon
-	{
-		position: relative;
-		display: block;
-		margin: 0px auto 20px auto;
-		line-height:  normal;
-		font-size: 6em;
-		text-align: center;
-		color: #3f3f3f;
-	}
-
-	.column1,
-	.column2,
-	.column3,
-	.column4
-	{
-		width: 282px;
-	}
-	
-	.column1,
-	.column2
-	{
-		float: left;
-		margin-right: 24px;
-	}
-	
-	.column3
-	{
-		float: left;
-	}
-	
-	.column4
-	{
-		float: right;
-	}
-
+#featured-wrapper {
+    overflow: hidden;
+    padding: 5em 0em;
+    background: #FFF;
+}
+#featured h2 {
+    text-align: center
+}
+#featured .icon {
+    position: relative;
+    display: block;
+    margin: 0px auto 20px auto;
+    line-height: normal;
+    font-size: 6em;
+    text-align: center;
+    color: #3f3f3f;
+}
+.column1,
+.column2,
+.column3,
+.column4 {
+    width: 282px
+}
+.column1,
+.column2 {
+    float: left;
+    margin-right: 24px;
+}
+.column3 {
+    float: left
+}
+.column4 {
+    float: right
+}
 /*********************************************************************************/
 /* Portfolio                                                                     */
 /*********************************************************************************/
-
-	#portfolio-wrapper
-	{
-		padding: 1em 0em;
-	}
-	
-	#portfolio
-	{
-		overflow: hidden;
-		text-align: center;
-	}
-	
-	#portfolio img
-	{
-		margin: 0;
-		padding: 0;
-	}
-	
-	#portfolio .box
-	{
-		padding: 30px;
-		background: #FFF;
-		border-bottom: 2px solid #7C7C7C;
-		border-right: 1px solid #DADADA;
-		border-left: 1px solid #DADADA;
-	}
-
+#portfolio-wrapper {
+    padding: 1em 0em
+}
+#portfolio {
+    overflow: hidden;
+    text-align: center;
+}
+#portfolio img {
+    margin: 0;
+    padding: 0;
+}
+#portfolio .box {
+    padding: 30px;
+    background: #FFF;
+    border-bottom: 2px solid #7C7C7C;
+    border-right: 1px solid #DADADA;
+    border-left: 1px solid #DADADA;
+}
 /*********************************************************************************/
 /* Table                                                                       */
 /*********************************************************************************/
-
-	form ul
-	{
-		margin: 0;
-		padding: 20px 0px 20px 0px;
-		list-style: none;
-		line-height: normal;
-		text-align: left;
-	}
-	
-	form ul li
-	{
-		display: inline-block;
-	}
+form ul {
+    margin: 0;
+    padding: 20px 0px 20px 0px;
+    list-style: none;
+    line-height: normal;
+    text-align: left;
+}
+form ul li {
+    display: inline-block
+}

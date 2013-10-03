@@ -11,15 +11,44 @@
     <link href="{% static "font.css" %}" rel="stylesheet" type="text/css" media="all" />
   </head>
   <body>
-    
+  
 <div id="header">
     <div id="menu" class="container">
-        <ul>
-            <li><a href="#">Stock-in</a></li>
-            <li><a href="#">Stock-out</a></li>
-            <li><a href="#">Donor</a></li>
-            <li><a href="#">Inventory</a></li>
-            <li><a href="#">Report</a></li>
+        <ul id="nav">
+            <li>
+	      <a href="#">Stock-in</a>
+	      <ul id="n1">
+		<li><a href="#">Donation</a></li>
+		<li><a href="#">Purchase</a></li>
+	      </ul>
+	      <ul></ul>
+	    </li>
+	    
+            <li>
+	      <a href="#">Stock-out</a>
+	      <ul id="n2">
+		<li><a href="#">Distribute</a></li>
+		<li><a href="#">Transfer</a></li>
+	      </ul>
+	    </li>
+	    
+            <li>
+	      <a href="#">Donor</a>
+	      <ul id="n3">
+	      </ul>
+	    </li>
+	    	      
+            <li>
+	      <a href="#">Inventory</a>
+	      <ul id="n4">
+	      </ul>
+	    </li>
+	    
+            <li>
+	      <a href="#">Report</a>
+	      <ul id="n5">
+	      </ul>
+	    </li>
         </ul>
     </div>
 </div>
