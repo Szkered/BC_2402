@@ -9,7 +9,8 @@ class Stock(models.Model):
         return self.name
 
     def purchase_sum(self):
-        purchased = Purchase.objects.filter(stock_id=self.pk, confirm=True)
+        purchased = Purchase.objects.filter(stock_id=self.pk,
+                                            confirm=True)
         sum = 0
         for stock in purchased:
             sum += stock.quantity

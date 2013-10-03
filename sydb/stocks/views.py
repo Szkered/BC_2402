@@ -27,11 +27,11 @@ def donation(request):
                 unit_measure=donate_form.cleaned_data['unit_measure'],
                 unit_price=donate_form.cleaned_data['unit_price']
                 )
-            donate = Donate(
+            donate = Donate.objects.create(
                 date=donate_form.cleaned_data['date'],
                 quantity=donate_form.cleaned_data['quantity'],
-                stock_id=s.id,
-                donor_id=d.id
+                stock=s,
+                donor=d
                 )
             return HttpResponseRedirect('thanks/')
     else:
@@ -40,3 +40,6 @@ def donation(request):
     return render(request, 'donation.html',
                   RequestContext(request, {'donor_form': donor_form,
                                            'donate_form': donate_form}))
+
+def thanks(request):
+    return render(request, 'thanks.html')

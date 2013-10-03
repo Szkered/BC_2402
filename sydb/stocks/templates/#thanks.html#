@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Thank you!{% endblock %}
+
+{% block title %}Thank you!{% endblock %}
+
