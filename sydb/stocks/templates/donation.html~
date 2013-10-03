@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donation{% endblock %}
+
+{% block title %}
+Donation
+{% endblock %}
+
+{% block content %}
+<form action="." method="POST">{% csrf_token %}
+
+  <table>
+    {{form.as_table}}
+  </table>
+
+  <input class="button" type="submit" value="Submit">
+</form>
+
+{% endblock %}
+
+
+
+
+
+
+
+

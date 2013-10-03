@@ -5,7 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       (r'^test/$', current_datetime),
+                       (r'^test/$', current_datetime), #test page
+                       (r'^stocks/', include('stocks.urls', namespace="stocks")),
+                       url(r'^admin/', include(admin.site.urls)),                     
     # Examples:
     # url(r'^$', 'sydb.views.home', name='home'),
     # url(r'^sydb/', include('sydb.foo.urls')),
@@ -14,5 +16,5 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-                       url(r'^admin/', include(admin.site.urls)),
+  
 )

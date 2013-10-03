@@ -1,0 +1,514 @@
+/*CSS RESET*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td                                  {
+                                        margin: 0;
+                                        padding: 0;
+                                        border: 0;
+                                        outline: 0;
+                                        font-weight: inherit;
+                                        font-style: inherit;
+                                        font-size: 100%;
+                                        vertical-align: baseline;
+                                    }
+/* remember to define focus styles! */
+:focus                              { outline: 0 }
+body                                {
+                                        line-height: 1;
+                                        color: black;
+                                        background: #EFECEC;
+                                    }
+ol,
+ul                                  { list-style: none }
+span                                {
+                                        font-style: normal;
+                                        font-size: 8px;
+                                    }
+/*End RESET - Begin Full Width CSS*/
+/*START:type_style */
+#content                            {
+                                        width: 960px;
+                                        padding: 100px 0px;
+                                        margin: 0px 0px 0px 250px;
+                                        height: auto;
+                                    }
+body                                { font-family: Georgia }
+/*END:type_style */
+/*START:pageheader_style */
+#pageheader                         {
+                                        background-color: #2C2C2E;
+                                        color: #d8dedc;
+                                        position: fixed;
+                                    }
+.wrap                               {
+                                        position: relative;
+                                        margin: 0 auto;
+                                        width: 1300px;
+                                    }
+#pageheader,
+#footer                             {
+                                        z-index: 99;
+                                        width: 100%;
+                                        float: left;
+                                        padding: 0;
+                                    }
+#pageheader .logo                   {
+                                        float: left;
+                                        width: 100px;
+                                    }
+#pageheader p                       {
+                                        float: right;
+                                        width: 400px;
+                                        margin: 0;
+                                    }
+/*END:pageheader_style */
+/*START:loin_style */
+#log a                              {
+                                        margin: 15px 0px 6px 6px;
+                                        font: italic 15px Georgia;
+                                        float: right;
+                                        text-decoration: none;
+                                        color: #d8dedc;
+                                    }
+#log a:hover                        {
+                                        float: right;
+                                        text-decoration: none;
+                                        color: #d94200;
+                                    }
+/*END:login_style */
+/*START:header_style */
+#header                             {
+                                        width: 100%;
+                                        border: 1px dashed #BEBEBE;
+                                        display: inline-block;
+                                        height: 70px;
+                                        margin: 0;
+                                    }
+/*END:header_style */
+/*START:icon_style */
+#icon                               { float: left }
+/*END:icon_style */
+/*START:nav_style */
+#nav                                {
+                                        list-style: none;
+                                        font: italic 15px Georgia;
+                                        margin: 0;
+                                        float: left;
+                                    }
+#nav li                             {
+                                        float: left;
+                                        position: relative;
+                                    }
+#nav a                              {
+                                        display: block;
+                                        padding: 15px 5px 16px 5px;
+                                        color: #D8DEDC;
+                                        text-decoration: none;
+                                    }
+#nav a:hover                        { color: #d94200 }
+/*--- DROPDOWN ---*/
+#nav ul                             {
+                                        background: #ffffff; /* Adding a background makes the dropdown work properly in IE7+. */
+                                        list-style: none;
+                                        top: 48px;
+                                        position: absolute;
+                                        left: -9999px; /*Hide off-screen when not needed */
+                                    }
+#nav ul li                          {
+                                        padding-top: 1px; /* Introducing a padding between the li and the a give the illusion spaced items */
+                                        float: none;
+                                        width: 130px;
+                                    }
+#nav ul a                           {
+                                        white-space: nowrap; /* Stop text wrapping and creating multi-line dropdown items */
+                                    }
+#nav li:hover ul                    {
+                                        /* Display the dropdown on hover */
+                                        left: 0; /* Bring back on-screen when needed */
+                                        box-shadow: 1px 1px 1px 1px #bec3c2;
+                                    }
+#nav li:hover a                     {
+                                        /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+                                        color: #d94200;
+                                    }
+#nav li:hover ul a                  {
+                                        /* The persistent hover state does however create a global style for links even before they're hovered. Here we undo these effects. */
+                                        text-decoration: none;
+                                        font-size: 15px;
+                                        margin: 0;
+                                        padding: 3px 20px 2px 6px;
+                                        border: none;
+                                    }
+#nav li:hover ul li a:hover         {
+                                        /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+                                        background: #EAEAEA;
+                                        padding: 3px 20px 2px 10px;
+                                    }
+/*END:nav_style */
+/*START:search_style */
+#search                             {
+                                        display: inline-block;
+                                        float: right;
+                                        margin: 7px 10px 5px 0px;
+                                        position: relative;
+                                    }
+#search input[type="text"]          {
+                                        background: url(pics/search-white.png) no-repeat 5px 5px #fdfdfd;
+                                        border: 1px dashed #BEBEBE;
+                                        font: italic 12px Georgia;
+                                        color: #bebebe;
+                                        width: 50px;
+                                        padding: 5px 15px 5px 25px;
+                                        text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+                                        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        -webkit-transition: all 0.7s ease 0s;
+                                        -moz-transition: all 0.7s ease 0s;
+                                        -o-transition: all 0.7s ease 0s;
+                                        transition: all 0.7s ease 0s;
+                                    }
+#search input[type="text"]:focus    { width: 400px }
+/*END:search_style */
+/*START:wrapper_style */
+.wrapper                            {
+                                        margin: 25px 0px 100px 10px;
+                                        float: right;
+                                        width: 100%;
+                                        height: auto;
+                                        background: #ffffff;
+                                        box-shadow: 1px 1px 1px 1px #bec3c2;
+                                    }
+/*END:wrapper_style */
+/*START:thumbnails_style */
+.thumbnails                         {
+                                        border: dashed #BEBEBE 1px;
+                                        margin: 10px;
+                                        height: 300px;
+                                        width: 240px;
+                                        display: inline;
+                                    }
+.thumbnails img                     {
+                                        height: 300px;
+                                        width: 240px;
+                                        float: left;
+                                        padding: 22px 32px 28px 22px;
+                                    }
+.thumbsmall                         {
+                                        height: 150px;
+                                        width: 120px;
+                                        display: inline-block;
+                                    }
+.thumbsmall img                     {
+                                        height: 150px;
+                                        width: 120px;
+                                    }
+/*END:thumbnails_style */
+/*START:info_style */
+.info                               {
+                                        float: right;
+                                        height: 150px;
+                                        display: inline;
+                                    }
+.info p                             {
+                                        margin: 0px 22px;
+                                        line-height: 1.2em;
+                                    }
+/*END:info_style */
+/*START:buy_style */
+#buy                                {
+                                        display: inline;
+                                        border: dashed #BEBEBE 1px;
+                                    }
+#buy form                           { margin: 0px 0px 30px 300px }
+#buy input[type="number"]           {
+                                        background: #fdfdfd;
+                                        border: 1px dashed #BEBEBE;
+                                        font: italic 18px Georgia;
+                                        color: #d94200;
+                                        width: 50px;
+                                        padding: 5px 5px 5px 5px;
+                                        text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+                                        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        border-radius: 1px;
+                                    }
+/*END:buy_style */
+/*START:button_style */
+.button1                            {
+                                        border: none;
+                                        font: italic 12px Georgia;
+                                        color: #D8DEDC;
+                                        padding: 8px 20px 10px 20px;
+                                        text-decoration: none;
+                                        -webkit-border-radius: 2px;
+                                        -moz-border-radius: 2px;
+                                        background: #d94200;
+                                    }
+.button1:hover                      { background: #34383B }
+.button2                            {
+                                        border: none;
+                                        font: italic 12px Georgia;
+                                        color: #ffffff;
+                                        padding: 8px 20px 10px 20px;
+                                        text-decoration: none;
+                                        -webkit-border-radius: 2px;
+                                        -moz-border-radius: 2px;
+                                        background: #446469;
+                                    }
+.button2:hover                      { background: #34383B }
+/*END:button_style */
+/*START:footer_style */
+#footer                             {
+                                        background: #DA4000;
+                                        text-align: center;
+                                        height: 40px;
+                                    }
+#footer p                           {
+                                        color: #d8dedc;
+                                        padding: 13px 0px 0px 0px;
+                                    }
+/*START:footer_style */
+/*START:dropdownbox_style*/
+#login-content,
+#signup-content                     {
+                                        display: none;
+                                        position: absolute;
+                                        top: 48px;
+                                        right: 0;
+                                        z-index: 999;
+                                        background: #ffffff;
+                                        padding: 15px;
+                                        box-shadow: 1px 1px 1px 1px #bec3c2;
+                                    }
+#login-content,
+#signup-content                     {
+                                        right: 0;
+                                        width: 250px;
+                                    }
+/*--------------------*/
+.inputs input                       {
+                                        background: #fdfdfd;
+                                        padding: 6px 5px;
+                                        margin: 0 0 5px 0;
+                                        width: 210px;
+                                        border: 1px dashed #BEBEBE;
+                                        font: italic 12px Georgia;
+                                        color: #bebebe;
+                                        padding: 5px 15px 5px 15px;
+                                        text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+                                        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+                                    }
+.inputs input:focus                 {
+                                        border-color: #e8c291;
+                                        -moz-box-shadow: 0 0 0 1px #e8c291 inset;
+                                        -webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+                                        box-shadow: 0 0 0 1px #e8c291 inset;
+                                    }
+/*--------------------*/
+#login #actions,
+#signup #actions                    { margin: 10px 0 0 0 }
+#login label                        {
+                                        float: right;
+                                        font: italic 15px Georgia;
+                                        margin: 7px 7px 0px 0px;
+                                    }
+#login label input[type="checkbox"] {
+                                        position: relative;
+                                        right: 10px;
+                                        background: #d94200;
+                                    }
+/*END:dropdownbox_style*/
+/*START:validation_style*/
+input.valid                         {
+                                        background: #32C98C url(pics/go.gif) no-repeat;
+                                        background-size: contain;
+                                        border: 2px #19a26b inset;
+                                    }
+input:focus.valid                   {
+                                        border-color: #32C98C;
+                                        -moz-box-shadow: 0 0 0 1px #e8c291 inset;
+                                        -webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+                                        box-shadow: 0 0 0 1px #e8c291 inset;
+                                    }
+input.invalid                       {
+                                        background: rgba(238,207,207,0.49) url(pics/stop.gif) right center no-repeat;
+                                        background-size: contain;
+                                        border: 1px dashed #d94200;
+                                    }
+input:focus.invalid                 {
+                                        border-color: #d94200;
+                                        -moz-box-shadow: 0 0 0 1px #e8c291 inset;
+                                        -webkit-box-shadow: 0 0 0 1px #e8c291 inset;
+                                        box-shadow: 0 0 0 1px #e8c291 inset;
+                                    }
+/*END:validation_style*/
+p.warning                           {
+                                        display: none;
+                                        font: 15px red;
+                                        color: #d94200;
+                                        padding: 0px 0px 6px 0px;
+                                    }
+/*START:regis_style*/
+.inf                                {
+                                        color: #2c2c2e;
+                                        font-size: 35px;
+                                        margin: 100px;
+                                    }
+/*END:regis_style*/
+/*START:suggestBox_style*/
+#suggestBox                         {
+                                        list-style: none;
+                                        font: italic 15px Georgia;
+                                        margin: 0px 316px 0px 0px;
+                                        float: right;
+                                        width: 350px;
+                                    }
+#suggestBox ul                      {
+                                        background: #ffffff; /* Adding a background makes the dropdown work properly in IE7+. Make this as close to your page's background as possible (i.e. white page == white background). */
+                                        list-style: none;
+                                        top: 38px;
+                                        position: absolute;
+                                        box-shadow: 1px 1px 1px 1px #bec3c2;
+                                    }
+#suggestBox ul a                    {
+                                        white-space: nowrap;
+                                        color: #2c2c2e;
+                                        text-decoration: none;
+                                        margin: 0;
+                                    }
+#suggestBox ul li                   {
+                                        padding: 3px 4px 3px 3px; /* Introducing a padding between the li and the a give the illusion spaced items */
+                                        float: none;
+                                        width: 540px;
+                                        margin: 0;
+                                    }
+#suggestBox ul li:hover             { background-color: #d8dedc }
+#suggestBox ul li a:hover           { color: #d94200 }
+/*END:suggestBox_style*/
+span.head                           {
+                                        position: relative;
+                                        font-family: 'Oswald', serif;
+                                        font-size: 50px;
+                                        font-weight: normal;
+                                        text-transform: uppercase;
+                                        line-height: 1.4em;
+                                        color: #080808;
+                                        text-shadow: 1px 1px 0px white, 2px 2px 0px #828282;
+                                        margin: 0 0 15px;
+                                        word-spacing: 10px;
+                                    }
+::selection                         {
+                                        background: #48DCFF;
+                                        color: white;
+                                    }
+.none                               {
+                                        background: none;
+                                        box-shadow: none;
+                                        height: auto;
+                                    }
+.article                            { padding: 25px }
+.book                               {
+                                        padding: 0;
+                                        height: 150px;
+                                        margin: 0px 0px 21px 0px;
+                                        background: #ffffff;
+                                        box-shadow: 1px 1px 1px 1px #bec3c2;
+                                    }
+.bookinfo                           {
+                                        display: inline-table;
+                                        width: 85%;
+                                        margin: 0;
+                                        vertical-align: super;
+                                        color: #515d62;
+                                        padding: 0px 0px 0px 10px;
+                                        line-height: 1.2em;
+                                    }
+.bookinfo a                         { color: #d94200 }
+.detail                             {
+                                        height: auto;
+                                        float: none;
+                                        padding: 0px 24px 0px 22px;
+                                    }
+a.back                              {
+                                        color: #446469;
+                                        text-decoration: none;
+                                    }
+a.back:hover                        {
+                                        color: #d94200;
+                                        text-decoration: none;
+                                    }
+.orders table                       {
+                                        width: 100%;
+                                        border-collapse: collapse;
+                                        margin-bottom: 30px;
+                                    }
+.order table,
+th                                  {
+                                        border-bottom: 1px solid black;
+                                        color: #446469;
+                                        font: bold 18px Georgia;
+                                    }
+.order table,
+th,
+td                                  { padding: 6px 0px 6px 0px }
+.order table,
+td                                  { text-align: center }
+li.suggest                          {
+                                        white-space: nowrap;
+                                        width: 100%;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    }

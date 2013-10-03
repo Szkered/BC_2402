@@ -8,10 +8,22 @@ class Stock(models.Model):
     donate_sum = models.DecimalField(max_digits=10, decimal_places=2)
     transfer_sum = models.DecimalField(max_digits=10, decimal_places=2)
     distribute_sum = models.DecimalField(max_digits=10, decimal_places=2)
-    category = models.CharField(max_length=50)
+    # category = models.CharField(max_length=50)
+    # Replaced with a table, since this is a many to one relationship
     
     def __str__(self):
         return self.description
+
+    def current_amt(self):
+        return self.purchase_sum + self.donate_sum
+        - self.transfer_sum - self.distribute_sum
+
+    def total_price(self):
+        return self.unit_price * current_amt(self)
+        
+class Category(models.Model):
+    stock = models.ForeignKey(Stock)
+    name = models.CharField(max_length=20)
         
 ##################################################
 class Destination(models.Model):
@@ -31,20 +43,20 @@ class CommonInfo(models.Model):
         abstract = True
 
 class Donor(CommonInfo):
-    FM = 'F'
-    CLIENT = 'C'
-    VOLUNTEER = 'V'
-    REGULAR = 'R'
-    OTHERS = 'O'
-    REFERRAL_TYPES = (
-        (FM, 'FM 97.2'),
-        (CLIENT, 'SYCC Client'),
-        (VOLUNTEER, 'SYCC Volunteer'),
-        (REGULAR, 'Regular Donor'),
-        (OTHERS, 'Others'),
-    )
+    # FM = 'F'
+    # CLIENT = 'C'
+    # VOLUNTEER = 'V'
+    # REGULAR = 'R'
+    # OTHERS = 'O'
+    # REFERRAL_TYPES = (
+    #     (FM, 'FM 97.2'),
+    #     (CLIENT, 'SYCC Client'),
+    #     (VOLUNTEER, 'SYCC Volunteer'),
+    #     (REGULAR, 'Regular Donor'),
+    #     (OTHERS, 'Others'),
+    # )
     mailing = models.BooleanField()
-    referral = models.CharField(max_length=1, choices=REFERRAL_TYPES)
+    referral = models.CharField(max_length=1)
 
     def __str__(self):
         return self.name

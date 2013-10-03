@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{% block pagetitle %}{% endblock %}</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
+    {% load static %}
+    <link href="{% static "default.css" %}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{% static "font.css" %}" rel="stylesheet" type="text/css" media="all" />
+  </head>
+  <body>
+    
+<div id="header">
+    <div id="menu" class="container">
+        <ul>
+            <li><a href="#">Stock-in</a></li>
+            <li><a href="#">Stock-out</a></li>
+            <li><a href="#">Donor</a></li>
+            <li><a href="#">Inventory</a></li>
+            <li><a href="#">Report</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="page" class="container">
+
+  <div id="content">
+    <div class="title">
+      <h2>{% block title %}{% endblock %}</h2>
+      <span class="byline">{% block byline %}{% endblock %}</span>
+    </div>
+    <p>{% block content %}{% endblock %}</p>
+  </div>
+    
+  <div id="portfolio-wrapper">
+    <div id="portfolio" class="container">
+      <div class="box">
+	{% block portfolio %}{% endblock %}
+      </div>
+    </div>
+  </div>
+
+  {% block footer %}{% endblock %}
+</div>
+
+
+
+<div id="copyright" class="container">
+	<p>Copyright (c) 2013 D&Liz&MX et al. All rights reserved. | Designed by Derek </a>.</p>
+</div>
+
+  </body>
+</html>
+
+

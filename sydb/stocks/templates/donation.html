@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donation{% endblock %}
+
+{% block title %}
+Donor Info
+{% endblock %}
+
+{% block content %}
+<form action="." method="POST">{% csrf_token %}
+  <table>
+    {{donor_form.as_table}}
+  </table>
+{% endblock %}
+
+{% block portfolio %}
+  <table>
+  {{donate_form.as_table}}
+  </table>
+{% endblock %}
+    
+{% block footer %}
+  <input class="button" type="submit" value="Submit">
+    </table>
+</form>
+{% endblock %}
+
+
+
+
+
+
