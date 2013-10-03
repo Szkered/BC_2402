@@ -8,7 +8,7 @@
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
     {% load static %}
     <link href="{% static "default.css" %}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{% static "font.css" %}" rel="stylesheet" type="text/css" media="all" />"
+    <link href="{% static "font.css" %}" rel="stylesheet" type="text/css" media="all" />
   </head>
   <body>
     
@@ -48,7 +48,7 @@
 
 
 <div id="copyright" class="container">
-	<p>Copyright (c) 2013 Liz et al. All rights reserved. | Designed by Derek </a>.</p>
+	<p>Copyright (c) 2013 D&Liz&MX et al. All rights reserved. | Designed by Derek </a>.</p>
 </div>
 
   </body>

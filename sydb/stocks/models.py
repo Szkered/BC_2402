@@ -1,25 +1,47 @@
 from django.db import models
 
 class Stock(models.Model):
-    description = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     unit_measure = models.CharField(max_length=10)
-    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    purchase_sum = models.DecimalField(max_digits=10, decimal_places=2)
-    donate_sum = models.DecimalField(max_digits=10, decimal_places=2)
-    transfer_sum = models.DecimalField(max_digits=10, decimal_places=2)
-    distribute_sum = models.DecimalField(max_digits=10, decimal_places=2)
-    # category = models.CharField(max_length=50)
-    # Replaced with a table, since this is a many to one relationship
-    
-    def __str__(self):
-        return self.description
+    unit_price = models.FloatField()
 
-    def current_amt(self):
-        return self.purchase_sum + self.donate_sum
-        - self.transfer_sum - self.distribute_sum
+    def __str__(self):
+        return self.name
+
+    def purchase_sum(self):
+        purchased = Purchase.objects.filter(stock_id=self.pk, confirm=True)
+        sum = 0
+        for stock in purchased:
+            sum += stock.quantity
+        return sum
+
+    def donate_sum(self):
+        donated = Donate.objects.filter(stock_id=self.pk)
+        sum = 0
+        for stock in donated:
+            sum += stock.quantity
+        return sum
+        
+    def distribute_sum(self):
+        distributed = Distribute.objects.filter(stock_id=self.pk)
+        sum = 0
+        for stock in distributed:
+            sum += stock.quantity
+        return sum
+        
+    def transfer_sum(self):
+        transferd = Transfer.objects.filter(stock_id=self.pk)
+        sum = 0
+        for stock in transferd:
+            sum += stock.quantity
+        return sum
+
+    def current_amt(self): 
+        return self.purchase_sum() + self.donate_sum()
+        - self.transfer_sum() - self.distribute_sum()
 
     def total_price(self):
-        return self.unit_price * current_amt(self)
+        return self.unit_price * self.current_amt()
         
 class Category(models.Model):
     stock = models.ForeignKey(Stock)
@@ -43,20 +65,20 @@ class CommonInfo(models.Model):
         abstract = True
 
 class Donor(CommonInfo):
-    # FM = 'F'
-    # CLIENT = 'C'
-    # VOLUNTEER = 'V'
-    # REGULAR = 'R'
-    # OTHERS = 'O'
-    # REFERRAL_TYPES = (
-    #     (FM, 'FM 97.2'),
-    #     (CLIENT, 'SYCC Client'),
-    #     (VOLUNTEER, 'SYCC Volunteer'),
-    #     (REGULAR, 'Regular Donor'),
-    #     (OTHERS, 'Others'),
-    # )
+    FM = 'F'
+    CLIENT = 'C'
+    VOLUNTEER = 'V'
+    REGULAR = 'R'
+    OTHERS = 'O'
+    REFERRAL_TYPES = (
+        (FM, 'FM 97.2'),
+        (CLIENT, 'SYCC Client'),
+        (VOLUNTEER, 'SYCC Volunteer'),
+        (REGULAR, 'Regular Donor'),
+        (OTHERS, 'Others'),
+    )
     mailing = models.BooleanField()
-    referral = models.CharField(max_length=1)
+    referral = models.CharField(max_length=1, choices=REFERRAL_TYPES)
 
     def __str__(self):
         return self.name

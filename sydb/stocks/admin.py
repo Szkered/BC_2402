@@ -3,11 +3,11 @@ from stocks.models import *
 
 class StockAdmin(admin.ModelAdmin):
 
-    list_display = ['description', 'unit_measure', 'unit_price',
-                    'current_amt'
+    list_display = ['name', 'unit_measure', 'unit_price',
+                    'current_amt', 'total_price'
     ]
-    ordering = ['description']
-    search_fields = ('description',)
+    ordering = ['name']
+    search_fields = ('name',)
 
 # class StockInline(admin.TabularInline):
 #     model = Stock
@@ -36,6 +36,9 @@ admin.site.register(Donor, DonorAdmin)
 admin.site.register(Destination, DestinationAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Donate)
+admin.site.register(Purchase)
+admin.site.register(Distribute)
+admin.site.register(Transfer)
 
 
     
