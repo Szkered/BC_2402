@@ -53,7 +53,7 @@ def donation(request):
 #     if(request.method == 'GET'):
 
 def donor(request):
-    donor_list = Donor.objects.filter(name="Chan")
+    donor_list = Donor.objects.all()
     return render(request, 'donor.html',
                   RequestContext(request, {'donor_list': donor_list}))
         
