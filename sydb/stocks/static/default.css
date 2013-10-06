@@ -43,6 +43,10 @@ a:hover {
     width: 1200px;
     margin: 0px auto;
 }
+
+li {
+    display: inline-block;
+}
 /*********************************************************************************/
 /* Image Style                                                                   */
 /*********************************************************************************/
@@ -238,7 +242,7 @@ ul.contact li a:before {
 #nav ul li {
     padding-top: 1px; /* Introducing a padding between the li and the a give the illusion spaced items */
     float: none;
-    width: 130px;
+    width: 160px;
     display: list-item;
 }
 #nav ul a {

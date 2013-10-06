@@ -8,17 +8,20 @@ Donor Info
 
 {% block content %}
 <form action="." method="POST">{% csrf_token %}
+
   <ul id="formheader">
    {{donor_form.as_ul}}
   </ul>
+
+  
 
   <div id="portfolio-wrapper">
     <div id="portfolio" class="container">
       <div class="column1">
 	<div class="box">
-	  <table>
-	    {{donate_form.as_table}}
-	  </table>
+	  <ul>
+	    {{donate_form.as_ul}}
+	  </ul>
 	</div>
       </div>
     </div>

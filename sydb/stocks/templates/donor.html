@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donor Report{% endblock %}
+
+{% block title %}Donor Report{% endblock %}
+
+
+{% block content %}
+    
+{% for donor in donor_list %}
+  <p>{{ donor.name }}</p>
+{% endfor %}
+
+{% endblock %}

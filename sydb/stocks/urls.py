@@ -5,6 +5,7 @@ from stocks.views import *
 urlpatterns = patterns('',
                        url(r'^donation/$', donation),
                        url(r'.?/thanks/$', thanks),
+                       url(r'^donor/$', donor),
                        # url(r'^purchase/$', purchase),
     
 )
