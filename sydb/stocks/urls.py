@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, url
+from django.views.generic import RedirectView
 from stocks.views import *
 
 urlpatterns = patterns('',
                        url(r'^donation/$', donation),
-                       url(r'.?/thanks/', thanks),
+                       url(r'.?/thanks/$', thanks),
+                       # url(r'^purchase/$', purchase),
     
 )

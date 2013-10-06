@@ -1,13 +1,21 @@
 from django.shortcuts import render, get_object_or_404
 # redirect for submission
 from django.http import HttpResponseRedirect
-# RequestContext for csrf
+# RequestContext for csrf validation
 from django.template import RequestContext, loader
 # from django.core.urlresolvers import reverse
+
+# generic views
+from django.views.generic.base import RedirectView
 
 # models & forms
 from stocks.models import *
 from stocks.forms import *
+
+
+
+def thanks(request):
+    return render(request, 'thanks.html')
 
 
 def donation(request):
@@ -41,5 +49,6 @@ def donation(request):
                   RequestContext(request, {'donor_form': donor_form,
                                            'donate_form': donate_form}))
 
-def thanks(request):
-    return render(request, 'thanks.html')
+# def donation_detail(request):
+#     if(request.method == 'GET'):
+        

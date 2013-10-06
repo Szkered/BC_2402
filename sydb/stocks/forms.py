@@ -19,6 +19,10 @@ class DonorForm(forms.Form):
     contact_no = forms.IntegerField()
     mailing = forms.BooleanField(required=False)
     referral = forms.ChoiceField(choices=REFERRAL_TYPES)
+
+# class DonorForm(forms.ModelForm):
+#     class Meta:
+#         model = Donor
     
 class DonateForm(forms.Form):
     date = forms.DateField()
@@ -26,4 +30,6 @@ class DonateForm(forms.Form):
     stock_name = forms.CharField()
     unit_measure = forms.CharField(max_length=10)
     unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
+    
+
     

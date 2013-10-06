@@ -18,8 +18,8 @@
             <li>
 	      <a href="#">Stock-in</a>
 	      <ul id="n1">
-		<li><a href="#">Donation</a></li>
-		<li><a href="#">Purchase</a></li>
+		<li><a href="/stocks/donation">Donation</a></li>
+		<li><a href="/stocks/purchase">Purchase</a></li>
 	      </ul>
 	      <ul></ul>
 	    </li>
@@ -27,8 +27,8 @@
             <li>
 	      <a href="#">Stock-out</a>
 	      <ul id="n2">
-		<li><a href="#">Distribute</a></li>
-		<li><a href="#">Transfer</a></li>
+		<li><a href="/stocks/distribute">Distribute</a></li>
+		<li><a href="/stocks/transfer">Transfer</a></li>
 	      </ul>
 	    </li>
 	    
@@ -56,8 +56,8 @@
 <div id="page" class="container">
 
   <div id="content">
-    <div class="title">
-      <h2>{% block title %}{% endblock %}</h2>
+    <div id="logo" class="container">
+      <h1>{% block title %}{% endblock %}</h1>
       <span class="byline">{% block byline %}{% endblock %}</span>
     </div>
     <p>{% block content %}{% endblock %}</p>
@@ -69,7 +69,7 @@
 
 
 <div id="copyright" class="container">
-	<p>Copyright (c) 2013 D&Liz&MX et al. All rights reserved. | Designed by Derek </a>.</p>
+	<p>Copyright (c) 2013 D&Liz&MX et al. All rights reserved. | Designed by Derek .</p>
 </div>
 
   </body>

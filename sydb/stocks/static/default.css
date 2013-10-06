@@ -179,7 +179,7 @@ ul.contact li a:before {
 /* Logo                                                                          */
 /*********************************************************************************/
 #logo {
-    padding: 4em 0em;
+    padding: 2em 0 0.5em 0;
     text-transform: uppercase;
 }
 #logo h1 {
@@ -204,7 +204,6 @@ ul.contact li a:before {
 /*********************************************************************************/
 #menu ul {
     margin: 0;
-    /* padding: 20px 0px 20px 0px; */
     list-style: none;
     line-height: normal;
     text-align: center;
@@ -293,6 +292,13 @@ ul.contact li a:before {
     overflow: hidden;
     padding: 3em 0em 0em 0em;
     border-top: 1px solid #E5E5E5;
+}
+
+/*********************************************************************************/
+/* Form Header                                                                       */
+/*********************************************************************************/
+#formheader li {
+    display: inline-block;
 }
 /*********************************************************************************/
 /* Content                                                                       */
