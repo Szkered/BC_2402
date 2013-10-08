@@ -1,0 +1,5 @@
+.item {
+    background: #fff;
+    box-shadow: 1px 1px 1px 1px #bec3c2;
+    padding: 7px;
+}

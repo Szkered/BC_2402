@@ -10,22 +10,28 @@ Donation
 <form action="." method="POST">{% csrf_token %}
 
 <h2>Donor Info</h2>
-<ul id="formheader">
-   {{donor_form.as_ul}}
-  </ul>
-  <h2>Donated Stocks</h2>
-  <div id="portfolio-wrapper">
-    <div id="portfolio" class="container">
-      {{donate_formset.management_form}}
-      {% for form in donate_formset.forms %}
-      <div class="box item">
-	{{form.as_ul}}
-	<li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
-      </div>
-      {% endfor %}
-    </div>
+<div class="header">
+  <label for="id_name">Name:</label>
+  {{donor_form.name}}
+  <label for="id_address">Address:</label>
+  {{donor_form.address}}
+  <label for="id_contact_no">Contact_no:</label>
+  {{donor_form.contact_no}}
+  <label for="id_mailing">Mailing:</label>
+  {{donor_form.mailing}}
+  <label for="id_referral">Referral:</label>
+  {{donor_form.referral}}
+</div>
+<h2>Donated Stocks</h2>
+{{donate_formset.management_form}}
+{% for form in donate_formset.forms %}
+  <div class="item">
+    {{form.as_ul}}
+    <li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
   </div>
-  <p><button type="button" class="rounded button"><a id="add" href="#">+</a></button></p>
-  <input class="button" type="submit" value="Submit">
+{% endfor %}
+
+<p><button type="button" class="rounded button"><a id="add" href="#">+</a></button></p>
+<input class="button" type="submit" value="Submit">
 </form>
 {% endblock %}

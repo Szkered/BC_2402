@@ -1,0 +1,276 @@
+html,
+body {
+    height: 100%
+}
+body {
+    margin: 0px;
+    padding: 0px;
+    background: #F6F4F3;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 12pt;
+    font-weight: 400;
+    color: #4E4D4D;
+}
+h1,
+h2,
+h3 {
+    margin: 0;
+    padding: 0;
+}
+p,
+ol,
+ul {
+    margin-top: 0
+}
+ol,
+ul {
+    padding: 0;
+    list-style: none;
+}
+p {
+    line-height: 180%
+}
+strong {
+
+}
+a {
+    color: #fff;
+    text-decoration: none;
+}
+a:hover {
+    color: #b5bd68;
+}
+.container {
+    width: 1200px;
+    margin: 0px auto;
+}
+
+li {
+    display: inline-block;
+}
+
+.item {
+    background: #fff;
+    box-shadow: 1px 1px 1px 1px #bec3c2;
+    padding: 7px;
+    t: 1px solid #dadada;
+}
+
+
+/*********************************************************************************/
+/* Button Style                                                                  */
+/*********************************************************************************/
+.button a {
+    color: #fff;
+}
+
+.button a:hover {
+    color: #b5bd68;
+}
+
+.button {
+    display: inline-block;
+    margin: 1em 0em;
+    padding: 1em 3em 1em 3em;
+    background: #3f3f3f;
+    letter-spacing: 0.20em;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 0.90em;
+    color: #FFF;
+    border: none;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+.button:before {
+
+}
+
+.rounded {
+    margin: 0;
+    padding: 0 0 2px 0;
+    letter-spacing: 0;
+    height: 20px;
+    width: 20px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-weight: 900;
+}
+/*********************************************************************************/
+/* Header                                                                        */
+/*********************************************************************************/
+#header {
+    background: #3f3f3f
+}
+/*********************************************************************************/
+/* Logo                                                                          */
+/*********************************************************************************/
+#logo {
+    padding: 2em 0 0.5em 0;
+    text-transform: uppercase;
+}
+#logo h1 {
+    text-align: center;
+    font-weight: 900;
+    font-size: 2.5em;
+}
+#logo h1 a {
+
+}
+#logo span {
+    padding: 0em 0em 0em 0.5em
+}
+#logo h1:before {
+
+}
+#logo a {
+    color: #3f3f3f
+}
+/*********************************************************************************/
+/* Menu                                                                          */
+/*********************************************************************************/
+#menu ul {
+    margin: 0;
+    list-style: none;
+    line-height: normal;
+    text-align: center;
+}
+#menu li {
+    display: inline-block
+}
+#menu a {
+    display: block;
+    padding: 2.5em 2em;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: 700;
+    color: #FFF;
+}
+#menu .current_page_item a {
+
+}
+#menu a:hover {
+    color: #b5bd68
+}
+#nav ul {
+    background: #ffffff; /* Adding a background makes the dropdown work properly in IE7+. */
+    list-style: none;
+    text-align: left;
+    top: 100px;
+    position: absolute;
+    left: -9999px; /*Hide off-screen when not needed */
+}
+#nav ul li {
+    padding-top: 1px; /* Introducing a padding between the li and the a give the illusion spaced items */
+    float: none;
+    width: 160px;
+    display: list-item;
+}
+#nav ul a {
+    white-space: nowrap; /* Stop text wrapping and creating multi-line dropdown items */
+}
+#nav li:hover ul {
+    box-shadow: 1px 1px 1px 1px #bec3c2
+}
+#nav li:hover #n1 {
+    /* Display the dropdown on hover */
+    left: 388px; /* Bring back on-screen when needed */
+}
+#nav li:hover #n2 {
+    left: 529px
+}
+#nav li:hover #n3 {
+    left: 690px
+}
+#nav li:hover #n4 {
+    left: 815px
+}
+#nav li:hover #n5 {
+    left: 973px
+}
+#nav li:hover a {
+    /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+    color: #b5bd68;
+}
+#nav li:hover ul a {
+    /* The persistent hover state does however create a global style for links even before they're hovered. Here we undo these effects. */
+    text-decoration: none;
+    font-size: 15px;
+    margin: 0;
+    padding: 13px 20px 12px 6px;
+    border: none;
+}
+#nav li:hover ul li a:hover {
+    /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+    background: #EAEAEA;
+    padding: 13px 20px 12px 10px;
+    /*********************************************************************************/
+    /* Banner                                                                        */
+    /*********************************************************************************/
+    #banner: ;
+    {: ;
+}
+/*********************************************************************************/
+/* Page                                                                          */
+/*********************************************************************************/
+#page {
+    overflow: hidden;
+    padding: 3em 0em 0em 0em;
+    border-top: 1px solid #E5E5E5;
+}
+
+/*********************************************************************************/
+/* Content                                                                       */
+/*********************************************************************************/
+#content {
+    float: left;
+    width: 1200px;
+}
+#content .title {
+    padding-bottom: 0.5em;
+    text-align: left;
+}
+#content h2 {
+    font-size: 2em
+}
+#content .byline {
+    padding-top: 0;
+    font-size: 1.5em;
+}
+
+/*********************************************************************************/
+/* Copyright                                                                     */
+/*********************************************************************************/
+#copyright {
+    overflow: hidden;
+    padding: 5em 0em;
+}
+#copyright p {
+    letter-spacing: 0.20em;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.80em;
+    color: #6F6F6F;
+}
+#copyright a {
+    text-decoration: none;
+    color: #8C8C8C;
+}
+
+/*********************************************************************************/
+/* Table                                                                       */
+/*********************************************************************************/
+form ul {
+    margin: 0;
+    padding: 20px 0px 20px 0px;
+    list-style: none;
+    line-height: normal;
+    text-align: left;
+}
+form ul li {
+    display: inline-block
+}

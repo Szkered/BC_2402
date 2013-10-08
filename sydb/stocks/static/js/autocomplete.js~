@@ -1,0 +1,6 @@
+$(function(){
+    $("#donors").autocomplete({
+	source: "",
+	minLength: 2,
+    });
+});
