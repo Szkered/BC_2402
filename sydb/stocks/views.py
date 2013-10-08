@@ -28,12 +28,22 @@ def donation(request):
             for form in self.forms:
                 form.empty_permitted = False # self.forms[0].empty_permitted = False
     DonateFormSet = formset_factory(DonateForm, max_num=10, formset=RequiredFormSet)
+
+    # Ajax autocomplete (work-in-progress)
+    # if(request.is_ajax()):
+    #     q = request.GET.get('term', '')
+    #     donors = Donor.objects.filter(name__icontains = q)[:20]
+    #     results = []
+    #     for donor in donors:
+    #         donor_json = {}
+
+    
     # When the form has been submitted
     if(request.method == 'POST'):
         donor_form = DonorForm(request.POST)
         donate_formset = DonateFormSet(request.POST)
-        
-        if(donor_form.is_valid() and donate_formset.is_valid()):
+        date_form = DateForm(request.POST)
+        if(donor_form.is_valid() and donate_formset.is_valid() and date_form.is_valid()):
             d, created = Donor.objects.get_or_create(**donor_form.cleaned_data)
             for donate_form in donate_formset:
                 s, created = Stock.objects.get_or_create(
@@ -42,7 +52,7 @@ def donation(request):
                     unit_measure=donate_form.cleaned_data['unit_measure']
                 )
                 donate = Donate.objects.create(
-                    date=donate_form.cleaned_data['date'],
+                    date=date_form.cleaned_data['date'],
                     quantity=donate_form.cleaned_data['quantity'],
                     stock=s,
                     donor=d
@@ -50,9 +60,11 @@ def donation(request):
             return HttpResponseRedirect('thanks')
     else:
         donor_form = DonorForm()
+        date_form = DateForm()
         donate_formset = DonateFormSet()
     return render(request, 'donation.html',
                   RequestContext(request, {'donor_form': donor_form,
+                                           'date_form': date_form,
                                            'donate_formset': donate_formset}))
 
 def donor(request):
