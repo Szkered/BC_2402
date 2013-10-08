@@ -3,30 +3,29 @@
 {% block pagetitle %}Donation{% endblock %}
 
 {% block title %}
-Donor Info
+Donation
 {% endblock %}
 
 {% block content %}
 <form action="." method="POST">{% csrf_token %}
 
-  <ul id="formheader">
+<h2>Donor Info</h2>
+<ul id="formheader">
    {{donor_form.as_ul}}
   </ul>
-
-  
-
+  <h2>Donated Stocks</h2>
   <div id="portfolio-wrapper">
     <div id="portfolio" class="container">
-      <div class="column1">
-	<div class="box">
-	  <ul>
-	    {{donate_form.as_ul}}
-	  </ul>
-	</div>
+      {{donate_formset.management_form}}
+      {% for form in donate_formset.forms %}
+      <div class="box item">
+	{{form.as_ul}}
+	<li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
       </div>
+      {% endfor %}
     </div>
   </div>
-
+  <p><button type="button" class="rounded button"><a id="add" href="#">+</a></button></p>
   <input class="button" type="submit" value="Submit">
 </form>
 {% endblock %}

@@ -7,6 +7,8 @@ from django.template import RequestContext, loader
 
 # generic views
 from django.views.generic.base import RedirectView
+# formset
+from django.forms.formsets import formset_factory, BaseFormSet
 
 # models & forms
 from stocks.models import *
@@ -19,38 +21,39 @@ def thanks(request):
 
 
 def donation(request):
+    # This class is used to require forms in the formset not to be empty
+    class RequiredFormSet(BaseFormSet):
+        def __init__(self, *args, **kwargs):
+            super(RequiredFormSet, self).__init__(*args, **kwargs)
+            for form in self.forms:
+                form.empty_permitted = False # self.forms[0].empty_permitted = False
+    DonateFormSet = formset_factory(DonateForm, max_num=10, formset=RequiredFormSet)
+    # When the form has been submitted
     if(request.method == 'POST'):
         donor_form = DonorForm(request.POST)
-        donate_form = DonateForm(request.POST)
-        if donor_form.is_valid() and donate_form.is_valid():
-            d, created = Donor.objects.get_or_create(
-                name=donor_form.cleaned_data['name'],
-                address=donor_form.cleaned_data['address'],
-                contact_no=donor_form.cleaned_data['contact_no'],
-                mailing=donor_form.cleaned_data['mailing'],
-                referral=donor_form.cleaned_data['referral']       
+        donate_formset = DonateFormSet(request.POST)
+        
+        if(donor_form.is_valid() and donate_formset.is_valid()):
+            d, created = Donor.objects.get_or_create(**donor_form.cleaned_data)
+            for donate_form in donate_formset:
+                s, created = Stock.objects.get_or_create(
+                    name=donate_form.cleaned_data['stock_name'],
+                    unit_price=donate_form.cleaned_data['unit_price'],
+                    unit_measure=donate_form.cleaned_data['unit_measure']
                 )
-            s, created = Stock.objects.get_or_create(
-                name=donate_form.cleaned_data['stock_name'],
-                unit_measure=donate_form.cleaned_data['unit_measure'],
-                unit_price=donate_form.cleaned_data['unit_price']
+                donate = Donate.objects.create(
+                    date=donate_form.cleaned_data['date'],
+                    quantity=donate_form.cleaned_data['quantity'],
+                    stock=s,
+                    donor=d
                 )
-            donate = Donate.objects.create(
-                date=donate_form.cleaned_data['date'],
-                quantity=donate_form.cleaned_data['quantity'],
-                stock=s,
-                donor=d
-                )
-            return HttpResponseRedirect('thanks/')
+            return HttpResponseRedirect('thanks')
     else:
         donor_form = DonorForm()
-        donate_form = DonateForm()
+        donate_formset = DonateFormSet()
     return render(request, 'donation.html',
                   RequestContext(request, {'donor_form': donor_form,
-                                           'donate_form': donate_form}))
-
-# def donation_detail(request):
-#     if(request.method == 'GET'):
+                                           'donate_formset': donate_formset}))
 
 def donor(request):
     donor_list = Donor.objects.all()
