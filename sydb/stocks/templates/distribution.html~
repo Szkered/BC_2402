@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Distribution{% endblock %}
+
+{% block title %}
+Distribution
+{% endblock %}
+
+{% block content %}
+  
+
+
+{% endblock %}

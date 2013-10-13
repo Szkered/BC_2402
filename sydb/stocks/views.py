@@ -28,7 +28,6 @@ StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSe
 def thanks(request):
     return render(request, 'thanks.html')
 
-
 def donation(request):
     # Autocomplete (work in progress)
     if(request.is_ajax()):
@@ -96,9 +95,8 @@ def purchase(request):
             vendor_form = VendorForm(request.POST)
             purchase_formset = StockInFormSet(request.POST)
             date_form = DateForm(request.POST)
-            confirm_form = ConfirmForm(request.POST)
             if(vendor_form.is_valid() and purchase_formset.is_valid()
-               and date_form.is_valid() and confirm_form.is_valid()):
+               and date_form.is_valid()):
                 v, created = Vendor.objects.get_or_create(**vendor_form.cleaned_data)
                 for purchase_form in purchase_formset:
                     s, created = Stock.objects.get_or_create(
@@ -111,24 +109,57 @@ def purchase(request):
                         quantity=purchase_form.cleaned_data['quantity'],
                         stock=s,
                         vendor=v,
-                        confirm=confirm_form.cleaned_data['confirm']
+                        confirm=False
                     )
                 return HttpResponseRedirect('thanks')
         else:
             vendor_form = VendorForm()
             date_form = DateForm()
             purchase_formset = StockInFormSet()
-            confirm_form = ConfirmForm()
         context = RequestContext(request, {'vendor_form': vendor_form,
                                            'date_form': date_form,
-                                           'confirm_form': confirm_form,
                                            'purchase_formset': purchase_formset})
         template = loader.get_template('purchase.html')
         data = template.render(context)
         mimetype = "text/html; charset=utf-8"
     return HttpResponse(data, mimetype)
     
-    
+def distribution(request):
+    # create formset
+    standard_list = Category.objects.filter(name="standard")
+    standard_item = []
+    for item in standard_list:
+        standard_item.append(item.stock)
+        DistributionFormSet = formset_factory(DistributionForm,
+                                              extra = len(standard_item),
+                                              formset=RequiredFormSet)
+    # form action handling
+    if(request.method == 'POST'):
+        family_form = FamilyForm(request.POST)
+        distribution_formset = DistributionFormSet(request.POST)
+        date_form = DateForm(request.POST)
+        if(family_form.is_valid() and
+           distribution_formset.is_valid() and
+           date_form.is_valid()):
+            for s, form in zip(standard_item, distribution_formset):
+                distribute = Distribute.objects.create(
+                    date=date_form.cleaned_data['date'],
+                    quantity=form.cleaned_data['quantity'],
+                    family_type=family_form.cleaned_data['family_type'],
+                    stock=s
+                )
+            return HttpResponseRedirect('thanks')
+    else:
+        family_form = FamilyForm()
+        distribution_formset = DistributionFormSet()
+        date_form = DateForm()
+    context = RequestContext(request, {'family_form': family_form,
+                                       'date_form': date_form,
+                                       'distribution_formset': distribution_formset,
+                                       'zip': zip(standard_item, distribution_formset)})
+    return render(request, 'distribution.html', context)
+            
+        
     
 def donor(request):
     categorys = Category.objects.all()
