@@ -3,6 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{% block pagetitle %}{% endblock %}</title>
+   
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
@@ -22,65 +23,102 @@
 	  $('#id_date').datepicker();
       });
     </script>
+    
+
   </head>
   <body>
+  
 
 
 <div id="header">
     <div id="menu">
         <ul id="nav">
-            <li>
-	      <a href="#">Stock-in</a>
-	      <ul id="n1">
-		<li><a href="/stocks/donation">Donation</a></li>
+        <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="#">Stock in</a>    
+            <ul id ="n1">
+            
+            <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+                    <a href="#">Donation</a> 
+                    <ul id = "n11"> 
+                        <li><a href="#">Add</a></li> 
+                        <li><a href="#">Edit</a></li> 
+                        
+                    </ul> 
+                </li> 
+               
+                <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+                    <a href="#">Purchase</a> 
+                    <ul id = "n12"> 
+                        <li><a href="#">Add</a></li> 
+                        <li><a href="#">Edit</a></li> 
 
-<!-- <ul id="nav"> -->
-<!--     <li><a href="">Add</a></li> -->
-<!--     <li><a href="">Edit</a></li> -->
-<!-- </ul> -->
-		
-		<li><a href="/stocks/purchase">Purchase</a></li>
-	      </ul>
-	      <ul></ul>
-	    </li>
-	    
-            <li>
-	      <a href="#">Stock-out</a>
-	      <ul id="n2">
-		<li><a href="/stocks/distribute">Distribute</a></li>
-		<li><a href="/stocks/transfer">Transfer-out</a></li>
-	      </ul>
-	    </li>
-	    
-            <li>
-	      <a href="#">Infos</a>
-	      <ul id="n3">
-		<li><a href="/stocks/donor">Donor</a></li>
-		<li><a href="/stocks/vendro">Vendor</a></li>
-	      </ul>
-	    </li>
-	    	      
-            <li>
-	      <a href="#">Inventory</a>
-	      <ul id="n4">
-		
-	      </ul>
-	    </li>
-	    
-            <li>
-	      <a href="#">Report</a>
-	      <ul id="n5">
+                    </ul> 
+                </li> 
+                </ul>
+        </li> 
+        
+        <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="#">Stock out</a>    
+            <ul id ="n2">
+            
+            <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+                    <a href="#">Distribution</a> 
+                    <ul id = "n21"> 
+                        <li><a href="#">Add</a></li> 
+                        <li><a href="#">Edit</a></li> 
+                        
+                    </ul> 
+                </li> 
+               
+                <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+                    <a href="#">Transfer-out</a> 
+                    <ul id = "n22"> 
+                        <li><a href="#">Add</a></li> 
+                        <li><a href="#">Edit</a></li> 
 
-		<li><a href="">Stock Summary</a></li>
-		<li><a href="">Donation</a></li>
-		<li><a href="">Purchase</a></li>
-		<li><a href="">Distribution</a></li>
-		<li><a href="">Transfer-out</a></li>
-		<li><a href="">Vendor</a></li>
-		<li><a href="">Donor</a></li>
-		
-	      </ul>
-	    </li>
+                    </ul> 
+                </li> 
+                </ul>
+        </li> 
+               
+      
+        
+        <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+            <a href="#">Vendor</a>    
+            <ul id = "n3"> 
+                <li><a href=" ">Update</a></li> 
+            </ul> 
+        </li> 
+        
+        <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+            <a href="#">Donor</a>    
+            <ul id = "n4"> 
+                <li><a href=" ">Update</a></li>  
+            </ul> 
+        </li> 
+        
+        <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+            <a href="#">Current Stock</a>    
+            <ul id="n5"> 
+                <li><a href=" ">??</a></li> 
+                <li><a href=" ">??</a></li> 
+             </ul> 
+        </li> 
+        
+        <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
+            <a href="#">Report</a>    
+            <ul id = "n6"> 
+                    <li><a href="">Stock Summary</a></li>
+		            <li><a href="">Donation</a></li>
+		            <li><a href="">Purchase</a></li>
+		            <li><a href="">Distribution</a></li>
+		            <li><a href="">Transfer-out</a></li>
+		            <li><a href="">Vendor</a></li>
+		            <li><a href="">Donor</a></li>
+            </ul> 
+        </li> 
+       
+	      
         </ul>
     </div>
 </div>
