@@ -6,6 +6,6 @@ urlpatterns = patterns('',
                        url(r'^donation/$', donation, name="donation"),
                        url(r'.?/thanks/$', thanks),
                        url(r'^donor/$', donor),
-                       # url(r'^purchase/$', purchase),
+                       url(r'^purchase/$', purchase),
     
 )
