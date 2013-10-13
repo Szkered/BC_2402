@@ -1,5 +1,8 @@
 from django.conf.urls import patterns, include, url
 from sydb.views import current_datetime
+# For autocomplete
+# import autocomplete_light
+# autocomplete_light.autodiscover()
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -7,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        (r'^test/$', current_datetime), #test page
                        (r'^stocks/', include('stocks.urls', namespace="stocks")),
+                       # url(r'^autocomplete/', include('autocomplete_light.urls')),
                        url(r'^admin/', include(admin.site.urls)),                     
     # Examples:
     # url(r'^$', 'sydb.views.home', name='home'),

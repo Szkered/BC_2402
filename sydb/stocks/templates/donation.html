@@ -7,12 +7,15 @@ Donation
 {% endblock %}
 
 {% block content %}
+  
 <form action="." method="POST">{% csrf_token %}
 
 <h2>Donor Info</h2>
 <div class="header">
-  <label for="id_name">Name:</label>
-  {{donor_form.name}}
+  <div class="ui-widget">
+    <label for="id_name">Name:</label>
+    {{donor_form.name}}
+  </div>
   <label for="id_address">Address:</label>
   {{donor_form.address}}
   <label for="id_contact_no">Contact_no:</label>
