@@ -233,7 +233,7 @@ ul.contact li a:before {
     text-align: center;
 }
 #menu li {
-    display: inline-block
+    display: inline-block;
 }
 #menu a {
     display: block;
@@ -249,7 +249,7 @@ ul.contact li a:before {
 
 }
 #menu a:hover {
-    color: #b5bd68
+    color: #b5bd68;
 }
 #nav ul {
     background: #ffffff; /* Adding a background makes the dropdown work properly in IE7+. */
@@ -268,25 +268,61 @@ ul.contact li a:before {
 #nav ul a {
     white-space: nowrap; /* Stop text wrapping and creating multi-line dropdown items */
 }
+#nav li{
+	position:relative;
+	text-align:center; 
+}
 #nav li:hover ul {
     box-shadow: 1px 1px 1px 1px #bec3c2
 }
 #nav li:hover #n1 {
     /* Display the dropdown on hover */
-    left: 388px; /* Bring back on-screen when needed */
+    postion:absolute;
+    left: -10px; /* Bring back on-screen when needed */
 }
 #nav li:hover #n2 {
-    left: 529px
+
+    left:0px;
 }
 #nav li:hover #n3 {
-    left: 690px
+
+    left: -7px;
 }
 #nav li:hover #n4 {
-    left: 815px
+
+    left: -7px;
 }
 #nav li:hover #n5 {
-    left: 973px
+    left: 17px;
 }
+
+#nav li:hover #n6 {
+    left: 0px;
+}
+/*????????????????????????????????*/
+
+
+#nav li ul li:hover #n11 {
+	top:10px;
+    left: 160px;
+}
+
+#nav li ul li:hover #n12 {
+	top:10px;
+    left: 160px;
+}
+
+#nav li ul li:hover #n21 {
+    top:10px;
+    left: 160px;
+}
+
+#nav li ul li:hover #n22 {
+    top:10px;
+    left: 160px;
+}
+
+
 #nav li:hover a {
     /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
     color: #b5bd68;
