@@ -29,6 +29,7 @@ Donation
 </div>
 <h2>Donated Stocks</h2>
 {{donate_formset.management_form}}
+
 {% for form in donate_formset.forms %}
   <div class="item">
     {{form.as_ul}}

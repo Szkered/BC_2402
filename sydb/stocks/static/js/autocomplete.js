@@ -1,6 +1,6 @@
-$(function(){
-    $("#donors").autocomplete({
-	source: "/api/donation/",
-	minLength: 2,
-    });
+$(function() {
+  $("#id_name").autocomplete({
+    source: "/stocks/donation/",
+    minLength: 2,
+  });
 });

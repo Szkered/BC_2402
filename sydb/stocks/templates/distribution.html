@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Distribution{% endblock %}
+
+{% block title %}
+Distribution
+{% endblock %}
+
+{% block content %}
+
+<form action="." method="POST">{% csrf_token %}
+<h2>Family Type</h2>
+{{family_form}}
+{{date_form}}
+<h2>Standard items to be distributed</h2>
+{{distribution_formset.management_form}}
+<div class="item">
+  <li>
+    Name
+  </li>
+  <li>
+    Unit Measure
+  </li>
+</div>
+
+{% for item in zip %}
+<div class="item">
+<li>
+{{item.0.name}}
+</li>
+<li>
+  {{item.0.unit_measure}}
+</li>
+{{item.1.as_ul}}  
+</div>
+{% endfor %}
+
+<input class="button" type="submit" value="Submit">
+</form>
+ 
+  
+{% endblock %}

@@ -3,30 +3,38 @@
 {% block pagetitle %}Purchase{% endblock %}
 
 {% block title %}
-Vendor Info
+Purchase Order
 {% endblock %}
 
 {% block content %}
+  
 <form action="." method="POST">{% csrf_token %}
 
-  <ul id="formheader">
-   {{donor_form.as_ul}}
-  </ul>
-
-  
-
-  <div id="portfolio-wrapper">
-    <div id="portfolio" class="container">
-      <div class="column1">
-	<div class="box">
-	  <ul>
-	    {{donate_form.as_ul}}
-	  </ul>
-	</div>
-      </div>
-    </div>
+<h2>Vendor Info</h2>
+<div class="header">
+  <div class="ui-widget">
+    <label for="id_name">Name:</label>
+    {{vendor_form.name}}
   </div>
+  <label for="id_address">Address:</label>
+  {{vendor_form.address}}
+  <label for="id_contact_no">Contact_no:</label>
+  {{vendor_form.contact_no}}
+  <label for="id_date">Date:</label>
+  {{date_form.date}}
+</div>
 
-  <input class="button" type="submit" value="Submit">
+<h2>Purchased Stocks</h2>
+{{purchase_formset.management_form}}
+{% for form in purchase_formset.forms %}
+  <div class="item">
+    {{form.as_ul}}
+    <li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
+  </div>
+{% endfor %}
+
+<p><button type="button" class="rounded button"><a id="add" href="#">+</a></button></p>
+<input class="button" type="submit" value="Submit">
 </form>
+
 {% endblock %}

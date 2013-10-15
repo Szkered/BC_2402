@@ -44,10 +44,25 @@ class Stock(models.Model):
 
     def total_price(self):
         return self.unit_price * self.current_amt()
+
+    def category_slug(self):
+        categorys = Category.objects.filter(stock=self)
+        slug = ""
+        for category in categorys:
+            slug += category.name
+            slug += " "
+        return slug
         
 class Category(models.Model):
     stock = models.ForeignKey(Stock)
     name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['stock__name', 'stock__unit_measure']
+
         
 ##################################################
 class Destination(models.Model):
