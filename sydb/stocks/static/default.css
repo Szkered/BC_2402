@@ -164,6 +164,7 @@ li {
     position: absolute;
     left: -9999px; /*Hide off-screen when not needed */
 }
+
 #nav ul li {
     padding-top: 1px; /* Introducing a padding between the li and the a give the illusion spaced items */
     float: none;
@@ -176,22 +177,29 @@ li {
 #nav li:hover ul {
     box-shadow: 1px 1px 1px 1px #bec3c2
 }
+
 #nav li:hover #n1 {
     /* Display the dropdown on hover */
+ 
     left: 388px; /* Bring back on-screen when needed */
 }
 #nav li:hover #n2 {
-    left: 529px
+
+    left: 529px;
 }
 #nav li:hover #n3 {
-    left: 690px
+
+    left: 690px;
 }
 #nav li:hover #n4 {
-    left: 815px
+
+    left: 815px;
 }
 #nav li:hover #n5 {
-    left: 973px
+
+    left: 973px;
 }
+
 #nav li:hover a {
     /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
     color: #b5bd68;
@@ -206,6 +214,7 @@ li {
 }
 #nav li:hover ul li a:hover {
     /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+    
     background: #EAEAEA;
     padding: 13px 20px 12px 10px;
     /*********************************************************************************/
