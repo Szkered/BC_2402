@@ -17,7 +17,7 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="{% static "js/dynamic_formset.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% block autocomplete %}{% endblock %}
     <script type="text/javascript">
       $(function(){
 	  $('#id_date').datepicker();
@@ -74,7 +74,7 @@
                 <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
                     <a href="#">Transfer-out</a> 
                     <ul id = "n22"> 
-                        <li><a href="#">Add</a></li> 
+                        <li><a href="/stocks/transfer/">Add</a></li> 
                         <li><a href="#">Edit</a></li> 
 
                     </ul> 
@@ -94,7 +94,7 @@
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Donor</a>    
             <ul id = "n4"> 
-                <li><a href=" ">Update</a></li>  
+                <li><a href="/stocks/donor/">Update</a></li>  
             </ul> 
         </li> 
         

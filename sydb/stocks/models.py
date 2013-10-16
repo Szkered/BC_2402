@@ -131,6 +131,7 @@ class Distribute(TransitInfo):
 class Transfer(TransitInfo):
     stock = models.ForeignKey(Stock)
     destination = models.ForeignKey(Destination)
+    # remark = models.CharField(max_length=100)
 
 class Donate(TransitInfo):
     stock = models.ForeignKey(Stock)

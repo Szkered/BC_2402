@@ -2,6 +2,17 @@
 
 {% block pagetitle %}Donation{% endblock %}
 
+{% block autocomplete %}
+<script type="text/javascript">
+$(function() {
+  $("#id_name").autocomplete({
+    source: "/stocks/donation/",
+    minLength: 2,
+  });
+});
+</script>
+{% endblock %}
+
 {% block title %}
 Donation
 {% endblock %}
@@ -27,6 +38,7 @@ Donation
   <label for="id_date">Date:</label>
   {{date_form.date}}
 </div>
+
 <h2>Donated Stocks</h2>
 {{donate_formset.management_form}}
 {% for form in donate_formset.forms %}
@@ -38,5 +50,6 @@ Donation
 
 <p><button type="button" class="rounded button"><a id="add" href="#">+</a></button></p>
 <input class="button" type="submit" value="Submit">
+  
 </form>
 {% endblock %}

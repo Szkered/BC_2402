@@ -11,6 +11,12 @@ class VendorForm(forms.ModelForm):
         
 class ConfirmForm(forms.Form):
     confirm = forms.BooleanField()
+
+class StockInForm(forms.Form):
+    stock_name = forms.CharField()
+    quantity = forms.IntegerField()
+    unit_measure = forms.CharField(max_length=10)
+    unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
         
 class DateForm(forms.Form):
     date = forms.DateField()
@@ -30,10 +36,20 @@ class FamilyForm(forms.Form):
     
 class DistributionForm(forms.Form):
     quantity = forms.IntegerField()
-        
-class StockInForm(forms.Form):
+
+class DestinationForm(forms.ModelForm):
+    class Meta:
+        model = Destination
+    
+class TransferForm(forms.Form):
     stock_name = forms.CharField()
+    unit_measure = forms.CharField()
     quantity = forms.IntegerField()
-    unit_measure = forms.CharField(max_length=10)
-    unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
+    # remark = forms.CharField()
+
+class StockForm(forms.ModelForm):
+    class Meta:
+        model = Stock
+        
+
 

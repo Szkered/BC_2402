@@ -10,11 +10,8 @@ Distribution
 
 <form action="." method="POST">{% csrf_token %}
 <h2>Family Type</h2>
-<div class="header">
-  {{family_form}}
-  {{date_form}}
-</div>
-
+{{destination_form.as_ul}}
+{{date_form}}
 <h2>Standard items to be distributed</h2>
 {{distribution_formset.management_form}}
 <div class="item">

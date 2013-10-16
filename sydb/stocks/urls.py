@@ -7,6 +7,7 @@ urlpatterns = patterns('',
                        url(r'.?/thanks/$', thanks),
                        url(r'^donor/$', donor),
                        url(r'^purchase/$', purchase),
-                       url(r'distribution/$', distribution),
+                       url(r'^distribution/$', distribution),
+                       url(r'^transfer/$', transfer),
     
 )

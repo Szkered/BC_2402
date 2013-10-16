@@ -1,7 +1,8 @@
-html,
-body {
-    height: 100%
+* {
+  margin: 0;
+  padding: 0;
 }
+
 body {
     margin: 0px;
     padding: 0px;
@@ -10,12 +11,23 @@ body {
     font-size: 12pt;
     font-weight: 400;
     color: #4E4D4D;
+
 }
-h1,
+h1{
+	font-size: 30pt;
+    margin: 20px 0px 0px 0px;
+    padding: 0;
+    text-align:center;
+}
+
 h2,
 h3 {
-    margin: 0;
+    margin: 20px 0px 0px 0px;
     padding: 0;
+    text-align:left;
+}
+h5{
+	text-align:center;
 }
 p,
 ol,
@@ -30,9 +42,7 @@ ul {
 p {
     line-height: 180%
 }
-strong {
 
-}
 a {
     color: #fff;
     text-decoration: none;
@@ -49,10 +59,47 @@ li {
     display: inline-block;
 }
 
+
 .item, .header {
     background: #fff;
     box-shadow: 1px 1px 1px 1px #bec3c2;
     padding: 7px;
+}
+
+
+#header {
+  background: #3f3f3f;/*header全屏背景色设置*/
+  color: #fff;
+  margin-bottom: 0px; /*顶部与主内容垂直间距，可自行修改*/
+
+}
+
+.main-content {
+  float: right;/*主内容居右*/
+}
+
+#footer {
+  background: #3f3f3f;/*footer全屏背景色设置*/
+  color: #fff;
+  margin-bottom:0px;
+  text-align: center;
+
+}
+
+/*测试样式，可自行修改*/
+#header .container {
+  width: 100%;
+}
+
+
+.main-content {
+  background-color: #F2F2E6;
+  height: 350px;
+  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+#footer .container {
+  margin-top: 20%;
 }
 
 /*********************************************************************************/
@@ -60,10 +107,12 @@ li {
 /*********************************************************************************/
 .button a {
     color: #fff;
+   
 }
 
 .button a:hover {
     color: #b5bd68;
+
 }
 
 .button {
@@ -81,6 +130,7 @@ li {
     border: none;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
+
 }
 .button:before {
 
@@ -96,36 +146,8 @@ li {
     border-radius: 10px;
     font-weight: 900;
 }
-/*********************************************************************************/
-/* Header                                                                        */
-/*********************************************************************************/
-#header {
-    background: #3f3f3f
-}
-/*********************************************************************************/
-/* Logo                                                                          */
-/*********************************************************************************/
-#logo {
-    padding: 2em 0 0.5em 0;
-    text-transform: uppercase;
-}
-#logo h1 {
-    text-align: center;
-    font-weight: 900;
-    font-size: 2.5em;
-}
-#logo h1 a {
 
-}
-#logo span {
-    padding: 0em 0em 0em 0.5em
-}
-#logo h1:before {
 
-}
-#logo a {
-    color: #3f3f3f
-}
 /*********************************************************************************/
 /* Menu                                                                          */
 /*********************************************************************************/
@@ -154,6 +176,7 @@ li {
 #menu a:hover {
     color: #b5bd68;
 }
+
 #nav ul {
     background: #ffffff; /* Adding a background makes the dropdown work properly in IE7+. */
     list-style: none;
@@ -175,6 +198,7 @@ li {
 	position:relative;
 	text-align:center; 
 }
+
 #nav li:hover ul {
     box-shadow: 1px 1px 1px 1px #bec3c2
 }
@@ -200,9 +224,8 @@ li {
 }
 
 #nav li:hover #n6 {
-    left: 0px;
+    left: 1px;
 }
-/*????????????????????????????????*/
 
 
 #nav li ul li:hover #n11 {
@@ -230,6 +253,16 @@ li {
     /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
     color: #b5bd68;
 }
+
+#nav li ul li a:hover  {
+	background:#3f3f3f;
+}
+#nav li ul li ul li  a:hover{
+	background:#3f3f3f;
+}
+
+
+
 #nav li:hover ul a {
     /* The persistent hover state does however create a global style for links even before they're hovered. Here we undo these effects. */
     text-decoration: none;
@@ -242,72 +275,21 @@ li {
     /* Here we define the most explicit hover states--what happens when you hover each individual link. */
     background: #EAEAEA;
     padding: 13px 20px 12px 10px;
-    /*********************************************************************************/
-    /* Banner                                                                        */
-    /*********************************************************************************/
-    #banner: ;
-    {: ;
+    
 }
+
+
 /*********************************************************************************/
 /* Page                                                                          */
 /*********************************************************************************/
 #page {
+	min-height:100%;
     overflow: hidden;
     padding: 3em 0em 0em 0em;
     border-top: 1px solid #E5E5E5;
+    align:center;
 }
 
-/*********************************************************************************/
-/* Content                                                                       */
-/*********************************************************************************/
-#content {
-    float: left;
-    width: 1200px;
-}
-#content .title {
-    padding-bottom: 0.5em;
-    text-align: left;
-}
-#content h2 {
-    font-size: 2em
-}
-#content .byline {
-    padding-top: 0;
-    font-size: 1.5em;
-}
-
-/*********************************************************************************/
-/* Copyright                                                                     */
-/*********************************************************************************/
-#copyright {
-    overflow: hidden;
-    padding: 5em 0em;
-}
-#copyright p {
-    letter-spacing: 0.20em;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 0.80em;
-    color: #6F6F6F;
-}
-#copyright a {
-    text-decoration: none;
-    color: #8C8C8C;
-}
-
-/*********************************************************************************/
-/* Table                                                                       */
-/*********************************************************************************/
-form ul {
-    margin: 0;
-    padding: 20px 0px 20px 0px;
-    list-style: none;
-    line-height: normal;
-    text-align: left;
-}
-form ul li {
-    display: inline-block
-}
-form h2{
-    padding: 5px;
+.ui-widget {
+    display:inline;
 }
