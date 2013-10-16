@@ -9,5 +9,6 @@ urlpatterns = patterns('',
                        url(r'^purchase/$', purchase),
                        url(r'^distribution/$', distribution),
                        url(r'^transfer/$', transfer),
+                       url(r'^current_stock/$', current_stock),
     
 )

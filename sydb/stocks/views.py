@@ -209,3 +209,11 @@ def donor(request):
                   RequestContext(request, {'donor_list': donor_list}))
 
 
+def current_stock(request):
+    stocks = Stock.objects.all()
+    return render(request, 'current_stock.html',
+                  RequestContext(request, {
+                      'stocks': stocks
+                  }))
+
+    

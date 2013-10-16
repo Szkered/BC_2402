@@ -5,7 +5,7 @@
 {% block autocomplete %}
 <script type="text/javascript">
 $(function() {
-  $("#id_name").autocomplete({
+  $("input[name$='name']").autocomplete({
     source: "/stocks/donation/",
     minLength: 2,
   });
@@ -43,7 +43,16 @@ Donation
 {{donate_formset.management_form}}
 {% for form in donate_formset.forms %}
   <div class="item">
-    {{form.as_ul}}
+    <div class="ui-widget">
+      <label for="id_stock_name">Name:</label>
+      {{form.stock_name}}
+    </div>
+    <label for="id_quantity">Quantity:</label>
+    {{form.quantity}}
+    <label for="id_unit_measure">Unit Measure:</label>
+    {{form.unit_measure}}
+    <label for="id_unit_price">Unit price:</label>
+    {{form.unit_price}}
     <li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
   </div>
 {% endfor %}
