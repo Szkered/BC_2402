@@ -51,5 +51,5 @@ class StockForm(forms.ModelForm):
     class Meta:
         model = Stock
         
-
-
+class CategoryForm(forms.Form):
+    category = forms.CharField()

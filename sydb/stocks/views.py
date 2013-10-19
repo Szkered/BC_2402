@@ -11,6 +11,8 @@ from django.views.generic.base import RedirectView
 # formset
 from django.forms.formsets import formset_factory, BaseFormSet
 
+# regex
+import re
 
 # models & forms
 from stocks.models import *
@@ -22,6 +24,7 @@ class RequiredFormSet(BaseFormSet):
         super(RequiredFormSet, self).__init__(*args, **kwargs)
         for form in self.forms:
             form.empty_permitted = False # self.forms[0].empty_permitted = False
+            
             
 StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSet)
 
@@ -89,8 +92,9 @@ def purchase(request):
         vendor_form = VendorForm(request.POST or None)
         purchase_formset = StockInFormSet(request.POST or None)
         date_form = DateForm(request.POST or None)
+        category_form = CategoryForm(request.POST or None)
         if(vendor_form.is_valid() and purchase_formset.is_valid()
-           and date_form.is_valid()):
+           and date_form.is_valid() and category_form.is_valid()):
             v, created = Vendor.objects.get_or_create(**vendor_form.cleaned_data)
             for purchase_form in purchase_formset:
                 s, created = Stock.objects.get_or_create(
@@ -105,10 +109,20 @@ def purchase(request):
                     vendor=v,
                     confirm=False
                 )
+                category_list = re.split(
+                    ', | ',
+                     category_form.cleaned_data['category']
+                )
+                for item in category_list:
+                    category = Category.objects.create(
+                        stock=s,
+                        name=item
+                    )
             return HttpResponseRedirect('thanks')
 
         context = RequestContext(request, {'vendor_form': vendor_form,
                                            'date_form': date_form,
+                                           'category_form': category_form,
                                            'purchase_formset': purchase_formset})
         template = loader.get_template('purchase.html')
         data = template.render(context)

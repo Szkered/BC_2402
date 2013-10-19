@@ -7,28 +7,26 @@ class StockAdmin(admin.ModelAdmin):
                     'current_amt', 'total_price', 'category_slug'
     ]
     ordering = ['name']
-    search_fields = ('name',)
+    search_fields = ('name','category_slug')
 
 # class StockInline(admin.TabularInline):
 #     model = Stock
 #     extra = 1
 
 class DonorAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['name', 'contact_no', 'address', 'referral', 'mailing']
+    ordering = ['name']
 
-# class DonateAdmin(admin.ModelAdmin):
-#     # fieldsets = {
-#     #     ('Donor Info': {'fields': ['quantity']}),
-#     #     ('Date Info': {'fields': ['date']}),
-#     # }
-#     # inlines = [StockInline]
-#     pass
+class DonateAdmin(admin.ModelAdmin):
+    list_display = ['stock', 'quantity', 'donor', 'date']
+    ordering = ['date']
     
 class DestinationAdmin(admin.ModelAdmin):
     pass
     
 class VendorAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['name', 'contact_no', 'address']
+    ordering = ['name']
     
     
     
@@ -36,7 +34,7 @@ admin.site.register(Stock, StockAdmin)
 admin.site.register(Donor, DonorAdmin)
 admin.site.register(Destination, DestinationAdmin)
 admin.site.register(Vendor, VendorAdmin)
-admin.site.register(Donate)
+admin.site.register(Donate, DonateAdmin)
 admin.site.register(Purchase)
 admin.site.register(Distribute)
 admin.site.register(Transfer)
