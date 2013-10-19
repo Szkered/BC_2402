@@ -252,23 +252,182 @@ def current_stock(request):
 #        for col, col_data in enumerate(row_data):
 #                 sheet.write(row, col, col_data)
 
-    stock=Stock.objects.all()
-    length = len(stock)
-    i = 0;
-    for row in range(length):
-        while True:
-            i=i+1
-            item = Stock.objects.get(id = i)
-            if not(item is None):
-                break
-        sheet.write(row+1, 0, item.id)
-        sheet.write(row+1, 1, item.name)
-        sheet.write(row+1, 2, item.unit_measure)
-        sheet.write(row+1, 3, item.unit_price)
+    row = 0
+    stock = Stock.objects.order_by('name')
+    for item in stock:
+        row = row + 1
+        sheet.write(row, 0, item.id)
+        sheet.write(row, 1, item.name)
+        sheet.write(row, 2, item.unit_measure)
+        sheet.write(row, 3, item.unit_price)
+    
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=my_data.xls'
     book.save(response)
     return response
 
-    
+def stock_summary_report(request):
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet('my_sheet')
+
+    header = ['Name', 'Unit Measure', 'Unit Price','Total']
+    for hcol, hcol_data in enumerate(header):
+        sheet.write(0, hcol, hcol_data)
+
+    row = 0
+    stock = Stock.objects.order_by('name','stock__unit_measure')
+    for item in stock:
+        row = row + 1
+        sheet.write(row, 0, item.name)
+        sheet.write(row, 1, item.unit_measure)
+        sheet.write(row, 2, item.unit_price)
+        sheet.write(row, 3, item.current_amt())
+        
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=stock_summary_report.xls'
+    book.save(response)
+    return response
+
+def donation_report(request):
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet('my_sheet')
+
+    header = ['Donor', 'Donated Stock', 'Unit Measure','Quantity']
+    for hcol, hcol_data in enumerate(header):
+        sheet.write(0, hcol, hcol_data)
+
+    row = 0
+    donation = Donate.objects.order_by('stock__name','stock__unit_measure')
+    for item in donation:
+        row = row + 1
+        sheet.write(row, 0, Donor.objects.get(id = item.donor_id).name)
+        stock = Stock.objects.get(id = item.stock_id)
+        sheet.write(row, 1, stock.name)
+        sheet.write(row, 2, stock.unit_measure)
+        sheet.write(row, 3, item.quantity)
+#        sheet.write(row, 4, item.date)
+        
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=donation_report.xls'
+    book.save(response)
+    return response
+
+def purchase_report(request):
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet('my_sheet')
+
+    header = ['Vendor', 'Purchased Stock', 'Unit Measure','Quantity']
+    for hcol, hcol_data in enumerate(header):
+        sheet.write(0, hcol, hcol_data)
+
+    row = 0
+    purchase = Purchase.objects.order_by('stock__name','stock__unit_measure')
+    for item in purchase:
+        row = row + 1
+        sheet.write(row, 0, Vendor.objects.get(id = item.vendor_id).name)
+        stock = Stock.objects.get(id = item.stock_id)
+        sheet.write(row, 1, stock.name)
+        sheet.write(row, 2, stock.unit_measure)
+        sheet.write(row, 3, item.quantity)
+#        sheet.write(row, 4, item.date)
+        
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Purchase_report.xls'
+    book.save(response)
+    return response
+
+def distribution_report(request):
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet('my_sheet')
+
+    header = ['Stock', 'Unit Measure' ,'Quantity','Family Type']
+    for hcol, hcol_data in enumerate(header):
+        sheet.write(0, hcol, hcol_data)
+
+    row = 0
+    distribute = Distribute.objects.order_by('stock__name','family_type')
+    for item in distribute:
+        row = row + 1
+        stock = Stock.objects.get(id = item.stock_id)
+        sheet.write(row, 0, stock.name)
+        sheet.write(row, 1, stock.unit_measure)
+        sheet.write(row, 2, item.quantity)
+        sheet.write(row, 3, item.family_type)
+#        sheet.write(row, 4, item.date)
+        
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=distribution_report.xls'
+    book.save(response)
+    return response
+
+def transfer_out_report(request):
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet('my_sheet')
+
+    header = ['Stock', 'Unit measure', 'Quantity', 'Destination']
+    for hcol, hcol_data in enumerate(header):
+        sheet.write(0, hcol, hcol_data)
+
+    row = 0
+    transfer = Transfer.objects.order_by('stock__name','destination')
+    for item in transfer:
+        row = row + 1
+        stock = Stock.objects.get(id = item.stock_id)
+        sheet.write(row, 0, stock.name)
+        sheet.write(row, 1, stock.unit_measure)
+        sheet.write(row, 2, item.quantity)
+        sheet.write(row, 3, Destination.objects.get(id = item.destination_id).name)
+#        sheet.write(row, 4, item.date)
+        
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=transfer_out_report.xls'
+    book.save(response)
+    return response
+
+def vendor_report(request):
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet('my_sheet')
+
+    header = ['Name', 'Address', 'Contact Number']
+    for hcol, hcol_data in enumerate(header):
+        sheet.write(0, hcol, hcol_data)
+
+    row = 0
+    vendor = Vendor.objects.order_by('name','address')
+    for item in vendor:
+        row = row + 1
+        sheet.write(row, 0, item.name)
+        sheet.write(row, 1, item.address)
+        sheet.write(row, 2, item.contact_no)
+        
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=vendor_report.xls'
+    book.save(response)
+    return response
+
+def donor_report(request):
+    book = xlwt.Workbook(encoding='utf8')
+    sheet = book.add_sheet('my_sheet')
+
+    header = ['Name', 'Address', 'Contact Number', 'mailing', 'Referral']
+    for hcol, hcol_data in enumerate(header):
+        sheet.write(0, hcol, hcol_data)
+
+    row = 0
+    donor = Donor.objects.order_by('name','address')
+    for item in donor:
+        row = row + 1
+        sheet.write(row, 0, item.name)
+        sheet.write(row, 1, item.address)
+        sheet.write(row, 2, item.contact_no)
+        mail = {0:'NO', 1:'YES'}
+        sheet.write(row, 3, mail[item.mailing])
+        referral_types = {'F':'FM 97.2', 'C':'SYCC Client', 'V':'SYCC Volunteer',
+                    'R':'Regular Donor', 'O':'Others'}
+        sheet.write(row, 4, referral_types[item.referral])
+        
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=donor_report.xls'
+    book.save(response)
+    return response
