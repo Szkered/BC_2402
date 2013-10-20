@@ -1,8 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-
 body {
     margin: 0px;
     padding: 0px;
@@ -11,7 +6,6 @@ body {
     font-size: 12pt;
     font-weight: 400;
     color: #4E4D4D;
-
 }
 h1{
 	font-size: 30pt;
@@ -29,12 +23,12 @@ h3 {
 h5{
 	text-align:center;
 }
+
 p,
-ol,
 ul {
     margin-top: 0
 }
-ol,
+
 ul {
     padding: 0;
     list-style: none;
@@ -47,9 +41,11 @@ a {
     color: #fff;
     text-decoration: none;
 }
+
 a:hover {
     color: #b5bd68;
 }
+
 .container {
     width: 1200px;
     margin: 0px auto;
@@ -59,19 +55,17 @@ li {
     display: inline-block;
 }
 
-
 .item, .header {
     background: #fff;
     box-shadow: 1px 1px 1px 1px #bec3c2;
     padding: 7px;
 }
 
-
 #header {
   background: #3f3f3f;/*header全屏背景色设置*/
   color: #fff;
   margin-bottom: 0px; /*顶部与主内容垂直间距，可自行修改*/
-
+  width:1349px;
 }
 
 .main-content {
@@ -83,23 +77,17 @@ li {
   color: #fff;
   margin-bottom:0px;
   text-align: center;
-
-}
-
-/*测试样式，可自行修改*/
-#header .container {
-  width: 100%;
+  width:1349px;
 }
 
 
 .main-content {
   background-color: #F2F2E6;
-  height: 350px;
   box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 #footer .container {
-  margin-top: 20%;
+  margin-top: 25%;
 }
 
 /*********************************************************************************/
@@ -112,7 +100,7 @@ li {
 
 .button a:hover {
     color: #b5bd68;
-
+  
 }
 
 .button {
@@ -130,14 +118,11 @@ li {
     border: none;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
-
 }
-.button:before {
 
-}
 
 .rounded {
-    margin: 0;
+    margin: 5px;
     padding: 0 0 2px 0;
     letter-spacing: 0;
     height: 20px;
@@ -156,6 +141,7 @@ li {
     list-style: none;
     line-height: normal;
     text-align: center;
+    position:relative;
 }
 #menu li {
     display: inline-block;
@@ -169,9 +155,6 @@ li {
     font-size: 1em;
     font-weight: 700;
     color: #FFF;
-}
-#menu .current_page_item a {
-
 }
 #menu a:hover {
     color: #b5bd68;
@@ -278,16 +261,17 @@ li {
     
 }
 
-
 /*********************************************************************************/
 /* Page                                                                          */
 /*********************************************************************************/
 #page {
-	min-height:100%;
+	
     overflow: hidden;
     padding: 3em 0em 0em 0em;
     border-top: 1px solid #E5E5E5;
     align:center;
+    width:1349px;
+
 }
 
 .ui-widget {
