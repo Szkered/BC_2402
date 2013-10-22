@@ -9,15 +9,12 @@
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
     {% load static %}
     <link href="{% static "css/default.css" %}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{% static "css/font.css" %}" rel="stylesheet" type="text/css" media="all" />
     <link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css" media="all" />
     <link href="{% static "css/jquery-ui-1.10.3.custom.css" %}" rel="stylesheet" type="text/css" media="all" />
-    <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/smoothness/jquery-ui.css" type="text/css" media="all" /> -->
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/base/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="{% static "js/jquery-1.10.2.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/jquery-ui-1.10.3.custom.js" %}" type="text/javascript"></script>
     <script src="{% static "js/dynamic_formset.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+    {% block autocomplete %}{% endblock %}
     <script type="text/javascript">
       $(function(){
 	  $('#id_date').datepicker();
@@ -101,8 +98,7 @@
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Current Stock</a>    
             <ul id="n5"> 
-                <li><a href=" ">??</a></li> 
-                <li><a href=" ">??</a></li> 
+                <li><a href=" ">Update</a></li> 
              </ul> 
         </li> 
         
@@ -116,6 +112,7 @@
 		            <li><a href="">Transfer-out</a></li>
 		            <li><a href="">Vendor</a></li>
 		            <li><a href="">Donor</a></li>
+			    <li><a href="">Thank you letter</a></li>
             </ul> 
         </li> 
        

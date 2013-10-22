@@ -32,101 +32,136 @@ StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSe
 def thanks(request):
     return render(request, 'thanks.html')
 
+def get_donors(request):
+    q = request.GET.get('term', '')
+    donors = Donor.objects.filter(name__icontains = q)[:20]
+    results = [{'label': '%s, tel: %s' % (donor.name, donor.contact_no),
+                'name': donor.name,
+                'address': donor.address,
+                'contact_no': donor.contact_no,
+                'mailing': donor.mailing,
+                'referral': donor.referral,
+            } for donor in donors]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_stocks(request):
+    q = request.GET.get('term', '')
+    stocks = Stock.objects.filter(name__icontains = q)[:20]
+    cList = Category.objects.filter(stock__name__icontains = q)
+    categorys = set()
+    categorys = {c.name for c in cList if c.name not in categorys}
+    catSlug = ''
+    for category in categorys:
+        catSlug += category + ' '
+    results = [{'value': '%s - %s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
+                'name': stock.name,
+                'unit_measure': stock.unit_measure,
+                'unit_price': stock.unit_price,
+                'categorys': catSlug,
+            } for stock in stocks]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_vendors(request):
+    q = request.GET.get('term', '')
+    vendors = Vendor.objects.filter(name__icontains = q)[:20]
+    results = [{'value': '%s, address: %s, tel: %s' % (vendor.name, vendor.address, vendor.contact_no),
+                'name': vendor.name,
+                'address': vendor.address,
+                'contact_no': vendor.contact_no,
+            } for vendor in vendors]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_categorys(request):
+    q = request.GET.get('term', '')
+    categorys = Category.objects.filter(name__icontains = q)[:20]
+    cList = {}
+    cList = {c.name for c in categorys if c.name not in cList}
+    results = [{'value': category} for category in cList]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
 def donation(request):
-    # Autocomplete (work in progress)
-    if(request.is_ajax()):
-        q = request.GET.get('term', '')
-        donors = Donor.objects.filter(name__icontains = q)[:20]
-        results = []
-        for donor in donors:
-            donor_json = {}
-            donor_json['label'] = donor.name
-            results.append(donor_json)
-        data = simplejson.dumps(results)
-        mimetype = 'application/json'
-
-    # form action handling
-    else:
-        donor_form = DonorForm(request.POST or None)
-        donate_formset = StockInFormSet(request.POST or None)
-        date_form = DateForm(request.POST or None)
-        if(donor_form.is_valid() and donate_formset.is_valid() and date_form.is_valid()):
-            d, created = Donor.objects.get_or_create(**donor_form.cleaned_data)
-            for donate_form in donate_formset:
-                s, created = Stock.objects.get_or_create(
-                    name=donate_form.cleaned_data['stock_name'],
-                    unit_price=donate_form.cleaned_data['unit_price'],
-                    unit_measure=donate_form.cleaned_data['unit_measure']
-                )
-                donate = Donate.objects.create(
-                    date=date_form.cleaned_data['date'],
-                    quantity=donate_form.cleaned_data['quantity'],
+    donor_form = DonorForm(request.POST or None)
+    donate_formset = StockInFormSet(request.POST or None)
+    date_form = DateForm(request.POST or None)
+    
+    if(donor_form.is_valid() and donate_formset.is_valid() and date_form.is_valid()):
+        d, created = Donor.objects.get_or_create(**donor_form.cleaned_data)
+        for donate_form in donate_formset:
+            s, created = Stock.objects.get_or_create(
+                name=donate_form.cleaned_data['stock_name'],
+                unit_price=donate_form.cleaned_data['unit_price'],
+                unit_measure=donate_form.cleaned_data['unit_measure']
+            )
+            donate = Donate.objects.create(
+                date=date_form.cleaned_data['date'],
+                quantity=donate_form.cleaned_data['quantity'],
+                stock=s,
+                donor=d
+            )
+            category_list = re.split(
+                ', | ',
+                donate_form.cleaned_data['category']
+            )
+            for item in category_list:
+                category, created = Category.objects.get_or_create(
                     stock=s,
-                    donor=d
+                    name=item
                 )
-            return HttpResponseRedirect('thanks')
-
-        context = RequestContext(request, {'donor_form': donor_form,
-                                           'date_form': date_form,
-                                           'donate_formset': donate_formset})
-        template = loader.get_template('donation.html')
-        data = template.render(context)
-        mimetype = "text/html; charset=utf-8"
+        return HttpResponseRedirect('thanks')
+                
+    context = RequestContext(request, {'donor_form': donor_form,
+                                       'date_form': date_form,
+                                       'donate_formset': donate_formset})
+    template = loader.get_template('donation.html')
+    data = template.render(context)
+    mimetype = "text/html; charset=utf-8"
     return HttpResponse(data, mimetype)
                   
 def purchase(request):
-    # Autocomplete 
-    if(request.is_ajax()):
-        q = request.GET.get('term', '')
-        vendors = Vendor.objects.filter(name__icontains = q)[:20]
-        results = []
-        for vendor in vendors:
-            vendor_json = {}
-            vendor_json['label'] = vendor.name
-            results.append(vendor_json)
-        data = simplejson.dumps(results)
-        mimetype = 'application/json'
-
-    # form action handling
-    else:
-        vendor_form = VendorForm(request.POST or None)
-        purchase_formset = StockInFormSet(request.POST or None)
-        date_form = DateForm(request.POST or None)
-        category_form = CategoryForm(request.POST or None)
-        if(vendor_form.is_valid() and purchase_formset.is_valid()
-           and date_form.is_valid() and category_form.is_valid()):
-            v, created = Vendor.objects.get_or_create(**vendor_form.cleaned_data)
-            for purchase_form in purchase_formset:
-                s, created = Stock.objects.get_or_create(
-                    name=purchase_form.cleaned_data['stock_name'],
-                    unit_price=purchase_form.cleaned_data['unit_price'],
-                    unit_measure=purchase_form.cleaned_data['unit_measure']
-                )
-                purchase = Purchase.objects.create(
-                        date=date_form.cleaned_data['date'],
-                    quantity=purchase_form.cleaned_data['quantity'],
+    vendor_form = VendorForm(request.POST or None)
+    purchase_formset = StockInFormSet(request.POST or None)
+    date_form = DateForm(request.POST or None)
+    if(vendor_form.is_valid() and purchase_formset.is_valid()
+       and date_form.is_valid()):
+        v, created = Vendor.objects.get_or_create(**vendor_form.cleaned_data)
+        for purchase_form in purchase_formset:
+            s, created = Stock.objects.get_or_create(
+                name=purchase_form.cleaned_data['stock_name'],
+                unit_price=purchase_form.cleaned_data['unit_price'],
+                unit_measure=purchase_form.cleaned_data['unit_measure']
+            )
+            purchase = Purchase.objects.create(
+                date=date_form.cleaned_data['date'],
+                quantity=purchase_form.cleaned_data['quantity'],
+                stock=s,
+                vendor=v,
+                confirm=False
+            )
+            category_list = re.split(
+                ', | ',
+                     purchase_form.cleaned_data['category']
+            )
+            for item in category_list:
+                category, created = Category.objects.get_or_create(
                     stock=s,
-                    vendor=v,
-                    confirm=False
+                    name=item
                 )
-                category_list = re.split(
-                    ', | ',
-                     category_form.cleaned_data['category']
-                )
-                for item in category_list:
-                    category = Category.objects.create(
-                        stock=s,
-                        name=item
-                    )
-            return HttpResponseRedirect('thanks')
+        return HttpResponseRedirect('thanks')
 
-        context = RequestContext(request, {'vendor_form': vendor_form,
-                                           'date_form': date_form,
-                                           'category_form': category_form,
-                                           'purchase_formset': purchase_formset})
-        template = loader.get_template('purchase.html')
-        data = template.render(context)
-        mimetype = "text/html; charset=utf-8"
+    context = RequestContext(request, {'vendor_form': vendor_form,
+                                       'date_form': date_form,
+                                       'purchase_formset': purchase_formset})
+    template = loader.get_template('purchase.html')
+    data = template.render(context)
+    mimetype = "text/html; charset=utf-8"
     return HttpResponse(data, mimetype)
     
 def distribution(request):
@@ -276,7 +311,7 @@ def stock_summary_report(request):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
-    stock = Stock.objects.order_by('name','stock__unit_measure')
+    stock = Stock.objects.order_by('name','unit_measure')
     for item in stock:
         row = row + 1
         sheet.write(row, 0, item.name)

@@ -3,14 +3,9 @@
 {% block pagetitle %}Donation{% endblock %}
 
 {% block autocomplete %}
-<script type="text/javascript">
-$(function() {
-  $("input[name$='name']").autocomplete({
-    source: "/stocks/donation/",
-    minLength: 2,
-  });
-});
-</script>
+  {% load static %}
+  <script src="{% static "js/autocomplete_donation.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block title %}
@@ -23,36 +18,15 @@ Donation
 
 <h2>Donor Info</h2>
 <div class="header">
-  <div class="ui-widget">
-    <label for="id_name">Name:</label>
-    {{donor_form.name}}
-  </div>
-  <label for="id_address">Address:</label>
-  {{donor_form.address}}
-  <label for="id_contact_no">Contact_no:</label>
-  {{donor_form.contact_no}}
-  <label for="id_mailing">Mailing:</label>
-  {{donor_form.mailing}}
-  <label for="id_referral">Referral:</label>
-  {{donor_form.referral}}
-  <label for="id_date">Date:</label>
-  {{date_form.date}}
+  {{donor_form.as_ul}}
+  {{date_form.as_ul}}
 </div>
 
 <h2>Donated Stocks</h2>
 {{donate_formset.management_form}}
 {% for form in donate_formset.forms %}
   <div class="item">
-    <div class="ui-widget">
-      <label for="id_stock_name">Name:</label>
-      {{form.stock_name}}
-    </div>
-    <label for="id_quantity">Quantity:</label>
-    {{form.quantity}}
-    <label for="id_unit_measure">Unit Measure:</label>
-    {{form.unit_measure}}
-    <label for="id_unit_price">Unit price:</label>
-    {{form.unit_price}}
+    {{form.as_ul}}
     <li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
   </div>
 {% endfor %}

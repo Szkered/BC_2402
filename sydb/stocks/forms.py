@@ -4,7 +4,7 @@ from stocks.models import *
 class DonorForm(forms.ModelForm):
     class Meta:
         model = Donor
-
+        
 class VendorForm(forms.ModelForm):
     class Meta:
         model = Vendor
@@ -14,9 +14,10 @@ class ConfirmForm(forms.Form):
 
 class StockInForm(forms.Form):
     stock_name = forms.CharField()
-    quantity = forms.IntegerField()
-    unit_measure = forms.CharField(max_length=10)
     unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
+    unit_measure = forms.CharField(max_length=10)
+    category = forms.CharField()
+    quantity = forms.IntegerField()
         
 class DateForm(forms.Form):
     date = forms.DateField()
