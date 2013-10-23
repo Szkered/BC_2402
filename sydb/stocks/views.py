@@ -32,6 +32,9 @@ StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSe
 def thanks(request):
     return render(request, 'thanks.html')
 
+def index(request):
+    return render(request, 'index.html')
+
 def get_donors(request):
     q = request.GET.get('term', '')
     donors = Donor.objects.filter(name__icontains = q)[:20]
@@ -83,6 +86,18 @@ def get_categorys(request):
     cList = {}
     cList = {c.name for c in categorys if c.name not in cList}
     results = [{'value': category} for category in cList]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_destination(request):
+    q = request.GET.get('term', '')
+    destinations = Destination.objects.filter(name__icontains = q)[:20]
+    results = [{'value': '%s, tel: %s' % (destination.name, destination.contact_no),
+                'name': destination.name,
+                'person_in_charge': destination.person_in_charge,
+                'contact_no': destination.contact_no,
+            } for destination in destinations]
     data = simplejson.dumps(results)
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
@@ -257,6 +272,21 @@ def donor(request):
     return render(request, 'donor.html',
                   RequestContext(request, {'donor_list': donor_list}))
 
+
+
+def donation_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        donations = Donate.objects.filter(date__range=[start_date, end_date])
+    else:
+        donations = Donate.objects.all()
+    return render(request, 'donation_summary.html',
+                  RequestContext(request, {'donations': donations,
+                                           'start_end_date_form': start_end_date_form}))
+    
+# EXCEL generation
 import xlwt3 as xlwt
 def current_stock(request):
     book = xlwt.Workbook(encoding='utf8')
@@ -325,6 +355,9 @@ def stock_summary_report(request):
     return response
 
 def donation_report(request):
+    start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
+    end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
+    
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -333,7 +366,7 @@ def donation_report(request):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
-    donation = Donate.objects.order_by('stock__name','stock__unit_measure')
+    donation = Donate.objects.filter(date__range=[start_date, end_date]).order_by('stock__name','stock__unit_measure')
     for item in donation:
         row = row + 1
         sheet.write(row, 0, Donor.objects.get(id = item.donor_id).name)
@@ -341,7 +374,7 @@ def donation_report(request):
         sheet.write(row, 1, stock.name)
         sheet.write(row, 2, stock.unit_measure)
         sheet.write(row, 3, item.quantity)
-#        sheet.write(row, 4, item.date)
+        sheet.write(row, 4, item.date.strftime("%Y %m %d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=donation_report.xls'

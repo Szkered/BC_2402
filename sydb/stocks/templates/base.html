@@ -17,7 +17,7 @@
     {% block autocomplete %}{% endblock %}
     <script type="text/javascript">
       $(function(){
-	  $('#id_date').datepicker();
+	  $('[name$=date]').datepicker();
       });
     </script>
     
@@ -106,13 +106,13 @@
             <a href="#">Report</a>    
             <ul id="n6"> 
                     <li><a href="">Stock Summary</a></li>
-		            <li><a href="">Donation</a></li>
-		            <li><a href="">Purchase</a></li>
-		            <li><a href="">Distribution</a></li>
-		            <li><a href="">Transfer-out</a></li>
-		            <li><a href="">Vendor</a></li>
-		            <li><a href="">Donor</a></li>
-			    <li><a href="">Thank you letter</a></li>
+		    <li><a href="/stocks/donation_summary/">Donation</a></li>
+		    <li><a href="">Purchase</a></li>
+		    <li><a href="">Distribution</a></li>
+		    <li><a href="">Transfer-out</a></li>
+		    <li><a href="">Vendor</a></li>
+		    <li><a href="">Donor</a></li>
+		    <li><a href="">Thank you letter</a></li>
             </ul> 
         </li> 
        
@@ -135,12 +135,13 @@
     </div>
  </div>
 
+ {% block footer %}
  <div id="footer">
  <div  class="container">
    <h5>Copyright  &copy; 2013 D&Liz&MX et al. All rights reserved. | Designed by Derek .</h5>
  </div>
  </div>  
-
+{% endblock %}
   </body>
 </html>
 

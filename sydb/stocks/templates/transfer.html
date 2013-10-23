@@ -3,14 +3,9 @@
 {% block pagetitle %}Transfer{% endblock %}
 
 {% block autocomplete %}
-<script type="text/javascript">
-$(function() {
-  $("#id_name").autocomplete({
-    source: "/stocks/transfer/",
-    minLength: 2,
-  });
-});
-</script>
+  {% load static %}
+  <script src="{% static "js/autocomplete_destination.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block title %}
@@ -23,14 +18,7 @@ Transfer
 
 <h2>Destination Info</h2>
 <div class="header">
-<div class="ui-widget">
-  <label for="id_name">Organisation Name:</label>
-  {{destination_form.name}}
-</div>
-<label for="id_person_in_charge">Person in charge:</label>
-{{destination_form.person_in_charge}}
-<label for="id_contact_no">Contact No.:</label>
-{{destination_form.contact_no}}
+{{destination_form.as_ul}}
 {{date_form}}
 </div>
 
@@ -38,12 +26,7 @@ Transfer
 {{transfer_formset.management_form}}
 {% for form in transfer_formset %}
 <div class="item">
-<label for="id_stock_name">Name:</label>
-{{form.stock_name}}
-<label for="id_unit_measure">Unit Measure:</label>
-{{form.unit_measure}}
-<label for="id_quantity">Quantity:</label>
-{{form.quantity}}
+{{form.as_ul}}
 <li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
 </div>
 {% endfor %}

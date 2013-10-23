@@ -22,6 +22,10 @@ class StockInForm(forms.Form):
 class DateForm(forms.Form):
     date = forms.DateField()
 
+class StartEndDateForm(forms.Form):
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    
 class FamilyForm(forms.Form):
     TYPE_A = 'A'
     TYPE_B = 'B'

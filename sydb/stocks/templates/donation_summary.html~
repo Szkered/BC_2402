@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donation Summary{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+  <script src="{% static "js/autocomplete_donation.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+Donation Summary
+{% endblock %}
+
+{% block content %}
+  
+<form action="." method="GET">{% csrf_token %}
+<div class="header">
+{{start_date_form.as_ul}}
+{{end_date_form.as_ul}}
+</div>
+<input class="button" type="submit" value="Get">
+</form>
+
+{% for donation in donations %}
+<div class="item">
+Name: {{donation.name}} Unit Measure: {{donation.unit_measure}} Total: {{donation.current_amt}}
+</div>
+{% endblock %}

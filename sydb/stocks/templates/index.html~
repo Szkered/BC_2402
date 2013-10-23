@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}ShanYouDataBase{% endblock %}
+
+{% block title %}
+Welcome!
+{% endblock %}
+
+{% block content %}
+
+<h2>ShanYouDataBase System</h2>
+
+{% endblock %}
