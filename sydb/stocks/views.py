@@ -10,6 +10,8 @@ from django.utils import simplejson
 from django.views.generic.base import RedirectView
 # formset
 from django.forms.formsets import formset_factory, BaseFormSet
+# model formset
+from django.forms.models import modelformset_factory
 
 # regex
 import re
@@ -29,78 +31,17 @@ class RequiredFormSet(BaseFormSet):
 StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSet)
 
 
+    
+################################################################################
+# Page View
+################################################################################
+
 def thanks(request):
     return render(request, 'thanks.html')
 
 def index(request):
     return render(request, 'index.html')
 
-def get_donors(request):
-    q = request.GET.get('term', '')
-    donors = Donor.objects.filter(name__icontains = q)[:20]
-    results = [{'label': '%s, tel: %s' % (donor.name, donor.contact_no),
-                'name': donor.name,
-                'address': donor.address,
-                'contact_no': donor.contact_no,
-                'mailing': donor.mailing,
-                'referral': donor.referral,
-            } for donor in donors]
-    data = simplejson.dumps(results)
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
-
-def get_stocks(request):
-    q = request.GET.get('term', '')
-    stocks = Stock.objects.filter(name__icontains = q)[:20]
-    cList = Category.objects.filter(stock__name__icontains = q)
-    categorys = set()
-    categorys = {c.name for c in cList if c.name not in categorys}
-    catSlug = ''
-    for category in categorys:
-        catSlug += category + ' '
-    results = [{'value': '%s - %s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
-                'name': stock.name,
-                'unit_measure': stock.unit_measure,
-                'unit_price': stock.unit_price,
-                'categorys': catSlug,
-            } for stock in stocks]
-    data = simplejson.dumps(results)
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
-
-def get_vendors(request):
-    q = request.GET.get('term', '')
-    vendors = Vendor.objects.filter(name__icontains = q)[:20]
-    results = [{'value': '%s, address: %s, tel: %s' % (vendor.name, vendor.address, vendor.contact_no),
-                'name': vendor.name,
-                'address': vendor.address,
-                'contact_no': vendor.contact_no,
-            } for vendor in vendors]
-    data = simplejson.dumps(results)
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
-
-def get_categorys(request):
-    q = request.GET.get('term', '')
-    categorys = Category.objects.filter(name__icontains = q)[:20]
-    cList = {}
-    cList = {c.name for c in categorys if c.name not in cList}
-    results = [{'value': category} for category in cList]
-    data = simplejson.dumps(results)
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
-
-def get_destination(request):
-    q = request.GET.get('term', '')
-    destinations = Destination.objects.filter(name__icontains = q)[:20]
-    results = [{'value': '%s, tel: %s' % (destination.name, destination.contact_no),
-                'name': destination.name,
-                'person_in_charge': destination.person_in_charge,
-                'contact_no': destination.contact_no,
-            } for destination in destinations]
-    data = simplejson.dumps(results)
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
 
 def donation(request):
     donor_form = DonorForm(request.POST or None)
@@ -255,16 +196,6 @@ def transfer(request):
         mimetype = "text/html; charset=utf-8"
     return HttpResponse(data, mimetype)
         
-
-# def stockEdit(request):
-#     stocks = Stock.objects.all()
-#     stock_formset = formset_factory(StockForm, formset=RequiredFormSet)
-#     for form in stock_formset:
-#         form.instance
-
-#     if(start_date_form.is_valid() and end_date_form.is_valid()):
-#         start_date = start_date_form.cleaned_data['date']
-
         
     
 def donor(request):
@@ -285,8 +216,137 @@ def donation_summary(request):
     return render(request, 'donation_summary.html',
                   RequestContext(request, {'donations': donations,
                                            'start_end_date_form': start_end_date_form}))
+
+def confirmation(request):
+    PurchaseFormSet = modelformset_factory(Purchase, extra=0)
+    unconfirmed_purchases = Purchase.objects.filter(confirm=False).order_by('date')
+    purchase_formset = PurchaseFormSet(request.POST or None, queryset=unconfirmed_purchases)
+    if(purchase_formset.is_valid()):
+        purchase_formset.save()
+        return HttpResponseRedirect('thanks')
+    return render(request, 'confirmation.html',
+                  RequestContext(request, {'purchase_formset': purchase_formset,
+                                           'unconfirmed_purchases': unconfirmed_purchases,
+                                           'zip': zip(purchase_formset,
+                                                      unconfirmed_purchases)}))
+
+def adjust(request):
+    adjust_form = AdjustForm(request.POST or None)
+    if(adjust_form.is_valid()):
+        corret_amt = adjust_form.cleaned_data['current_amount']
+        target_stock = Stock.objects.get(name=adjust_form.cleaned_data['stock_name'],
+                                         unit_measure=adjust_form.cleaned_data['unit_measure'])
+        if(corret_amt > target_stock.current_amt()):
+            adjustment = corret_amt - target_stock.current_amt()
+            super_d, created = Donor.objects.get_or_create(
+                name="super",
+                address="super",
+                contact_no="1",
+                mailing=False,
+                referral='O',
+            )
+            Donate.objects.create(
+                date=datetime.datetime.now(),
+                quantity=adjustment,
+                donor=super_d,
+                stock=target_stock,
+            )
+        else:
+            adjustment = target_stock.current_amt() - corret_amt
+            super_d, created = Destination.objects.get_or_create(
+                name="super",
+                person_in_charge="super",
+                contact_no="1",
+            )
+            Transfer.objects.create(
+                date=datetime.datetime.now(),
+                quantity=adjustment,
+                stock=target_stock,
+                destination=super_d,
+            )
+        return HttpResponseRedirect('thanks')
+    return render(request, 'adjust.html',
+                  RequestContext(request, {'adjust_form': adjust_form}))
+
     
+################################################################################
+# Autocomplete
+################################################################################
+    
+def get_donors(request):
+    q = request.GET.get('term', '')
+    donors = Donor.objects.filter(name__icontains = q)[:20]
+    results = [{'label': '%s, tel: %s' % (donor.name, donor.contact_no),
+                'name': donor.name,
+                'address': donor.address,
+                'contact_no': donor.contact_no,
+                'mailing': donor.mailing,
+                'referral': donor.referral,
+            } for donor in donors]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_stocks(request):
+    q = request.GET.get('term', '')
+    stocks = Stock.objects.filter(name__icontains = q)[:20]
+    cList = Category.objects.filter(stock__name__icontains = q)
+    categorys = set()
+    categorys = {c.name for c in cList if c.name not in categorys}
+    catSlug = ''
+    for category in categorys:
+        catSlug += category + ' '
+    results = [{'value': '%s - %s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
+                'name': stock.name,
+                'unit_measure': stock.unit_measure,
+                'unit_price': stock.unit_price,
+                'categorys': catSlug,
+            } for stock in stocks]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_vendors(request):
+    q = request.GET.get('term', '')
+    vendors = Vendor.objects.filter(name__icontains = q)[:20]
+    results = [{'value': '%s, address: %s, tel: %s' % (vendor.name, vendor.address, vendor.contact_no),
+                'name': vendor.name,
+                'address': vendor.address,
+                'contact_no': vendor.contact_no,
+            } for vendor in vendors]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_categorys(request):
+    q = request.GET.get('term', '')
+    categorys = Category.objects.filter(name__icontains = q)[:20]
+    cList = {}
+    cList = {c.name for c in categorys if c.name not in cList}
+    results = [{'value': category} for category in cList]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def get_destination(request):
+    q = request.GET.get('term', '')
+    destinations = Destination.objects.filter(name__icontains = q)[:20]
+    results = [{'value': '%s, tel: %s' % (destination.name, destination.contact_no),
+                'name': destination.name,
+                'person_in_charge': destination.person_in_charge,
+                'contact_no': destination.contact_no,
+            } for destination in destinations]
+    data = simplejson.dumps(results)
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
+
+    
+################################################################################
 # EXCEL generation
+################################################################################
+
 import xlwt3 as xlwt
 def current_stock(request):
     book = xlwt.Workbook(encoding='utf8')
@@ -361,7 +421,7 @@ def donation_report(request):
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Donor', 'Donated Stock', 'Unit Measure','Quantity']
+    header = ['Donor', 'Donated Stock', 'Unit Measure', 'Quantity', 'Date']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 

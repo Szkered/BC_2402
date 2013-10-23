@@ -18,6 +18,7 @@ $(function() {
 		$(this).val(ui.item.name);
 		$(this).parent().siblings().children('[id$=unit_price]').val(ui.item.unit_price);
 		$(this).parent().siblings().children('[id$=unit_measure]').val(ui.item.unit_measure);
+		$(this).parent().siblings().children('[id$=category]').val(ui.item.categorys);
 		return false;
             }
 	});	

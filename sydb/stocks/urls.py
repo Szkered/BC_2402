@@ -4,13 +4,14 @@ from stocks.views import *
 
 urlpatterns = patterns('',
                        #pages
-
                        url(r'^donation/$', donation, name="donation"),
                        url(r'^purchase/$', purchase),
                        url(r'^distribution/$', distribution),
                        url(r'^transfer/$', transfer),
                        url(r'.?/thanks/$', thanks),
                        url(r'^donor/$', donor),
+                       url(r'^confirmation', confirmation),
+                       url(r'^adjust/$', adjust),
                        url(r'^donation_summary/$', donation_summary),
                        #autocomplete
                        url(r'^get_donors/$', get_donors, name="get_donors"),

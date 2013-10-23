@@ -18,7 +18,11 @@ class StockInForm(forms.Form):
     unit_measure = forms.CharField(max_length=10)
     category = forms.CharField()
     quantity = forms.IntegerField()
-        
+
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+    
 class DateForm(forms.Form):
     date = forms.DateField()
 
@@ -58,3 +62,8 @@ class StockForm(forms.ModelForm):
         
 class CategoryForm(forms.Form):
     category = forms.CharField()
+    
+class AdjustForm(forms.Form):
+    stock_name = forms.CharField()
+    unit_measure = forms.CharField()
+    current_amount = forms.IntegerField()

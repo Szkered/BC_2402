@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Confirmation{% endblock %}
+
+{% block title %}
+Confirmation of Orders
+{% endblock %}
+
+{% block content %}
+<form action="." method="POST">{% csrf_token %}
+{{purchase_formset.management_form}}
+  {% for item in zip %}
+
+    <div class="item">
+      
+
+      
+      Date: {{item.1.date}}
+      Stock: {{item.1.stock}}
+      Vendor: {{item.1.vendor}}
+      Quantity: {{item.1.quantity}}
+      Total Price: {{item.1.total_price}}
+      Confirm: {{item.0.confirm}}
+    </div>
+        <div class="hide">
+{{item.0.date}}
+{{item.0.quantity}}
+{{item.0.stock}}
+{{item.0.vendor}}
+    </div>
+  {% endfor %}
+<input class="button" type="submit" value="Confirm">
+</form>
+{% endblock %}

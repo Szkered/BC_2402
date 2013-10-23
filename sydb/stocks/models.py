@@ -7,7 +7,7 @@ class Stock(models.Model):
     unit_price = models.FloatField()
 
     def __str__(self):
-        return self.name
+        return "%s - %s/%s" % (self.name, self.unit_price, self.unit_measure)
 
     def purchase_sum(self):
         purchased = Purchase.objects.filter(stock_id=self.pk,
@@ -103,7 +103,7 @@ class Donor(CommonInfo):
 class Vendor(CommonInfo):
 
     def __str__(self):
-        return self.name
+        return "%s, tel: %s" % (self.name, self.contact_no)
 
 ##################################################
 class TransitInfo(models.Model):
@@ -142,3 +142,5 @@ class Purchase(TransitInfo):
     vendor = models.ForeignKey(Vendor)
     confirm = models.BooleanField()
     
+    def total_price(self):
+        return self.stock.unit_price * self.quantity
