@@ -7,7 +7,7 @@ class Stock(models.Model):
     unit_price = models.FloatField()
 
     def __str__(self):
-        return "%s - %s/%s" % (self.name, self.unit_price, self.unit_measure)
+        return "%s - $%s/%s" % (self.name, self.unit_price, self.unit_measure)
 
     def purchase_sum(self):
         purchased = Purchase.objects.filter(stock_id=self.pk,
@@ -49,8 +49,8 @@ class Stock(models.Model):
         categorys = Category.objects.filter(stock=self)
         slug = ""
         for category in categorys:
-            slug += category.name
-            slug += " "
+            if category != '':
+                slug += category.name + ", "
         return slug
         
 class Category(models.Model):

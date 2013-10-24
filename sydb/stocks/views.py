@@ -37,7 +37,10 @@ StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSe
 ################################################################################
 
 def thanks(request):
-    return render(request, 'thanks.html')
+    current_path = request.get_full_path()
+    target_path = current_path.replace('thanks/', '')
+    return render(request, 'thanks.html',
+                  RequestContext(request, {'target_path': target_path}))
 
 def index(request):
     return render(request, 'index.html')
@@ -196,66 +199,6 @@ def transfer(request):
         mimetype = "text/html; charset=utf-8"
     return HttpResponse(data, mimetype)
         
-        
-    
-def donor(request):
-    donor_list = Donor.objects.all()
-    return render(request, 'donor.html',
-                  RequestContext(request, {'donor_list': donor_list}))
-
-################################################################################
-# Report
-################################################################################
-
-def donation_summary(request):
-    start_end_date_form = StartEndDateForm(request.GET or None)
-    if(start_end_date_form.is_valid()):
-        start_date = start_end_date_form.cleaned_data['start_date']
-        end_date = start_end_date_form.cleaned_data['end_date']
-        donations = Donate.objects.filter(date__range=[start_date, end_date])
-    else:
-        donations = Donate.objects.all()
-    return render(request, 'donation_summary.html',
-                  RequestContext(request, {'donations': donations,
-                                           'start_end_date_form': start_end_date_form}))
-
-def purchase_summary(request):
-    start_end_date_form = StartEndDateForm(request.GET or None)
-    if(start_end_date_form.is_valid()):
-        start_date = start_end_date_form.cleaned_data['start_date']
-        end_date = start_end_date_form.cleaned_data['end_date']
-        purchases = Purchase.objects.filter(date__range=[start_date, end_date])
-    else:
-        purchases = Purchase.objects.all()
-    return render(request, 'Purchase_summary.html',
-                  RequestContext(request, {'purchases': purchases,
-                                           'start_end_date_form': start_end_date_form}))
-
-def distribution_summary(request):
-    start_end_date_form = StartEndDateForm(request.GET or None)
-    if(start_end_date_form.is_valid()):
-        start_date = start_end_date_form.cleaned_data['start_date']
-        end_date = start_end_date_form.cleaned_data['end_date']
-        distributions = Distribute.objects.filter(date__range=[start_date, end_date])
-    else:
-        distributions = Distribute.objects.all()
-    return render(request, 'distribution_summary.html',
-                  RequestContext(request, {'distributions': distributions,
-                                           'start_end_date_form': start_end_date_form}))
-
-def transfer_out_summary(request):
-    start_end_date_form = StartEndDateForm(request.GET or None)
-    if(start_end_date_form.is_valid()):
-        start_date = start_end_date_form.cleaned_data['start_date']
-        end_date = start_end_date_form.cleaned_data['end_date']
-        transfers = Transfer.objects.filter(date__range=[start_date, end_date])
-    else:
-        transfers = Transfer.objects.all()
-    return render(request, 'transfer_out_summary.html',
-                  RequestContext(request, {'transfers': transfers,
-                                           'start_end_date_form': start_end_date_form}))
-################################################################################
-
 
 def confirmation(request):
     PurchaseFormSet = modelformset_factory(Purchase, extra=0)
@@ -308,6 +251,153 @@ def adjust(request):
     return render(request, 'adjust.html',
                   RequestContext(request, {'adjust_form': adjust_form}))
 
+
+
+################################################################################
+# Edit
+################################################################################
+
+def donate_edit(request):
+    DonateFormSet = modelformset_factory(Donate, extra=0)
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    stock_name = request.GET.get('stock_name', '')
+    category = re.split(', | ', request.GET.get('category', ''))
+    if(category==['']):
+        q = Donate.objects.all()
+    else:
+        cList = Category.objects.filter(name__in=category)
+        sList = [c.stock for c in cList]
+        q = Donate.objects.filter(stock__in=sList)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        if(stock_name==''):
+            q = q.filter(date__range=[start_date, end_date])
+        else:
+            q = q.filter(date__range=[start_date, end_date], stock__name=stock_name)
+        donate_formset = DonateFormSet(request.POST or None, queryset=q)
+    else:
+        if(stock_name==''):
+            donate_formset = DonateFormSet(request.POST or None, queryset=q)
+        else:
+            q = q.filter(stock__name=stock_name)
+            donate_formset = DonateFormSet(request.POST or None, queryset=q)
+    if(donate_formset.is_valid()):
+        donate_formset.save()
+        return HttpResponseRedirect('thanks')
+    return render(request, 'donate_edit.html',
+                  RequestContext(request, {'donate_formset': donate_formset,
+                                           'start_end_date_form': start_end_date_form}))
+
+def vendor_edit(request):
+    VendorFormSet = modelformset_factory(Vendor, extra=0)
+    vendor_name = request.GET.get('id_name', '')
+    if(vendor_name==''):
+        vendor_formset = VendorFormSet(request.POST or None)
+    else:
+        q = Vendor.objects.filter(name=vendor_name)
+        vendor_formset = VendorFormSet(request.POST or None, queryset=q)
+    if(vendor_formset.is_valid()):
+        vendor_formset.save()
+        return HttpResponseRedirect('thanks')
+    return render(request, 'vendor_edit.html',
+                  RequestContext(request, {'vendor_formset': vendor_formset}))
+
+def stock_edit(request):
+    StockFormSet = modelformset_factory(Stock, extra=0)
+    stock_name = request.GET.get('stock_name', '')
+    category = re.split(', | ', request.GET.get('category', ''))
+    if(category==['']):
+        q = Stock.objects.all().order_by('name')
+    else:
+        cL = Category.objects.filter(name__in=category)
+        sList = [c.stock.pk for c in cL]
+        q = Stock.objects.filter(pk__in=sList).order_by('name')
+    if(stock_name!=''):
+        q = q.filter(name=stock_name)
+    stock_formset = StockFormSet(request.POST or None, queryset=q)
+    cList = [stock.category_slug() for stock in q]
+    if(stock_formset.is_valid()):
+        stock_formset.save()
+        for s in q:
+            new_cList = re.split(', | ', request.POST.get(s.name))
+            old_cList = re.split(', | ', s.category_slug())
+            for item in new_cList:
+                if item not in old_cList and item != '':
+                    Category.objects.create(
+                        stock=s,
+                        name=item
+                    )
+            for item in old_cList:
+                if item not in new_cList:
+                    Category.objects.get(
+                        stock=s,
+                        name=item
+                    ).delete()
+        return HttpResponseRedirect('thanks')
+    return render(request, 'stock_edit.html',
+                  RequestContext(request, {'zip': zip(stock_formset, cList),
+                                           'stock_formset': stock_formset}))
+
+
+
+    
+    
+################################################################################
+# Report
+################################################################################
+
+def donation_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        donations = Donate.objects.filter(date__range=[start_date, end_date])
+    else:
+        donations = Donate.objects.all()
+    return render(request, 'donation_summary.html',
+                  RequestContext(request, {'donations': donations,
+                                           'start_end_date_form': start_end_date_form}))
+
+def purchase_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        purchases = Purchase.objects.filter(date__range=[start_date, end_date])
+    else:
+        purchases = Purchase.objects.all()
+    return render(request, 'Purchase_summary.html',
+                  RequestContext(request, {'purchases': purchases,
+                                           'start_end_date_form': start_end_date_form}))
+
+def distribution_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        distributions = Distribute.objects.filter(date__range=[start_date, end_date])
+    else:
+        distributions = Distribute.objects.all()
+    return render(request, 'distribution_summary.html',
+                  RequestContext(request, {'distributions': distributions,
+                                           'start_end_date_form': start_end_date_form}))
+
+def transfer_out_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        transfers = Transfer.objects.filter(date__range=[start_date, end_date])
+    else:
+        transfers = Transfer.objects.all()
+    return render(request, 'transfer_out_summary.html',
+                  RequestContext(request, {'transfers': transfers,
+                                           'start_end_date_form': start_end_date_form}))
+
+
+
+
     
 ################################################################################
 # Autocomplete
@@ -336,7 +426,7 @@ def get_stocks(request):
     catSlug = ''
     for category in categorys:
         catSlug += category + ' '
-    results = [{'value': '%s - %s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
+    results = [{'value': '%s - $%s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
                 'name': stock.name,
                 'unit_measure': stock.unit_measure,
                 'unit_price': stock.unit_price,
@@ -455,6 +545,7 @@ def stock_summary_report(request):
     return response
 
 def donation_report(request):
+    
     start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
     end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
     

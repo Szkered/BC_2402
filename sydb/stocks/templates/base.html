@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {% block meta %}
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  {% endblock %}
     <title>{% block pagetitle %}{% endblock %}</title>
-   
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
@@ -38,7 +39,7 @@
                     <a href="#">Donation</a> 
                     <ul id="n11"> 
                         <li><a href="/stocks/donation/">Add</a></li> 
-                        <li><a href="/admin/stocks/donate/">Edit</a></li> 
+                        <li><a href="/stocks/donate_edit/">Edit</a></li> 
                         
                     </ul> 
                 </li> 
@@ -84,7 +85,7 @@
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Vendor</a>    
             <ul id="n3"> 
-                <li><a href="/admin/stocks/vendor/">Update</a></li> 
+                <li><a href="/stocks/vendor_edit/">Update</a></li> 
             </ul> 
         </li> 
         
@@ -98,7 +99,7 @@
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Current Stock</a>    
             <ul id="n5"> 
-                <li><a href=" ">Update</a></li>
+                <li><a href="/stocks/stock_edit/">Update</a></li>
 		<li><a href="/stocks/adjust/">Adjust</a></li> 
              </ul> 
         </li> 

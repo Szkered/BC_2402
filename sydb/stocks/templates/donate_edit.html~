@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donation Edit{% endblock %}
+
+
+{% block title %}
+Donation Edit
+{% endblock %}
+
+{% block content %}
+<h2>Select Date Range</h2>
+<form action="." method="GET">{% csrf_token %}
+<div class="header">
+{{start_end_date_form.as_ul}}
+</div>
+<input class="button" type="submit" value="Get">
+</form>
+
+<h2>Donation</h2>
+{{donate_formset.management_formset}}
+{% for donate_form in donate_formset %}
+<div class="item">
+
+</div>
+{% endfor %}
+<form action="/stocks/donation_report/download/" method="GET">{% csrf_token %}
+<input type="hidden" name="start_date" value="{{start_end_date_form.cleaned_data.start_date}}"/>
+<input type="hidden" name="end_date" value="{{start_end_date_form.cleaned_data.end_date}}"/>
+<input class="button" type="submit" value="Download">
+</form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donation Edit{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+Donation Edit
+{% endblock %}
+
+{% block content %}
+<h2>Filter</h2>
+<form action="." method="GET">{% csrf_token %}
+<div class="header">
+{{start_end_date_form.as_ul}}
+</div>
+<div class="header">
+<label for="">Search by stock name: </label>
+<input type="text" id="stock_name" name="stock_name" value=""/>
+</div>
+<div class="header">
+<label for="">Search by category: </label>
+<input type="text" id="category" name="category" value=""/>
+</div>
+<input class="button" type="submit" value="Get">
+</form>
+
+<h2>Donation</h2>
+<form action="." method="POST">{% csrf_token %}
+{{donate_formset.management_form}}
+{% for donate_form in donate_formset %}
+<div class="item">
+{{donate_form.as_ul}}
+</div>
+{% endfor %}
+<input class="button" type="submit" value="Update">
+</form>
+{% endblock %}

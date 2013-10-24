@@ -9,14 +9,17 @@ urlpatterns = patterns('',
                        url(r'^distribution/$', distribution),
                        url(r'^transfer/$', transfer),
                        url(r'.?/thanks/$', thanks),
-                       url(r'^donor/$', donor),
                        url(r'^confirmation', confirmation),
                        url(r'^adjust/$', adjust),
+                       #edit
+                       url(r'^donate_edit/$', donate_edit),
+                       url(r'^vendor_edit/$', vendor_edit),
+                       url(r'^stock_edit/$', stock_edit),
+                       #reports
                        url(r'^donation_summary/$', donation_summary),
                        url(r'^purchase_summary/$', purchase_summary),
                        url(r'^distribution_summary/$', distribution_summary),
                        url(r'^transfer_out_summary/$', transfer_out_summary),
-                       
                        #autocomplete
                        url(r'^get_donors/$', get_donors, name="get_donors"),
                        url(r'^get_stocks/$', get_stocks, name="get_stocks"),

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Vendor Info Update{% endblock %}
+
+{% block title %}
+Vendor Info Update
+{% endblock %}
+
+{% block content %}
+<h2>Filter</h2>
+<form action="." method="GET">{% csrf_token %}
+<div class="header">
+<label for="">Search by vendor name: </label>
+<input type="text" id="vendor_name" name="vendor_name" value=""/>
+</div>
+<input class="button" type="submit" value="Get">
+</form>
+
+<h2>Vendor List</h2>
+<form action="." method="POST">{% csrf_token %}
+{{vendor_formset.management_form}}
+{% for vendor_form in vendor_formset %}
+<div class="item">
+{{vendor_form.as_ul}}
+</div>
+{% endfor %}
+<input class="button" type="submit" value="Update">
+</form>
+{% endblock %}
