@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Transfer Out Summary{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+  <script src="{% static "js/autocomplete_donation.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+Transfer Out Summary
+{% endblock %}
+
+{% block content %}
+<h2>Select Date Range</h2>
+<form action="." method="GET">{% csrf_token %}
+<div class="header">
+{{start_end_date_form.as_ul}}
+</div>
+<input class="button" type="submit" value="Get">
+</form>
+
+<h2>Transfer Out</h2>
+{% for transfer in transfers %}
+<div class="item">
+Date: {{transfer.date}} Stock: {{transfer.stock.name}} Unit Measure: {{transfer.stock.unit_measure}} Quantity: {{transfer.quantity}} Destination: {{transfer.destination.name}}
+</div>
+{% endfor %}
+<form action="/stocks/transfer_out_report/download/" method="GET">{% csrf_token %}
+<input type="hidden" name="start_date" value="{{start_end_date_form.cleaned_data.start_date}}"/>
+<input type="hidden" name="end_date" value="{{start_end_date_form.cleaned_data.end_date}}"/>
+<input class="button" type="submit" value="Download">
+</form>
+{% endblock %}

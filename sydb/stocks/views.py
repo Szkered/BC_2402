@@ -203,7 +203,9 @@ def donor(request):
     return render(request, 'donor.html',
                   RequestContext(request, {'donor_list': donor_list}))
 
-
+################################################################################
+# Report
+################################################################################
 
 def donation_summary(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
@@ -216,6 +218,44 @@ def donation_summary(request):
     return render(request, 'donation_summary.html',
                   RequestContext(request, {'donations': donations,
                                            'start_end_date_form': start_end_date_form}))
+
+def purchase_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        purchases = Purchase.objects.filter(date__range=[start_date, end_date])
+    else:
+        purchases = Purchase.objects.all()
+    return render(request, 'Purchase_summary.html',
+                  RequestContext(request, {'purchases': purchases,
+                                           'start_end_date_form': start_end_date_form}))
+
+def distribution_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        distributions = Distribute.objects.filter(date__range=[start_date, end_date])
+    else:
+        distributions = Distribute.objects.all()
+    return render(request, 'distribution_summary.html',
+                  RequestContext(request, {'distributions': distributions,
+                                           'start_end_date_form': start_end_date_form}))
+
+def transfer_out_summary(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        transfers = Transfer.objects.filter(date__range=[start_date, end_date])
+    else:
+        transfers = Transfer.objects.all()
+    return render(request, 'transfer_out_summary.html',
+                  RequestContext(request, {'transfers': transfers,
+                                           'start_end_date_form': start_end_date_form}))
+################################################################################
+
 
 def confirmation(request):
     PurchaseFormSet = modelformset_factory(Purchase, extra=0)
@@ -434,7 +474,7 @@ def donation_report(request):
         sheet.write(row, 1, stock.name)
         sheet.write(row, 2, stock.unit_measure)
         sheet.write(row, 3, item.quantity)
-        sheet.write(row, 4, item.date.strftime("%Y %m %d"))
+        sheet.write(row, 4, item.date.strftime("%Y/%m/%d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=donation_report.xls'
@@ -442,15 +482,18 @@ def donation_report(request):
     return response
 
 def purchase_report(request):
+    start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
+    end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
+
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Vendor', 'Purchased Stock', 'Unit Measure','Quantity']
+    header = ['Vendor', 'Purchased Stock', 'Unit Measure','Quantity','Date']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
-    purchase = Purchase.objects.order_by('stock__name','stock__unit_measure')
+    purchase = Purchase.objects.filter(date__range=[start_date, end_date]).order_by('stock__name','stock__unit_measure')
     for item in purchase:
         row = row + 1
         sheet.write(row, 0, Vendor.objects.get(id = item.vendor_id).name)
@@ -458,7 +501,7 @@ def purchase_report(request):
         sheet.write(row, 1, stock.name)
         sheet.write(row, 2, stock.unit_measure)
         sheet.write(row, 3, item.quantity)
-#        sheet.write(row, 4, item.date)
+        sheet.write(row, 4, item.date.strftime("%Y/%m/%d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Purchase_report.xls'
@@ -466,15 +509,17 @@ def purchase_report(request):
     return response
 
 def distribution_report(request):
+    start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
+    end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Stock', 'Unit Measure' ,'Quantity','Family Type']
+    header = ['Stock', 'Unit Measure' ,'Quantity','Family Type','Date']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
-    distribute = Distribute.objects.order_by('stock__name','family_type')
+    distribute = Distribute.objects.filter(date__range=[start_date, end_date]).order_by('stock__name','family_type')
     for item in distribute:
         row = row + 1
         stock = Stock.objects.get(id = item.stock_id)
@@ -482,7 +527,7 @@ def distribution_report(request):
         sheet.write(row, 1, stock.unit_measure)
         sheet.write(row, 2, item.quantity)
         sheet.write(row, 3, item.family_type)
-#        sheet.write(row, 4, item.date)
+        sheet.write(row, 4, item.date.strftime("%Y/%m/%d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=distribution_report.xls'
@@ -490,15 +535,17 @@ def distribution_report(request):
     return response
 
 def transfer_out_report(request):
+    start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
+    end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Stock', 'Unit measure', 'Quantity', 'Destination']
+    header = ['Stock', 'Unit measure', 'Quantity', 'Destination','Date']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
-    transfer = Transfer.objects.order_by('stock__name','destination')
+    transfer = Transfer.objects.filter(date__range=[start_date, end_date]).order_by('stock__name','destination')
     for item in transfer:
         row = row + 1
         stock = Stock.objects.get(id = item.stock_id)
@@ -506,7 +553,7 @@ def transfer_out_report(request):
         sheet.write(row, 1, stock.unit_measure)
         sheet.write(row, 2, item.quantity)
         sheet.write(row, 3, Destination.objects.get(id = item.destination_id).name)
-#        sheet.write(row, 4, item.date)
+        sheet.write(row, 4, item.date.strftime("%Y/%m/%d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=transfer_out_report.xls'
