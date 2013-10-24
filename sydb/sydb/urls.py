@@ -5,9 +5,12 @@ from sydb.views import current_datetime
 # autocomplete_light.autodiscover()
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from django.views.generic import RedirectView, TemplateView
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
+                       url(r'^$', TemplateView.as_view(template_name="index.html")),
                        (r'^test/$', current_datetime), #test page
                        (r'^stocks/', include('stocks.urls', namespace="stocks")),
                        # url(r'^autocomplete/', include('autocomplete_light.urls')),

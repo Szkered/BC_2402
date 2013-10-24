@@ -4,17 +4,32 @@ from stocks.models import *
 class DonorForm(forms.ModelForm):
     class Meta:
         model = Donor
-
+        
 class VendorForm(forms.ModelForm):
     class Meta:
         model = Vendor
         
 class ConfirmForm(forms.Form):
     confirm = forms.BooleanField()
-        
+
+class StockInForm(forms.Form):
+    stock_name = forms.CharField()
+    unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
+    unit_measure = forms.CharField(max_length=10)
+    category = forms.CharField()
+    quantity = forms.IntegerField()
+
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+    
 class DateForm(forms.Form):
     date = forms.DateField()
 
+class StartEndDateForm(forms.Form):
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+    
 class FamilyForm(forms.Form):
     TYPE_A = 'A'
     TYPE_B = 'B'
@@ -30,10 +45,25 @@ class FamilyForm(forms.Form):
     
 class DistributionForm(forms.Form):
     quantity = forms.IntegerField()
-        
-class StockInForm(forms.Form):
-    stock_name = forms.CharField()
-    quantity = forms.IntegerField()
-    unit_measure = forms.CharField(max_length=10)
-    unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
 
+class DestinationForm(forms.ModelForm):
+    class Meta:
+        model = Destination
+    
+class TransferForm(forms.Form):
+    stock_name = forms.CharField()
+    unit_measure = forms.CharField()
+    quantity = forms.IntegerField()
+    # remark = forms.CharField()
+
+class StockForm(forms.ModelForm):
+    class Meta:
+        model = Stock
+        
+class CategoryForm(forms.Form):
+    category = forms.CharField()
+    
+class AdjustForm(forms.Form):
+    stock_name = forms.CharField()
+    unit_measure = forms.CharField()
+    current_amount = forms.IntegerField()

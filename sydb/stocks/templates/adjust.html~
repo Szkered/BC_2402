@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donation{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+Donation
+{% endblock %}
+
+{% block content %}
+  
+<form action="." method="POST">{% csrf_token %}
+
+<input class="button" type="submit" value="Adjust">
+  
+</form>
+{% endblock %}

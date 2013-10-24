@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Donation{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+  <script src="{% static "js/autocomplete_donation.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+Donation
+{% endblock %}
+
+{% block content %}
+  
+<form action="." method="POST">{% csrf_token %}
+<div class="header"></div>
+{{startDate_form.as_ul}}
+{{endDate_form.as_ul}}
+</form>
+{% endblock %}

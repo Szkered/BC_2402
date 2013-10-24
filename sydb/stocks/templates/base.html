@@ -9,18 +9,15 @@
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
     {% load static %}
     <link href="{% static "css/default.css" %}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{% static "css/font.css" %}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{% static "css/newstyle.css" %}" rel="stylesheet" type="text/css" media="all" />
     <link href="{% static "css/jquery-ui-1.10.3.custom.css" %}" rel="stylesheet" type="text/css" media="all" />
-    <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/smoothness/jquery-ui.css" type="text/css" media="all" /> -->
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/base/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="{% static "js/jquery-1.10.2.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/jquery-ui-1.10.3.custom.js" %}" type="text/javascript"></script>
     <script src="{% static "js/dynamic_formset.js" %}" type="text/javascript"></script>
-    <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+    {% block autocomplete %}{% endblock %}
     <script type="text/javascript">
       $(function(){
-	  $('#id_date').datepicker();
+	  $('[name$=date]').datepicker();
       });
     </script>
     
@@ -29,29 +26,29 @@
   <body>
   
 
-
-<div id="header">
-    <div id="menu">
+ <div id="header">
+ <div class="container">
+   <div id="menu">
         <ul id="nav">
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
             <a href="#">Stock in</a>    
-            <ul id ="n1">
+            <ul id="n1">
             
             <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
                     <a href="#">Donation</a> 
-                    <ul id = "n11"> 
+                    <ul id="n11"> 
                         <li><a href="/stocks/donation/">Add</a></li> 
-                        <li><a href="#">Edit</a></li> 
+                        <li><a href="/admin/stocks/donate/">Edit</a></li> 
                         
                     </ul> 
                 </li> 
                
                 <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
                     <a href="#">Purchase</a> 
-                    <ul id = "n12"> 
+                    <ul id="n12"> 
                         <li><a href="/stocks/purchase/">Add</a></li> 
-                        <li><a href="#">Edit</a></li>
-			<li><a href="#">Confirm</a></li> 
+                        <li><a href="/admin/stocks/purchase/">Edit</a></li>
+			<li><a href="/stocks/confirmation/thanks">Confirm</a></li> 
 
                     </ul> 
                 </li> 
@@ -60,22 +57,22 @@
         
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
             <a href="#">Stock out</a>    
-            <ul id ="n2">
+            <ul id="n2">
             
             <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
                     <a href="#">Distribution</a> 
-                    <ul id = "n21"> 
+                    <ul id="n21"> 
                         <li><a href="/stocks/distribution/">Add</a></li> 
-                        <li><a href="#">Edit</a></li> 
+                        <li><a href="/admin/stocks/distribute/">Edit</a></li> 
                         
                     </ul> 
                 </li> 
                
                 <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
                     <a href="#">Transfer-out</a> 
-                    <ul id = "n22"> 
-                        <li><a href="#">Add</a></li> 
-                        <li><a href="#">Edit</a></li> 
+                    <ul id="n22"> 
+                        <li><a href="/stocks/transfer/">Add</a></li> 
+                        <li><a href="/admin/stocks/transfer/">Edit</a></li> 
 
                     </ul> 
                 </li> 
@@ -86,62 +83,66 @@
         
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Vendor</a>    
-            <ul id = "n3"> 
-                <li><a href=" ">Update</a></li> 
+            <ul id="n3"> 
+                <li><a href="/admin/stocks/vendor/">Update</a></li> 
             </ul> 
         </li> 
         
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Donor</a>    
-            <ul id = "n4"> 
-                <li><a href=" ">Update</a></li>  
+            <ul id="n4"> 
+                <li><a href="/admin/stocks/donor/">Update</a></li>  
             </ul> 
         </li> 
         
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Current Stock</a>    
             <ul id="n5"> 
-                <li><a href=" ">??</a></li> 
-                <li><a href=" ">??</a></li> 
+                <li><a href=" ">Update</a></li>
+		<li><a href="/stocks/adjust/">Adjust</a></li> 
              </ul> 
         </li> 
         
         <li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)"> 
             <a href="#">Report</a>    
-            <ul id = "n6"> 
+            <ul id="n6"> 
                     <li><a href="">Stock Summary</a></li>
-		            <li><a href="">Donation</a></li>
-		            <li><a href="">Purchase</a></li>
-		            <li><a href="">Distribution</a></li>
-		            <li><a href="">Transfer-out</a></li>
-		            <li><a href="">Vendor</a></li>
-		            <li><a href="">Donor</a></li>
+		    <li><a href="/stocks/donation_summary/">Donation</a></li>
+		    <li><a href="/stocks/purchase_summary/">Purchase</a></li>
+		    <li><a href="/stocks/distribution_summary/">Distribution</a></li>
+		    <li><a href="/stocks/transfer_out_summary/">Transfer-out</a></li>
+		    <li><a href="">Vendor</a></li>
+		    <li><a href="">Donor</a></li>
+		    <li><a href="">Thank you letter</a></li>
             </ul> 
         </li> 
        
 	      
         </ul>
-    </div>
-</div>
+     </div>
+   
+ </div>
+ </div>
 
-<div id="page" class="container">
 
-  <div id="content">
-    <div id="logo" class="container">
+
+ <div id="page">
+    <div class="container">
+    
       <h1>{% block title %}{% endblock %}</h1>
-    </div>
+    
     <p>{% block content %}{% endblock %}</p>
-  </div>
+    
+    </div>
+ </div>
 
-  {% block footer %}{% endblock %}
-</div>
-
-
-
-<div id="copyright" class="container">
-	<p>Copyright (c) 2013 D&Liz&MX et al. All rights reserved. | Designed by Derek .</p>
-</div>
-
+ {% block footer %}
+ <div id="footer">
+ <div  class="container">
+   <h5>Copyright  &copy; 2013 D&Liz&MX et al. All rights reserved. | Designed by Derek .</h5>
+ </div>
+ </div>  
+{% endblock %}
   </body>
 </html>
 

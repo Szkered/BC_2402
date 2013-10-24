@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Current Stock{% endblock %}
+
+{% block title %}
+Current Stock
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
