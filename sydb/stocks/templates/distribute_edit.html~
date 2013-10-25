@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block pagetitle %}Stock Info Update{% endblock %}
+{% block pagetitle %}Distribute Edit{% endblock %}
 
 {% block autocomplete %}
   {% load static %}
@@ -8,29 +8,36 @@
 {% endblock %}
 
 {% block title %}
-Stock Info Update
+Distribute Edit
 {% endblock %}
 
 {% block content %}
 <h2>Filter</h2>
 <form action="." method="GET">{% csrf_token %}
 <div class="header">
+{{start_end_date_form.as_ul}}
+</div>
+
+<div class="header">
+<label for="">Search by family type: </label>
+<input type="text" name="familty_type" value=""/>
+
 <label for="">Search by stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>
 
 <label for="">Search by category: </label>
 <input type="text" id="category" name="category" value=""/>
 </div>
+
 <input class="button" type="submit" value="Get">
 </form>
 
-<h2>Stock List</h2>
+<h2>Distribute</h2>
 <form action="." method="POST">{% csrf_token %}
-{{stock_formset.management_form}}
-{% for item in zip %}
+{{distribute_formset.management_form}}
+{% for distribute_form in distribute_formset %}
 <div class="item">
-{{item.0.as_ul}}
-<input type="text" id="category" name="{{item.0.name.value}}" value="{{item.1}}"/>
+{{distribute_form.as_ul}}
 </div>
 {% endfor %}
 <input class="button" type="submit" value="Update">

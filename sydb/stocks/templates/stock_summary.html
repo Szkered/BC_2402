@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block pagetitle %}Stock Info Update{% endblock %}
+{% block pagetitle %}Stock Summary{% endblock %}
 
 {% block autocomplete %}
   {% load static %}
@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block title %}
-Stock Info Update
+Stock Summary
 {% endblock %}
 
 {% block content %}
@@ -21,18 +21,18 @@ Stock Info Update
 <label for="">Search by category: </label>
 <input type="text" id="category" name="category" value=""/>
 </div>
-<input class="button" type="submit" value="Get">
+<input class="button" type="submit" value="Search">
 </form>
 
-<h2>Stock List</h2>
-<form action="." method="POST">{% csrf_token %}
-{{stock_formset.management_form}}
-{% for item in zip %}
+<h2>Stock</h2>
+{% for stock in stocks %}
 <div class="item">
-{{item.0.as_ul}}
-<input type="text" id="category" name="{{item.0.name.value}}" value="{{item.1}}"/>
+Name: {{stock.name}} Unit Measure: {{stock.unit_measure}} Current Amount: {{stock.current_amt}}
 </div>
 {% endfor %}
-<input class="button" type="submit" value="Update">
+<form action="/stocks/stock_report/download/" method="GET">{% csrf_token %}
+<input type="hidden" name="category" value="{{category}}"/>
+<input type="hidden" name="stock_name" value="{{stock_name}}"/>
+<input class="button" type="submit" value="Download">
 </form>
 {% endblock %}
