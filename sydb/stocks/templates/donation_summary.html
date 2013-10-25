@@ -18,18 +18,33 @@ Donation Summary
 <div class="header">
 {{start_end_date_form.as_ul}}
 </div>
+
+<div class="header">
+<label for="">Search by donor name: </label>
+<input type="text" id="id_name" name="donor_name" value=""/>
+
+<label for="">Search by stock name: </label>
+<input type="text" id="stock_name" name="stock_name" value=""/>
+
+<label for="">Search by category: </label>
+<input type="text" id="category" name="category" value=""/>
+</div>
+
 <input class="button" type="submit" value="Get">
 </form>
 
 <h2>Donation</h2>
 {% for donation in donations %}
 <div class="item">
-Date: {{donation.date}} Donor: {{donation.donor.name}} Stock: {{donation.stock.name}} Unit Measure: {{donation.stock.unit_measure}} Quantity: {{donation.quantity}}
+Date: {{donation.date}} Donor: {{donation.donor.name}} Stock: {{donation.stock.name}} Unit Measure: {{donation.stock.unit_measure}} Quantity: {{donation.quantity}} Cash Value: 
 </div>
 {% endfor %}
 <form action="/stocks/donation_report/download/" method="GET">{% csrf_token %}
 <input type="hidden" name="start_date" value="{{start_end_date_form.cleaned_data.start_date}}"/>
 <input type="hidden" name="end_date" value="{{start_end_date_form.cleaned_data.end_date}}"/>
+<input type="hidden" name="donor_name" value="{{donor_name}}"/>
+<input type="hidden" name="stock_name" value="{{stock_name}}"/>
+<input type="hidden" name="category" value="{{category}}"/>
 <input class="button" type="submit" value="Download">
 </form>
 {% endblock %}

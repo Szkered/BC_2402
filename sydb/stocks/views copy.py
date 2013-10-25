@@ -448,128 +448,54 @@ def stock_summary(request):
                                            'stock_name': stock_name}))
 
 def donation_summary(request):
-    donor_name = request.GET.get('donor_name', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-
-    if(category==['']):
-        q = Donate.objects.all().order_by('stock__name')
-    else:
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        q = Donate.objects.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        q = q.filter(stock__name=stock_name)
-    if(donor_name!=''):
-        q = q.filter(donor__name=donor_name)      
     start_end_date_form = StartEndDateForm(request.GET or None)
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
-        q = q.filter(date__range=[start_date, end_date])
-        
+        donations = Donate.objects.filter(date__range=[start_date, end_date])
+    else:
+        donations = Donate.objects.all()
     return render(request, 'donation_summary.html',
-                  RequestContext(request, {'donations': q,
-                                           'category': request.GET.get('category', ''),
-                                           'stock_name': stock_name,
-                                           'donor_name': donor_name,
+                  RequestContext(request, {'donations': donations,
                                            'start_end_date_form': start_end_date_form}))
 
 def purchase_summary(request):
-    vendor_name = request.GET.get('vendor_name', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-
-    if(category==['']):
-        q = Purchase.objects.all().order_by('stock__name')
-    else:
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        q = Purchase.objects.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        q = q.filter(stock__name=stock_name)
-    if(vendor_name!=''):
-        q = q.filter(vendor__name=vendor_name)
     start_end_date_form = StartEndDateForm(request.GET or None)
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
-        q = q.filter(date__range=[start_date, end_date])
-    
+        purchases = Purchase.objects.filter(date__range=[start_date, end_date])
+    else:
+        purchases = Purchase.objects.all()
     return render(request, 'Purchase_summary.html',
-                  RequestContext(request, {'purchases': q,
-                                           'category': request.GET.get('category', ''),
-                                           'stock_name': stock_name,
-                                           'vendor_name': vendor_name,
+                  RequestContext(request, {'purchases': purchases,
                                            'start_end_date_form': start_end_date_form}))
 
 def distribution_summary(request):
-    family = request.GET.get('family_type', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-
-    if(category==['']):
-        q = Distribute.objects.all().order_by('stock__name')
-    else:
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        q = Distribute.objects.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        q = q.filter(stock__name=stock_name)
-    if(family!=''):
-        q = q.filter(family_type=family)
     start_end_date_form = StartEndDateForm(request.GET or None)
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
-        q = q.filter(date__range=[start_date, end_date])
-    
+        distributions = Distribute.objects.filter(date__range=[start_date, end_date])
+    else:
+        distributions = Distribute.objects.all()
     return render(request, 'distribution_summary.html',
-                  RequestContext(request, {'distributions': q,
-                                           'category': request.GET.get('category', ''),
-                                           'stock_name': stock_name,
-                                           'family_type': family,
+                  RequestContext(request, {'distributions': distributions,
                                            'start_end_date_form': start_end_date_form}))
 
 def transfer_out_summary(request):
-    destination = request.GET.get('destination', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-
-    if(category==['']):
-        q = Transfer.objects.all().order_by('stock__name')
-    else:
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        q = Transfer.objects.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        q = q.filter(stock__name=stock_name)
-    if(destination!=''):
-        q = q.filter(destination__name=destination)
     start_end_date_form = StartEndDateForm(request.GET or None)
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
-        q = q.filter(date__range=[start_date, end_date])
-    
+        transfers = Transfer.objects.filter(date__range=[start_date, end_date])
+    else:
+        transfers = Transfer.objects.all()
     return render(request, 'transfer_out_summary.html',
-                  RequestContext(request, {'transfers': q,
-                                           'category': request.GET.get('category', ''),
-                                           'stock_name': stock_name,
-                                           'destination': destination,
+                  RequestContext(request, {'transfers': transfers,
                                            'start_end_date_form': start_end_date_form}))
 
-def vendor_summary(request):
-    vendors = Vendor.objects.all().order_by('name')
-    
-    return render(request, 'vendor_summary.html',
-                  RequestContext(request, {'vendors': vendors}))
 
-def donor_summary(request):
-    donors = Donor.objects.all().order_by('name')
-    
-    return render(request, 'donor_summary.html',
-                  RequestContext(request, {'donors': donors}))
 
 
     
@@ -686,24 +612,11 @@ def stock_summary_report(request):
     return response
 
 def donation_report(request):
-    donor_name = request.GET.get('donor_name', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-    donation = Donate.objects.all().order_by('stock__name','stock__unit_measure')
-    
+    donation = Donate.objects.all().order_by('stock__name','stock__unit_measure')    
     if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
         start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         donation = donation.filter(date__range=[start_date, end_date])
-    if(category!=['']):
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        donation = donation.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        donation = donation.filter(stock__name=stock_name)
-    if(donor_name!=''):
-        donation = donation.filter(donor__name=donor_name)      
-    
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -728,24 +641,9 @@ def donation_report(request):
     return response
 
 def purchase_report(request):
-    vendor_name = request.GET.get('vendor_name', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-    purchase = Purchase.objects.all().order_by('stock__name','stock__unit_measure')
+    start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
+    end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
 
-    if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
-        start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
-        end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
-        purchase = purchase.filter(date__range=[start_date, end_date])
-    if(category!=['']):
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        purchase = purchase.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        purchase = purchase.filter(stock__name=stock_name)
-    if(vendor_name!=''):
-        purchase = purchase.filter(vendor__name=vendor_name)
-    
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -754,7 +652,7 @@ def purchase_report(request):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
- 
+    purchase = Purchase.objects.filter(date__range=[start_date, end_date]).order_by('stock__name','stock__unit_measure')
     for item in purchase:
         row = row + 1
         sheet.write(row, 0, Vendor.objects.get(id = item.vendor_id).name)
@@ -770,24 +668,8 @@ def purchase_report(request):
     return response
 
 def distribution_report(request):
-    family = request.GET.get('family_type', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-    distribute = Distribute.objects.all().order_by('stock__name','stock__unit_measure')
-
-    if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
-        start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
-        end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
-        distribute = distribute.filter(date__range=[start_date, end_date])
-    if(category!=['']):
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        distribute = distribute.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        distribute = distribute.filter(stock__name=stock_name)
-    if(family!=''):
-        distribute = distribute.filter(family=family_type)
-    
+    start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
+    end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -796,7 +678,7 @@ def distribution_report(request):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
-
+    distribute = Distribute.objects.filter(date__range=[start_date, end_date]).order_by('stock__name','family_type')
     for item in distribute:
         row = row + 1
         stock = Stock.objects.get(id = item.stock_id)
@@ -812,24 +694,8 @@ def distribution_report(request):
     return response
 
 def transfer_out_report(request):
-    destination = request.GET.get('destination', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
-    transfer = Transfer.objects.all().order_by('stock__name','stock__unit_measure')
-
-    if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
-        start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
-        end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
-        transfer = transfer.filter(date__range=[start_date, end_date])
-    if(category!=['']):
-        cL = Category.objects.filter(name__in=category)
-        sList = [c.stock.pk for c in cL]
-        transfer = transfer.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        transfer = transfer.filter(stock__name=stock_name)
-    if(destination!=''):
-        transfer = transfer.filter(destination__name=destination)
-
+    start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
+    end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -838,7 +704,7 @@ def transfer_out_report(request):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
-
+    transfer = Transfer.objects.filter(date__range=[start_date, end_date]).order_by('stock__name','destination')
     for item in transfer:
         row = row + 1
         stock = Stock.objects.get(id = item.stock_id)

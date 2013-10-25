@@ -18,6 +18,19 @@ Distribution Summary
 <div class="header">
 {{start_end_date_form.as_ul}}
 </div>
+
+<div class="header">
+<label for="">Search by family type:  </label>
+<input type="text" id="family_type" name="family_type" value=""/>
+
+<label for="">Search by stock name: </label>
+<input type="text" id="stock_name" name="stock_name" value=""/>
+
+<label for="">Search by category: </label>
+<input type="text" id="category" name="category" value=""/>
+</div>
+
+
 <input class="button" type="submit" value="Get">
 </form>
 
@@ -30,6 +43,9 @@ Date: {{distribution.date}} Stock: {{distribution.stock.name}} Unit Measure: {{d
 <form action="/stocks/distribution_report/download/" method="GET">{% csrf_token %}
 <input type="hidden" name="start_date" value="{{start_end_date_form.cleaned_data.start_date}}"/>
 <input type="hidden" name="end_date" value="{{start_end_date_form.cleaned_data.end_date}}"/>
+<input type="hidden" name="family_type" value="{{family_type}}"/>
+<input type="hidden" name="stock_name" value="{{stock_name}}"/>
+<input type="hidden" name="category" value="{{category}}"/>
 <input class="button" type="submit" value="Download">
 </form>
 {% endblock %}
