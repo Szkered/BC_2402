@@ -16,7 +16,7 @@ h1{
 
 h2,
 h3 {
-    margin: 20px 0px 0px 0px;
+    margin: 50px 0px 0px 0px;
     padding: 0;
     text-align:left;
 }
@@ -47,8 +47,9 @@ a:hover {
 }
 
 .container {
-    width: 1200px;
-    margin: 0px auto;
+    width: auto;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 li {
@@ -65,7 +66,7 @@ li {
   background: #3f3f3f;/*header全屏背景色设置*/
   color: #fff;
   margin-bottom: 0px; /*顶部与主内容垂直间距，可自行修改*/
-  width:1349px;
+  width:auto;
 }
 
 .main-content {
@@ -73,11 +74,10 @@ li {
 }
 
 #footer {
-  background: #3f3f3f;/*footer全屏背景色设置*/
-  color: #fff;
-  margin-bottom:0px;
+  /*footer全屏背景色设置*/
+  color: #3f3f3f;
   text-align: center;
-  width:1349px;
+  width:auto;
 }
 
 
@@ -101,7 +101,6 @@ li {
 /*********************************************************************************/
 .button a {
     color: #fff;
-   
 }
 
 .button a:hover {
@@ -124,7 +123,15 @@ li {
     border: none;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
+
 }
+
+
+#button input[type=submit]{
+	right:47px;
+	position:absolute;
+}
+
 
 
 .rounded {
@@ -136,6 +143,11 @@ li {
     -moz-border-radius: 10px;
     border-radius: 10px;
     font-weight: 900;
+    
+}
+
+.rounded a:hover{
+	float:right;
 }
 
 
@@ -271,15 +283,35 @@ li {
 /* Page                                                                          */
 /*********************************************************************************/
 #page {
-	
     overflow: hidden;
     padding: 3em 0em 0em 0em;
     border-top: 1px solid #E5E5E5;
     align:center;
     width:1349px;
-
 }
 
 .ui-widget {
     display:inline;
 }
+
+/*********************************************************************************/
+/* Confirmation page display                                                     */
+/*********************************************************************************/
+table,th,td
+{
+    border:1px solid #3f3f3f;
+
+}
+table{
+	border-collapse:collapse;
+	width:100%;
+	
+}
+
+th,td{
+	text-align:center;
+	width:16%;
+}
+
+
+

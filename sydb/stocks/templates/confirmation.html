@@ -7,16 +7,35 @@ Confirmation of Orders
 {% endblock %}
 
 {% block content %}
+     
 <form action="." method="POST">{% csrf_token %}
 {{purchase_formset.management_form}}
+<div class="item">
+      <Table>
+      <tr>
+      <th>Date</th>
+      <th>Stock</th>
+      <th>Vendor</th>
+      <th>Quantity</th>
+      <th>Total Price</th>
+      <th>Confirm</th>
+      </tr>
+      </Table>
+</div>
+      
   {% for item in zip %}
     <div class="item">
-      Date: {{item.1.date}}
-      Stock: {{item.1.stock}}
-      Vendor: {{item.1.vendor}}
-      Quantity: {{item.1.quantity}}
-      Total Price: {{item.1.total_price}}
-      Confirm: {{item.0.confirm}}
+
+      <table>
+      <tr>
+      <td>{{item.1.date}}</td>
+      <td>{{item.1.stock}}</td>
+      <td>{{item.1.vendor}}</td>
+      <td>{{item.1.quantity}}</td>
+      <td>{{item.1.total_price}}</td>
+      <td>{{item.0.confirm}}</td>
+      </tr>
+      </Table>
     </div>
     <div class="hide">
       {{item.0.date}}
@@ -26,6 +45,6 @@ Confirmation of Orders
       {{item.0.id}}
     </div>
   {% endfor %}
-<input class="button" type="submit" value="Confirm">
+<div id="button"><input class="button" type="submit" value="Confirm"></div>
 </form>
 {% endblock %}

@@ -18,27 +18,31 @@ Distribution
 <h2>Standard items to be distributed</h2>
 {{distribution_formset.management_form}}
 <div class="item">
-  <li>
-    Name
-  </li>
-  <li>
-    Unit Measure
-  </li>
+<Table>
+  <tr>
+  <th>Name</th>
+  <th>Unit Measure</th>
+  <th>Quantity</th>
+  </tr>
+</Table>
 </div>
 
-{% for item in zip %}
 <div class="item">
-<li>
-{{item.0.name}}
-</li>
-<li>
-  {{item.0.unit_measure}}
-</li>
-{{item.1.as_ul}}  
-</div>
-{% endfor %}
+{% for item in zip %}
 
-<input class="button" type="submit" value="Submit">
+<Table>
+<tr>
+
+<td>{{item.0.name}}</td>
+<td>{{item.0.unit_measure}}</td>
+<td>{{item.1.as_ul}}</td>
+</tr>
+</Table>
+
+{% endfor %}
+</div>
+
+<div id="button"><input class="button" type="submit" value="Submit"></div>
 </form>
  
   
