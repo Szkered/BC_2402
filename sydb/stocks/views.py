@@ -66,7 +66,7 @@ def donation(request):
                 donor=d
             )
             category_list = re.split(
-                ', | ',
+                ', | |,|',
                 donate_form.cleaned_data['category']
             )
             for item in category_list:
@@ -105,7 +105,7 @@ def purchase(request):
                 confirm=False
             )
             category_list = re.split(
-                ', | ',
+                ', | |,|',
                      purchase_form.cleaned_data['category']
             )
             for item in category_list:
@@ -250,7 +250,7 @@ def donate_edit(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
     donor_name = request.GET.get('donor_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,|', request.GET.get('category', ''))
     if(category==['']):
         q = Donate.objects.all()
     else:
@@ -278,7 +278,7 @@ def purchase_edit(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
     vendor_name = request.GET.get('vendor_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,|', request.GET.get('category', ''))
     if(category==['']):
         q = Purchase.objects.all()
     else:
@@ -306,7 +306,7 @@ def transfer_edit(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
     destination_name = request.GET.get('destination_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,|', request.GET.get('category', ''))
     if(category==['']):
         q = Transfer.objects.all()
     else:
@@ -334,7 +334,7 @@ def distribute_edit(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
     family_form = FamilyForm(request.GET or None)
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,|', request.GET.get('category', ''))
     if(category==['']):
         q = Distribute.objects.all()
     else:
@@ -390,7 +390,7 @@ def donor_edit(request):
 def stock_edit(request):
     StockFormSet = modelformset_factory(Stock, extra=0)
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,|', request.GET.get('category', ''))
     if(category==['']):
         q = Stock.objects.all().order_by('name')
     else:
@@ -404,8 +404,8 @@ def stock_edit(request):
     if(stock_formset.is_valid()):
         stock_formset.save()
         for s in q:
-            new_cList = re.split(', | ', request.POST.get(s.name))
-            old_cList = re.split(', | ', s.category_slug())
+            new_cList = re.split(', | |,|', request.POST.get("%s_%s" % (s.name, s.unit_measure)))
+            old_cList = re.split(', | |,|', s.category_slug())
             for item in new_cList:
                 if item not in old_cList and item != '':
                     Category.objects.create(
@@ -433,7 +433,7 @@ def stock_edit(request):
 
 def stock_summary(request):
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,|', request.GET.get('category', ''))
     if(category==['']):
         q = Stock.objects.all().order_by('name')
     else:
@@ -599,7 +599,7 @@ def get_stocks(request):
     categorys = {c.name for c in cList if c.name not in categorys}
     catSlug = ''
     for category in categorys:
-        catSlug += category + ' '
+        catSlug += category + ', '
     results = [{'value': '%s - $%s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
                 'name': stock.name,
                 'unit_measure': stock.unit_measure,
@@ -655,7 +655,7 @@ import xlwt3 as xlwt
 
 def stock_summary_report(request):
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,|' , request.GET.get('category', ''))
     stock = Stock.objects.all().order_by('name', 'unit_measure')
     if(category != ['']):
         cL = Category.objects.filter(name__in=category)

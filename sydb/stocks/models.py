@@ -10,7 +10,7 @@ class Stock(models.Model):
         return "%s - $%s/%s" % (self.name, self.unit_price, self.unit_measure)
 
     def purchase_sum(self):
-        purchased = Purchase.objects.filter(stock_id=self.pk,
+        purchased = Purchase.objects.filter(stock=self,
                                             confirm=True)
         sum = 0
         for stock in purchased:
@@ -18,29 +18,28 @@ class Stock(models.Model):
         return sum
 
     def donate_sum(self):
-        donated = Donate.objects.filter(stock_id=self.pk)
+        donated = Donate.objects.filter(stock=self)
         sum = 0
         for stock in donated:
             sum += stock.quantity
         return sum
         
     def distribute_sum(self):
-        distributed = Distribute.objects.filter(stock_id=self.pk)
+        distributed = Distribute.objects.filter(stock=self)
         sum = 0
         for stock in distributed:
             sum += stock.quantity
         return sum
         
     def transfer_sum(self):
-        transferd = Transfer.objects.filter(stock_id=self.pk)
+        transferd = Transfer.objects.filter(stock=self)
         sum = 0
         for stock in transferd:
             sum += stock.quantity
         return sum
 
     def current_amt(self): 
-        return self.purchase_sum() + self.donate_sum()
-        - self.transfer_sum() - self.distribute_sum()
+        return self.purchase_sum() + self.donate_sum() - self.transfer_sum() - self.distribute_sum()
 
     def total_price(self):
         return self.unit_price * self.current_amt()

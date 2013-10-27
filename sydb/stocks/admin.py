@@ -35,7 +35,13 @@ class VendorAdmin(admin.ModelAdmin):
     list_display = ['name', 'contact_no', 'address']
     ordering = ['name']
     
-    
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'stock']
+    ordering = ['stock']
+
+class DistributeAdmin(admin.ModelAdmin):
+    list_display = ['quantity', 'stock', 'family_type', 'date']
+    ordering = ['stock']
     
 admin.site.register(Stock, StockAdmin)
 admin.site.register(Donor, DonorAdmin)
@@ -43,9 +49,9 @@ admin.site.register(Destination, DestinationAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Donate, DonateAdmin)
 admin.site.register(Purchase, PurchaseAdmin)
-admin.site.register(Distribute)
+admin.site.register(Distribute, DistributeAdmin)
 admin.site.register(Transfer)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 
 
     
