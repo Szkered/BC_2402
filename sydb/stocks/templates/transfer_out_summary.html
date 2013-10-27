@@ -18,6 +18,19 @@ Transfer Out Summary
 <div class="header">
 {{start_end_date_form.as_ul}}
 </div>
+
+<div class="header">
+<label for="">Search by destination:  </label>
+<input type="text" id="destination" name="destination" value=""/>
+
+<label for="">Search by stock name: </label>
+<input type="text" id="stock_name" name="stock_name" value=""/>
+
+<label for="">Search by category: </label>
+<input type="text" id="category" name="category" value=""/>
+</div>
+
+
 <input class="button" type="submit" value="Get">
 </form>
 
@@ -30,6 +43,9 @@ Date: {{transfer.date}} Stock: {{transfer.stock.name}} Unit Measure: {{transfer.
 <form action="/stocks/transfer_out_report/download/" method="GET">{% csrf_token %}
 <input type="hidden" name="start_date" value="{{start_end_date_form.cleaned_data.start_date}}"/>
 <input type="hidden" name="end_date" value="{{start_end_date_form.cleaned_data.end_date}}"/>
+<input type="hidden" name="destination" value="{{destination}}"/>
+<input type="hidden" name="stock_name" value="{{stock_name}}"/>
+<input type="hidden" name="category" value="{{category}}"/>
 <input class="button" type="submit" value="Download">
 </form>
 {% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Vendor Summary{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+  <script src="{% static "js/autocomplete_donation.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+Vendor Summary
+{% endblock %}
+
+{% block content %}
+{% for vendor in vendors %}
+<div class="item">
+Name: {{vendor.name}} Address: {{vendor.address}} Contact Number: {{vendor.contact_no}} 
+</div>
+{% endfor %}
+<form action="/stocks/vendor_report/download/" method="GET">{% csrf_token %}
+<input class="button" type="submit" value="Download">
+</form>
+{% endblock %}

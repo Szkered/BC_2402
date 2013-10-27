@@ -25,6 +25,8 @@ urlpatterns = patterns('',
                        url(r'^purchase_summary/$', purchase_summary),
                        url(r'^distribution_summary/$', distribution_summary),
                        url(r'^transfer_out_summary/$', transfer_out_summary),
+                       url(r'^vendor_summary/$', vendor_summary),
+                       url(r'^donor_summary/$', donor_summary),
                        #autocomplete
                        url(r'^get_donors/$', get_donors, name="get_donors"),
                        url(r'^get_stocks/$', get_stocks, name="get_stocks"),
