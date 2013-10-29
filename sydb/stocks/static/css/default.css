@@ -48,8 +48,8 @@ a:hover {
 
 .container {
     width: auto;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 4%;
+    margin-right: 4%;
 }
 
 li {
@@ -128,7 +128,7 @@ li {
 
 
 #button input[type=submit]{
-	right:47px;
+	right:4%;
 	position:absolute;
 }
 
@@ -297,10 +297,9 @@ li {
 /*********************************************************************************/
 /* Confirmation page display                                                     */
 /*********************************************************************************/
-table,th,td
+#tableHeader
 {
     border:1px solid #3f3f3f;
-
 }
 table{
 	border-collapse:collapse;

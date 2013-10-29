@@ -18,7 +18,7 @@ Donor Info Update
 <label for="">Search by donor name: </label>
 <input type="text" id="id_name" name="id_name" value=""/>
 </div>
-<input class="button" type="submit" value="Get">
+<div id="button"><input class="button" type="submit" value="Get"></div>
 </form>
 
 <h2>Donor List</h2>
@@ -29,6 +29,6 @@ Donor Info Update
 {{donor_form.as_ul}}
 </div>
 {% endfor %}
-<input class="button" type="submit" value="Update">
+<div id="button"><input class="button" type="submit" value="Update"></div>
 </form>
 {% endblock %}
