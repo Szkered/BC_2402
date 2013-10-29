@@ -155,8 +155,11 @@ class Order(models.Model):
     
 class Purchase(models.Model):
     order = models.ForeignKey(Order)
-    quantity = models.IntegerField()
     stock = models.ForeignKey(Stock)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return "%s :%s %s" % (self.stock, self.quantity, self.stock.unit_measure)
     
     def cash_value(self):
         return self.quantity * self.stock.unit_price

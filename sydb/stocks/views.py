@@ -20,16 +20,6 @@ import re
 from stocks.models import *
 from stocks.forms import *
 
-# This class is used to require forms in the formset not to be empty
-class RequiredFormSet(BaseFormSet):
-    def __init__(self, *args, **kwargs):
-        super(RequiredFormSet, self).__init__(*args, **kwargs)
-        for form in self.forms:
-            form.empty_permitted = False # self.forms[0].empty_permitted = False
-
-            
-StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSet)
-
 
     
 ################################################################################
@@ -280,51 +270,45 @@ def donate_edit(request):
                   RequestContext(request, {'donate_formset': donate_formset,
                                            'start_end_date_form': start_end_date_form}))
 
-def purchase_edit(request):
-    """Edit purchase orders."""
     
-    # PurchaseFormSet = modelformset_factory(Purchase, extra=0)
+def purchase_edit(request, o_id):
+    PurchaseFormSet = modelformset_factory(Purchase, exclude='order' ,extra=0)
+    o = Order.objects.get(pk=o_id)
+    q = Purchase.objects.filter(order=o)
+    purchase_formset = PurchaseFormSet(request.POST or None, queryset=q)
+    
+    if(purchase_formset.is_valid()):
+        purchase_formset.save()
+        return HttpResponseRedirect('thanks')
+        
+    return render(request, 'purchase_edit.html',
+                  RequestContext(request, {'order': o,
+                                           'purchase_formset': purchase_formset}))
+
+def order_edit(request):
     OrderFormSet = modelformset_factory(Order, extra=0)
     start_end_date_form = StartEndDateForm(request.GET or None)
-    
-    vendor_name = request.GET.get('vendor_name', '')
-    stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | |,|', request.GET.get('category', ''))
-    
-    if(category==['']):
-        q = Purchase.objects.all()
-    else:
-        cList = Category.objects.filter(name__in=category)
-        sList = [c.stock for c in cList]
-        q = Purchase.objects.filter(stock__in=sList)
-        
+
+    o = Order.objects.all()
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
-        q = q.filter(order__date__range=[start_date, end_date])
-        
-    if(stock_name!=''):
-        q = q.filter(stock__name=stock_name)
-    if(vendor_name!=''):
-        q = q.filter(vendor__name=vendor_name)
+        o = o.filter(date__range=[start_date, end_date])
 
-    orders_id = []
-    orders_id = [item.order.pk for item in q if item.order not in orders_id]
-    o = Order.objects.filter(pk__in=orders_id)
+    purchase_list = [Purchase.objects.filter(order=item) for item in o]
         
-    # purchase_formset = PurchaseFormSet(request.POST or None, queryset=q)
     order_formset = OrderFormSet(request.POST or None, queryset=o)
-    
     if(order_formset.is_valid()):
         # purchase_formset.save()
         order_formset.save()
         return HttpResponseRedirect('thanks')
-    return render(request, 'purchase_edit.html',
+    return render(request, 'order_edit.html',
                   RequestContext(request, {
                       # 'purchase_formset': purchase_formset,
+                      'zip': zip(order_formset, purchase_list),
                       'order_formset': order_formset,
                       'start_end_date_form': start_end_date_form}))
-
+    
 def transfer_edit(request):
     TransferFormSet = modelformset_factory(Transfer, extra=0)
     start_end_date_form = StartEndDateForm(request.GET or None)
