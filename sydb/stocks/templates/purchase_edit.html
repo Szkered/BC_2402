@@ -33,14 +33,28 @@ Purchase Edit
 <div id="button"><input class="button" type="submit" value="Get"></div>
 </form>
 
-<h2>Purchase</h2>
+
+<h2>Orders</h2>
 <form action="." method="POST">{% csrf_token %}
-{{purchase_formset.management_form}}
-{% for purchase_form in purchase_formset %}
+  
+{{order_formset.management_form}}
+  
+{% for order_form in order_formset %}
 <div class="item">
-{{purchase_form.as_ul}}
+Order
+{{order_form.as_ul}}
 </div>
+
 {% endfor %}
+  
+<!-- {{purchase_formset.management_form}} -->
+  
+<!-- {% for purchase_form in purchase_formset %} -->
+<!--   <div class="item"> -->
+<!--     {{purchase_form.as_ul}} -->
+<!--   </div> -->
+<!-- {% endfor %} -->
+
 <div id="button"><input class="button" type="submit" value="Update"></div>
 </form>
 {% endblock %}

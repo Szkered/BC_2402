@@ -11,7 +11,7 @@ class Stock(models.Model):
 
     def purchase_sum(self):
         purchased = Purchase.objects.filter(stock=self,
-                                            confirm=True)
+                                            order__confirm=True)
         sum = 0
         for stock in purchased:
             sum += stock.quantity
@@ -108,9 +108,13 @@ class Vendor(CommonInfo):
 class TransitInfo(models.Model):
     date = models.DateField(default=datetime.datetime.now())
     quantity = models.IntegerField()
+    stock = models.ForeignKey(Stock)
 
     class Meta:
         abstract = True
+
+    def cash_value(self):
+        return self.quantity * self.stock.unit_price
         
 class Distribute(TransitInfo):
     TYPE_A = 'A'
@@ -124,22 +128,35 @@ class Distribute(TransitInfo):
         (TYPE_D, 'Type D'),
     )
 
-    stock = models.ForeignKey(Stock)
     family_type = models.CharField(max_length=1, choices=FAMILY_TYPES)
 
 class Transfer(TransitInfo):
-    stock = models.ForeignKey(Stock)
     destination = models.ForeignKey(Destination)
     # remark = models.CharField(max_length=100)
 
 class Donate(TransitInfo):
-    stock = models.ForeignKey(Stock)
     donor = models.ForeignKey(Donor)
 
-class Purchase(TransitInfo):
-    stock = models.ForeignKey(Stock)
+# class Purchase(TransitInfo):
+#     vendor = models.ForeignKey(Vendor)
+
+class Order(models.Model):
     vendor = models.ForeignKey(Vendor)
+    date = models.DateField(default=datetime.datetime.now())
     confirm = models.BooleanField()
-    
+
+    def __str__(self):
+        return "%s - %s" % (self.date, self.vendor)
+        
     def total_price(self):
-        return self.stock.unit_price * self.quantity
+        purchase = [item.cash_value() for item in Purchase.objects.filter(order=self)]
+        return sum(purchase)
+        
+    
+class Purchase(models.Model):
+    order = models.ForeignKey(Order)
+    quantity = models.IntegerField()
+    stock = models.ForeignKey(Stock)
+    
+    def cash_value(self):
+        return self.quantity * self.stock.unit_price

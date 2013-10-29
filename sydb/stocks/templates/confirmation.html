@@ -9,7 +9,7 @@ Confirmation of Orders
 {% block content %}
      
 <form action="." method="POST">{% csrf_token %}
-{{purchase_formset.management_form}}
+{{order_formset.management_form}}
 <div class="item">
       <Table>
       <tr>

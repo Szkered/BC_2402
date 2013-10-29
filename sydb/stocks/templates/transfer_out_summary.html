@@ -37,7 +37,7 @@ Transfer Out Summary
 <h2>Transfer Out</h2>
 {% for transfer in transfers %}
 <div class="item">
-Date: {{transfer.date}} Stock: {{transfer.stock.name}} Unit Measure: {{transfer.stock.unit_measure}} Quantity: {{transfer.quantity}} Destination: {{transfer.destination.name}}
+Date: {{transfer.date}} Stock: {{transfer.stock.name}} Unit Measure: {{transfer.stock.unit_measure}} Quantity: {{transfer.quantity}} Destination: {{transfer.destination.name}}Cash Value: ${{transfer.cash_value}}
 </div>
 {% endfor %}
 <form action="/stocks/transfer_out_report/download/" method="GET">{% csrf_token %}

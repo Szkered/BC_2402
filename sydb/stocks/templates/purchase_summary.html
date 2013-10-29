@@ -37,7 +37,7 @@ Purchase Summary
 <h2>Purchase</h2>
 {% for purchase in purchases %}
 <div class="item">
-Date: {{purchase.date}} Donor: {{purchase.vendor.name}} Stock: {{purchase.stock.name}} Unit Measure: {{purchase.stock.unit_measure}} Quantity: {{purchase.quantity}}
+Date: {{purchase.date}} Donor: {{purchase.vendor.name}} Stock: {{purchase.stock.name}} Unit Measure: {{purchase.stock.unit_measure}} Quantity: {{purchase.quantity}}Cash Value: ${{purchase.cash_value}}
 </div>
 {% endfor %}
 <form action="/stocks/purchase_report/download/" method="GET">{% csrf_token %}

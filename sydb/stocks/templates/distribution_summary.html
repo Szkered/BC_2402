@@ -37,7 +37,7 @@ Distribution Summary
 <h2>Distribution</h2>
 {% for distribution in distributions %}
 <div class="item">
-Date: {{distribution.date}} Stock: {{distribution.stock.name}} Unit Measure: {{distribution.stock.unit_measure}} Quantity: {{distribution.quantity}} Family Type: {{distribution.family_type}}
+Date: {{distribution.date}} Stock: {{distribution.stock.name}} Unit Measure: {{distribution.stock.unit_measure}} Quantity: {{distribution.quantity}} Family Type: {{distribution.family_type}}Cash Value: ${{distribution.cash_value}}
 </div>
 {% endfor %}
 <form action="/stocks/distribution_report/download/" method="GET">{% csrf_token %}

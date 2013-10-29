@@ -36,7 +36,7 @@ Donation Summary
 <h2>Donation</h2>
 {% for donation in donations %}
 <div class="item">
-Date: {{donation.date}} Donor: {{donation.donor.name}} Stock: {{donation.stock.name}} Unit Measure: {{donation.stock.unit_measure}} Quantity: {{donation.quantity}} Cash Value: 
+Date: {{donation.date}} Donor: {{donation.donor.name}} Stock: {{donation.stock.name}} Unit Measure: {{donation.stock.unit_measure}} Quantity: {{donation.quantity}} Cash Value: ${{donation.cash_value}}
 </div>
 {% endfor %}
 <form action="/stocks/donation_report/download/" method="GET">{% csrf_token %}

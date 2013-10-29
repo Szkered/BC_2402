@@ -13,11 +13,9 @@ class StockAdmin(admin.ModelAdmin):
 #     model = Stock
 #     extra = 1
 
-class PurchaseAdmin(admin.ModelAdmin):
-
-    list_display = ['date', 'stock', 'vendor', 'quantity', 'total_price', 'confirm']
-    ordering = ['date']
-    search_fields = ('date',)
+# class PurchaseAdmin(admin.ModelAdmin):
+#     list_display = ['stock', 'quantity', 'cash_value']
+#     ordering = ['stock']
     
 
 class DonorAdmin(admin.ModelAdmin):
@@ -42,16 +40,29 @@ class CategoryAdmin(admin.ModelAdmin):
 class DistributeAdmin(admin.ModelAdmin):
     list_display = ['quantity', 'stock', 'family_type', 'date']
     ordering = ['stock']
+
+class PurchaseInline(admin.StackedInline):
+    model = Purchase
+    extra = 0
+    
+class OrderAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['vendor', 'confirm']}),
+        ('Date Info', {'fields': ['date'], 'classes' : ['collapse']}),
+    ]
+    inlines = [PurchaseInline]
+
     
 admin.site.register(Stock, StockAdmin)
 admin.site.register(Donor, DonorAdmin)
 admin.site.register(Destination, DestinationAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Donate, DonateAdmin)
-admin.site.register(Purchase, PurchaseAdmin)
+# admin.site.register(Purchase, PurchaseAdmin)
 admin.site.register(Distribute, DistributeAdmin)
 admin.site.register(Transfer)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Order, OrderAdmin)
 
 
     

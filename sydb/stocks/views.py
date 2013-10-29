@@ -26,7 +26,7 @@ class RequiredFormSet(BaseFormSet):
         super(RequiredFormSet, self).__init__(*args, **kwargs)
         for form in self.forms:
             form.empty_permitted = False # self.forms[0].empty_permitted = False
-            
+
             
 StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSet)
 
@@ -56,9 +56,11 @@ def donation(request):
         for donate_form in donate_formset:
             s, created = Stock.objects.get_or_create(
                 name=donate_form.cleaned_data['stock_name'],
-                unit_price=donate_form.cleaned_data['unit_price'],
-                unit_measure=donate_form.cleaned_data['unit_measure']
+                unit_measure=donate_form.cleaned_data['unit_measure'],
+                defaults={'unit_price':donate_form.cleaned_data['unit_price']}
             )
+            s.unit_price = donate_form.cleaned_data['unit_price']
+            s.save()
             donate = Donate.objects.create(
                 date=date_form.cleaned_data['date'],
                 quantity=donate_form.cleaned_data['quantity'],
@@ -91,6 +93,11 @@ def purchase(request):
     if(vendor_form.is_valid() and purchase_formset.is_valid()
        and date_form.is_valid()):
         v, created = Vendor.objects.get_or_create(**vendor_form.cleaned_data)
+        o = Order.objects.create(
+            date=date_form.cleaned_data['date'],
+            confirm=False,
+            vendor=v
+        )
         for purchase_form in purchase_formset:
             s, created = Stock.objects.get_or_create(
                 name=purchase_form.cleaned_data['stock_name'],
@@ -98,21 +105,20 @@ def purchase(request):
                 unit_measure=purchase_form.cleaned_data['unit_measure']
             )
             purchase = Purchase.objects.create(
-                date=date_form.cleaned_data['date'],
+                order=o,
                 quantity=purchase_form.cleaned_data['quantity'],
-                stock=s,
-                vendor=v,
-                confirm=False
+                stock=s
             )
             category_list = re.split(
                 ', | |,|',
-                     purchase_form.cleaned_data['category']
+                purchase_form.cleaned_data['category']
             )
             for item in category_list:
-                category, created = Category.objects.get_or_create(
-                    stock=s,
-                    name=item
-                )
+                if not item=='':
+                    category, created = Category.objects.get_or_create(
+                        stock=s,
+                        name=item
+                    )
         return HttpResponseRedirect('thanks')
 
     context = RequestContext(request, {'vendor_form': vendor_form,
@@ -125,25 +131,26 @@ def purchase(request):
     
 def distribution(request):
     # create formset
-    standard_list = Category.objects.filter(name="standard")
-    standard_item = []
-    for item in standard_list:
-        standard_item.append(item.stock)
-        DistributionFormSet = formset_factory(DistributionForm,
-                                              extra = len(standard_item),
-                                              formset=RequiredFormSet)
+    standard_item = [item.stock for item in Category.objects.filter(name="standard")]
+    DistributionFormSet = formset_factory(DistributionForm,
+                                          extra = len(standard_item),
+                                          formset=RequiredFormSet,)
     # form action handling
     family_form = FamilyForm(request.POST or None)
     distribution_formset = DistributionFormSet(request.POST or None)
     date_form = DateForm(request.POST or None)
+    for s, form in zip(standard_item, distribution_formset):
+        form.fields['stock_id'].initial = s.pk
+
     if(family_form.is_valid() and
        distribution_formset.is_valid() and
        date_form.is_valid()):
         for s, form in zip(standard_item, distribution_formset):
-            if(form.cleaned_data['quantity'] != 0):
+            q = form.cleaned_data['quantity']
+            if(q > 0):
                 distribute = Distribute.objects.create(
                     date=date_form.cleaned_data['date'],
-                    quantity=form.cleaned_data['quantity'],
+                    quantity=q,
                     family_type=family_form.cleaned_data['family_type'],
                     stock=s
                 )
@@ -189,17 +196,17 @@ def transfer(request):
         
 
 def confirmation(request):
-    PurchaseFormSet = modelformset_factory(Purchase, extra=0)
-    unconfirmed_purchases = Purchase.objects.filter(confirm=False).order_by('date')
-    purchase_formset = PurchaseFormSet(request.POST or None, queryset=unconfirmed_purchases)
-    if(purchase_formset.is_valid()):
-        purchase_formset.save()
+    OrderFormSet = modelformset_factory(Order, extra=0)
+    unconfirmed_order = Order.objects.filter(confirm=False).order_by('date')
+    order_formset = OrderFormSet(request.POST or None, queryset=unconfirmed_order)
+    if(order_formset.is_valid()):
+        order_formset.save()
         return HttpResponseRedirect('thanks')
     return render(request, 'confirmation.html',
-                  RequestContext(request, {'purchase_formset': purchase_formset,
-                                           'unconfirmed_purchases': unconfirmed_purchases,
-                                           'zip': zip(purchase_formset,
-                                                      unconfirmed_purchases)}))
+                  RequestContext(request, {'order_formset': order_formset,
+                                           'unconfirmed_purchases': unconfirmed_order,
+                                           'zip': zip(order_formset,
+                                                      unconfirmed_order)}))
 
 def adjust(request):
     adjust_form = AdjustForm(request.POST or None)
@@ -274,32 +281,49 @@ def donate_edit(request):
                                            'start_end_date_form': start_end_date_form}))
 
 def purchase_edit(request):
-    PurchaseFormSet = modelformset_factory(Purchase, extra=0)
+    """Edit purchase orders."""
+    
+    # PurchaseFormSet = modelformset_factory(Purchase, extra=0)
+    OrderFormSet = modelformset_factory(Order, extra=0)
     start_end_date_form = StartEndDateForm(request.GET or None)
+    
     vendor_name = request.GET.get('vendor_name', '')
     stock_name = request.GET.get('stock_name', '')
     category = re.split(', | |,|', request.GET.get('category', ''))
+    
     if(category==['']):
         q = Purchase.objects.all()
     else:
         cList = Category.objects.filter(name__in=category)
         sList = [c.stock for c in cList]
         q = Purchase.objects.filter(stock__in=sList)
-    if(stock_name!=''):
-        q = q.filter(stock__name=stock_name)
+        
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
-        q = q.filter(date__range=[start_date, end_date])
+        q = q.filter(order__date__range=[start_date, end_date])
+        
+    if(stock_name!=''):
+        q = q.filter(stock__name=stock_name)
     if(vendor_name!=''):
         q = q.filter(vendor__name=vendor_name)
-    purchase_formset = PurchaseFormSet(request.POST or None, queryset=q)
-    if(purchase_formset.is_valid()):
-        purchase_formset.save()
+
+    orders_id = []
+    orders_id = [item.order.pk for item in q if item.order not in orders_id]
+    o = Order.objects.filter(pk__in=orders_id)
+        
+    # purchase_formset = PurchaseFormSet(request.POST or None, queryset=q)
+    order_formset = OrderFormSet(request.POST or None, queryset=o)
+    
+    if(order_formset.is_valid()):
+        # purchase_formset.save()
+        order_formset.save()
         return HttpResponseRedirect('thanks')
     return render(request, 'purchase_edit.html',
-                  RequestContext(request, {'purchase_formset': purchase_formset,
-                                           'start_end_date_form': start_end_date_form}))
+                  RequestContext(request, {
+                      # 'purchase_formset': purchase_formset,
+                      'order_formset': order_formset,
+                      'start_end_date_form': start_end_date_form}))
 
 def transfer_edit(request):
     TransferFormSet = modelformset_factory(Transfer, extra=0)
