@@ -132,13 +132,11 @@ class Distribute(TransitInfo):
 
 class Transfer(TransitInfo):
     destination = models.ForeignKey(Destination)
-    # remark = models.CharField(max_length=100)
+    remark = models.CharField(max_length=100)
 
 class Donate(TransitInfo):
     donor = models.ForeignKey(Donor)
 
-# class Purchase(TransitInfo):
-#     vendor = models.ForeignKey(Vendor)
 
 class Order(models.Model):
     vendor = models.ForeignKey(Vendor)

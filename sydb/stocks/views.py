@@ -168,11 +168,17 @@ def transfer(request):
             s = Stock.objects.get(name=form.cleaned_data['stock_name'],
                                   unit_measure=form.cleaned_data['unit_measure']
             )
+
+            if form.cleaned_data['remark']:
+                r = form.cleaned_data['remark']
+            else:
+                r = ''
+            
             transfer = Transfer.objects.create(
                 date=date_form.cleaned_data['date'],
                 quantity=form.cleaned_data['quantity'],
                 destination=d,
-                # remark=form.cleaned_data['remark'],
+                remark=r,
                 stock=s
             )
         return HttpResponseRedirect('thanks')

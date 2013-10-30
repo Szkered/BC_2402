@@ -2,6 +2,7 @@ from django import forms
 from stocks.models import *
 from django.forms.models import modelformset_factory, inlineformset_factory, BaseInlineFormSet
 from django.forms.formsets import formset_factory, BaseFormSet
+import re
 
 class DonorForm(forms.ModelForm):
     class Meta:
@@ -24,10 +25,19 @@ class StockInForm(forms.Form):
     def clean(self):
         cleaned_data = super(StockInForm, self).clean()
         quantity = cleaned_data.get('quantity')
+        unit_price = cleaned_data.get('unit_price')
+        unit_measure = cleaned_data.get('unit_measure')
         
         if quantity:
             if not quantity > 0:
                 raise forms.ValidationError("Quantity must be positive integer!")
+
+        if not unit_price > 0:
+            raise forms.ValidationError("Unit price must be positive integer!")
+
+        if not re.compile("\d+\w+").search(unit_measure):
+            raise forms.ValidationError(
+                "Unit measure must be the combination of number and characters!")
 
         return cleaned_data
 
@@ -65,6 +75,9 @@ class DistributionForm(forms.Form):
         
         if quantity > stock.current_amt():
             raise forms.ValidationError("You don't have that much %s!" % stock.name)
+
+        if quantity < 0:
+            raise forms.ValidationError("Quantity must be positive integer!")
             
         return cleaned_data
 
@@ -77,7 +90,7 @@ class TransferForm(forms.Form):
     stock_name = forms.CharField()
     unit_measure = forms.CharField()
     quantity = forms.IntegerField()
-    # remark = forms.CharField()
+    remark = forms.CharField(required=False)
 
     def clean(self):
         cleaned_data = super(TransferForm, self).clean()
@@ -86,8 +99,12 @@ class TransferForm(forms.Form):
             name=cleaned_data.get('stock_name'),
             unit_measure=cleaned_data.get('unit_measure')
         )
+        
         if quantity > stock.current_amt():
             raise forms.ValidationError("You don't have that much %s!" % stock.name)
+
+        if quantity < 0:
+            raise forms.ValidationError("Quantity must be positive integer!")
             
         return cleaned_data
 
