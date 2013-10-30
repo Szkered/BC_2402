@@ -13,12 +13,32 @@ Donor Summary
 {% endblock %}
 
 {% block content %}
+
+<div class="item">
+<Table id="tableHeader">
+      <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Contact Number</th>
+      <th>Mail</th>
+      <th>Referral Type</th>
+      </tr>
+</Table>
+</div>
 {% for donor in donors %}
 <div class="item">
-Name: {{donor.name}} Address: {{donor.address}} Contact Number: {{donor.contact_no}} Mail: {{donor.mailing}} Referral Type: {{donor.referral}}
+<Table>
+      <tr>
+      <th>{{donor.name}}</th>
+      <th>{{donor.address}}</th>
+      <th>{{donor.contact_no}}</th>
+      <th>{{donor.mailing}}</th>
+      <th>{{donor.referral}}</th>
+      </tr>
+</Table>
 </div>
 {% endfor %}
 <form action="/stocks/donor_report/download/" method="GET">{% csrf_token %}
-<input class="button" type="submit" value="Download">
+<div id="button"><input class="button" type="submit" value="Download"></div>
 </form>
 {% endblock %}

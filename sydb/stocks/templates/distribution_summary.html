@@ -31,13 +31,34 @@ Distribution Summary
 </div>
 
 
-<input class="button" type="submit" value="Get">
+<div id="button"><input class="button" type="submit" value="Get"></div>
 </form>
 
 <h2>Distribution</h2>
+<div class="item">
+<Table id="tableHeader">
+      <tr>
+      <th>Date</th>
+      <th>Stock</th>
+      <th>Unit Measure</th>
+      <th>Quantity</th>
+      <th>Family Type</th>
+      <th>Cash Value</th>
+      </tr>
+</Table>
+</div>
 {% for distribution in distributions %}
 <div class="item">
-Date: {{distribution.date}} Stock: {{distribution.stock.name}} Unit Measure: {{distribution.stock.unit_measure}} Quantity: {{distribution.quantity}} Family Type: {{distribution.family_type}}Cash Value: ${{distribution.cash_value}}
+<Table>
+      <tr>
+      <th>{{distribution.date}}</th>
+      <th>{{distribution.stock.name}}</th>
+      <th>{{distribution.stock.unit_measure}}</th>
+      <th>{{distribution.quantity}}</th>
+      <th>{{distribution.family_type}}</th>
+      <th>${{distribution.cash_value}}</th>
+      </tr>
+</Table>
 </div>
 {% endfor %}
 <form action="/stocks/distribution_report/download/" method="GET">{% csrf_token %}
@@ -46,6 +67,6 @@ Date: {{distribution.date}} Stock: {{distribution.stock.name}} Unit Measure: {{d
 <input type="hidden" name="family_type" value="{{family_type}}"/>
 <input type="hidden" name="stock_name" value="{{stock_name}}"/>
 <input type="hidden" name="category" value="{{category}}"/>
-<input class="button" type="submit" value="Download">
+<div id="button"><input class="button" type="submit" value="Download"></div>
 </form>
 {% endblock %}

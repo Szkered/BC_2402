@@ -31,13 +31,34 @@ Transfer Out Summary
 </div>
 
 
-<input class="button" type="submit" value="Get">
+<div id="button"><input class="button" type="submit" value="Get"></div>
 </form>
 
 <h2>Transfer Out</h2>
+<div class="item">
+<Table id="tableHeader">
+      <tr>
+      <th>Date</th>
+      <th>Stock</th>
+      <th>Unit Measure</th>
+      <th>Quantity</th>
+      <th>Destination</th>
+      <th>Cash Value</th>
+      </tr>
+</Table>
+</div>
 {% for transfer in transfers %}
 <div class="item">
-Date: {{transfer.date}} Stock: {{transfer.stock.name}} Unit Measure: {{transfer.stock.unit_measure}} Quantity: {{transfer.quantity}} Destination: {{transfer.destination.name}}Cash Value: ${{transfer.cash_value}}
+<Table>
+      <tr>
+      <th>{{transfer.date}}</th>
+      <th>{{transfer.stock.name}}</th>
+      <th>{{transfer.stock.unit_measure}}</th>
+      <th>{{transfer.quantity}}</th>
+      <th>{{transfer.destination.name}}</th>
+      <th>${{transfer.cash_value}}</th>
+      </tr>
+</Table>
 </div>
 {% endfor %}
 <form action="/stocks/transfer_out_report/download/" method="GET">{% csrf_token %}
@@ -46,6 +67,6 @@ Date: {{transfer.date}} Stock: {{transfer.stock.name}} Unit Measure: {{transfer.
 <input type="hidden" name="destination" value="{{destination}}"/>
 <input type="hidden" name="stock_name" value="{{stock_name}}"/>
 <input type="hidden" name="category" value="{{category}}"/>
-<input class="button" type="submit" value="Download">
+<div id="button"><input class="button" type="submit" value="Download"></div>
 </form>
 {% endblock %}

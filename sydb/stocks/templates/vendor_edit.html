@@ -18,7 +18,7 @@ Vendor Info Update
 <label for="">Search by vendor name: </label>
 <input type="text" id="id_name" name="id_name" value=""/>
 </div>
-<input class="button" type="submit" value="Get">
+<div id="button"><div id="button"><input class="button" type="submit" value="Get"></div></div>
 </form>
 
 <h2>Vendor List</h2>
@@ -29,6 +29,6 @@ Vendor Info Update
 {{vendor_form.as_ul}}
 </div>
 {% endfor %}
-<input class="button" type="submit" value="Update">
+<div id="button"><input class="button" type="submit" value="Update"></div>
 </form>
 {% endblock %}
