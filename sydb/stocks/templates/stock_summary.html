@@ -21,12 +21,12 @@ Stock Summary
 <label for="">Search by category: </label>
 <input type="text" id="category" name="category" value=""/>
 </div>
-<input class="button" type="submit" value="Search">
+<div id="button"><input class="button" type="submit" value="Search"></div>
 </form>
 
 <h2>Stock</h2>
 <div class="item">
-<table>
+<table id="tableHeader">
     <tr>
         <th>Stock</th>
         <th>Categroy</th>
@@ -51,6 +51,6 @@ Stock Summary
 <form action="/stocks/stock_report/download/" method="GET">{% csrf_token %}
 <input type="hidden" name="category" value="{{category}}"/>
 <input type="hidden" name="stock_name" value="{{stock_name}}"/>
-<input class="button" type="submit" value="Download">
+<div id="button"><input class="button" type="submit" value="Download"></div>
 </form>
 {% endblock %}

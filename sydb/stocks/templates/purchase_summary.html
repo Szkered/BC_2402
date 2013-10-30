@@ -31,13 +31,34 @@ Purchase Summary
 </div>
 
 
-<input class="button" type="submit" value="Get">
+<div id="button"><input class="button" type="submit" value="Search"></div>
 </form>
 
 <h2>Purchase</h2>
+<div class="item">
+<Table id="tableHeader">
+      <tr>
+      <th>Date</th>
+      <th>Vendor</th>
+      <th>Stock</th>
+      <th>Unit Measure</th>
+      <th>Quantity</th>
+      <th>Cash Value</th>
+      </tr>
+</Table>
+</div>
 {% for purchase in purchases %}
 <div class="item">
-Date: {{purchase.date}} Donor: {{purchase.vendor.name}} Stock: {{purchase.stock.name}} Unit Measure: {{purchase.stock.unit_measure}} Quantity: {{purchase.quantity}}Cash Value: ${{purchase.cash_value}}
+<Table>
+      <tr>
+      <th>{{purchase.date}}</th>
+      <th>{{purchase.vendor.name}}</th>
+      <th>{{purchase.stock.name}}</th>
+      <th>{{purchase.stock.unit_measure}}</th>
+      <th>{{purchase.quantity}}</th>
+      <th>${{purchase.cash_value}}</th>
+      </tr>
+</Table>
 </div>
 {% endfor %}
 <form action="/stocks/purchase_report/download/" method="GET">{% csrf_token %}
@@ -46,6 +67,6 @@ Date: {{purchase.date}} Donor: {{purchase.vendor.name}} Stock: {{purchase.stock.
 <input type="hidden" name="vendor_name" value="{{vendor_name}}"/>
 <input type="hidden" name="stock_name" value="{{stock_name}}"/>
 <input type="hidden" name="category" value="{{category}}"/>
-<input class="button" type="submit" value="Download">
+<div id="button"><input class="button" type="submit" value="Download"></div>
 </form>
 {% endblock %}
