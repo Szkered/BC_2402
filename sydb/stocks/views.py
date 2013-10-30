@@ -58,14 +58,15 @@ def donation(request):
                 donor=d
             )
             category_list = re.split(
-                ', | |,|',
+                ', | |,',
                 donate_form.cleaned_data['category']
             )
             for item in category_list:
-                category, created = Category.objects.get_or_create(
-                    stock=s,
-                    name=item
-                )
+                if item != '':
+                    category, created = Category.objects.get_or_create(
+                        stock=s,
+                        name=item
+                    )
         return HttpResponseRedirect('thanks')
                 
     context = RequestContext(request, {'donor_form': donor_form,
@@ -100,7 +101,7 @@ def purchase(request):
                 stock=s
             )
             category_list = re.split(
-                ', | |,|',
+                ', | |,',
                 purchase_form.cleaned_data['category']
             )
             for item in category_list:
@@ -253,7 +254,7 @@ def donate_edit(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
     donor_name = request.GET.get('donor_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | |,|', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     if(category==['']):
         q = Donate.objects.all()
     else:
@@ -320,7 +321,7 @@ def transfer_edit(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
     destination_name = request.GET.get('destination_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | |,|', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     if(category==['']):
         q = Transfer.objects.all()
     else:
@@ -348,7 +349,7 @@ def distribute_edit(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
     family_form = FamilyForm(request.GET or None)
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | |,|', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     if(category==['']):
         q = Distribute.objects.all()
     else:
@@ -404,7 +405,7 @@ def donor_edit(request):
 def stock_edit(request):
     StockFormSet = modelformset_factory(Stock, extra=0)
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | |,|', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     if(category==['']):
         q = Stock.objects.all().order_by('name')
     else:
@@ -418,8 +419,8 @@ def stock_edit(request):
     if(stock_formset.is_valid()):
         stock_formset.save()
         for s in q:
-            new_cList = re.split(', | |,|', request.POST.get("%s_%s" % (s.name, s.unit_measure)))
-            old_cList = re.split(', | |,|', s.category_slug())
+            new_cList = re.split(', | |,', request.POST.get("%s_%s" % (s.name, s.unit_measure)))
+            old_cList = re.split(', | |,', s.category_slug())
             for item in new_cList:
                 if item not in old_cList and item != '':
                     Category.objects.create(
@@ -447,7 +448,7 @@ def stock_edit(request):
 
 def stock_summary(request):
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | |,|', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     if(category==['']):
         q = Stock.objects.all().order_by('name')
     else:
@@ -464,7 +465,7 @@ def stock_summary(request):
 def donation_summary(request):
     donor_name = request.GET.get('donor_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
 
     if(category==['']):
         q = Donate.objects.all().order_by('stock__name')
@@ -492,7 +493,7 @@ def donation_summary(request):
 def purchase_summary(request):
     vendor_name = request.GET.get('vendor_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
 
     if(category==['']):
         q = Purchase.objects.all().order_by('stock__name')
@@ -520,7 +521,7 @@ def purchase_summary(request):
 def distribution_summary(request):
     family = request.GET.get('family_type', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
 
     if(category==['']):
         q = Distribute.objects.all().order_by('stock__name')
@@ -548,7 +549,7 @@ def distribution_summary(request):
 def transfer_out_summary(request):
     destination = request.GET.get('destination', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
 
     if(category==['']):
         q = Transfer.objects.all().order_by('stock__name')
@@ -669,7 +670,7 @@ import xlwt3 as xlwt
 
 def stock_summary_report(request):
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | |,|' , request.GET.get('category', ''))
+    category = re.split(', | |,' , request.GET.get('category', ''))
     stock = Stock.objects.all().order_by('name', 'unit_measure')
     if(category != ['']):
         cL = Category.objects.filter(name__in=category)
@@ -702,7 +703,7 @@ def stock_summary_report(request):
 def donation_report(request):
     donor_name = request.GET.get('donor_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     donation = Donate.objects.all().order_by('stock__name','stock__unit_measure')
     
     if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
@@ -744,7 +745,7 @@ def donation_report(request):
 def purchase_report(request):
     vendor_name = request.GET.get('vendor_name', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     purchase = Purchase.objects.all().order_by('stock__name','stock__unit_measure')
 
     if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
@@ -786,7 +787,7 @@ def purchase_report(request):
 def distribution_report(request):
     family = request.GET.get('family_type', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     distribute = Distribute.objects.all().order_by('stock__name','stock__unit_measure')
 
     if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
@@ -828,7 +829,7 @@ def distribution_report(request):
 def transfer_out_report(request):
     destination = request.GET.get('destination', '')
     stock_name = request.GET.get('stock_name', '')
-    category = re.split(', | ', request.GET.get('category', ''))
+    category = re.split(', | |,', request.GET.get('category', ''))
     transfer = Transfer.objects.all().order_by('stock__name','stock__unit_measure')
 
     if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):

@@ -27,6 +27,7 @@ class StockInForm(forms.Form):
         quantity = cleaned_data.get('quantity')
         unit_price = cleaned_data.get('unit_price')
         unit_measure = cleaned_data.get('unit_measure')
+        category_list = re.split(', | |,',cleaned_data.get('category'))
         
         if quantity:
             if not quantity > 0:
@@ -39,6 +40,10 @@ class StockInForm(forms.Form):
             raise forms.ValidationError(
                 "Unit measure must be the combination of number and characters!")
 
+        if category_list:
+            if 'Standard' not in category_list and 'Non-Standard' not in category_list:
+                raise forms.ValidationError("An item must be either Standard or Non-Standard!")
+            
         return cleaned_data
 
 
@@ -114,6 +119,9 @@ class StockForm(forms.ModelForm):
         
 class CategoryForm(forms.Form):
     category = forms.CharField()
+
+
+            
     
 class AdjustForm(forms.Form):
     stock_name = forms.CharField()
@@ -128,36 +136,4 @@ class RequiredFormSet(BaseFormSet):
         for form in self.forms:
             form.empty_permitted = False # self.forms[0].empty_permitted = False
 
-
-# class BaseNestedFormSet(BaseFormSet):
-#     def add_fields(self, form, index):
-#         # allow the super class to create the fields as usual
-#         super(BaseNestedFormSet, self).add_fields(form, index)
-
-#         # created the nested formset
-#         try:
-#             instance = self.get_queryset()[index]
-#             pk_value = instance.pk
-#         except IndexError:
-#             instance=None
-#             pk_value = hash(form.prefix)
-
-#         # store the formset in the .nested property
-#         form.nested = [
-#             TenantFormset(queryset = Purchase.Objects.filter(order=pk_value),
-#                           prefix = 'PURCHASE_%s' % pk_value)]
-        
-#     def is_valid(self):
-#         result = super(BaseProtocolEventFormSet, self).is_valid()
-
-#         for form in self.forms:
-#             if hasattr(form, 'nested'):
-#                 for n in form.nested:
-#                     n.data = form.data
-#                     if form.is_bound:
-#                         n.is_bound = True
-#                     result = result and n.is_valid()
-#         return result
-
-        
 StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSet)
