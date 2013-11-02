@@ -44,5 +44,10 @@ urlpatterns = patterns('',
                        url(r'^transfer_out_report/download/$', transfer_out_report),
                        url(r'^vendor_report/download/$', vendor_report),
                        url(r'^donor_report/download/$', donor_report),
+                       #
+                       url(r'^purchase_order/$', purchase_order),
+                       url(r'^p_order/(?P<o_id>\d+)/$', purchase_order_generate),
+                       url(r'^thank_you_letter/$', thank_you_letter),
+                       url(r'^d_letter/(?P<d_id>\d+)/$',letter_generate),
 )
 
