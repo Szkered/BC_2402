@@ -3,20 +3,9 @@ from stocks.models import *
 
 class StockAdmin(admin.ModelAdmin):
 
-    list_display = ['name', 'unit_measure', 'unit_price',
-                    'current_amt', 'total_price', 'category_slug'
-    ]
+    list_display = ['name', 'unit_measure', 'unit_price', 'category_slug']
     ordering = ['name']
     search_fields = ('name',)
-
-# class StockInline(admin.TabularInline):
-#     model = Stock
-#     extra = 1
-
-# class PurchaseAdmin(admin.ModelAdmin):
-#     list_display = ['stock', 'quantity', 'cash_value']
-#     ordering = ['stock']
-    
 
 class DonorAdmin(admin.ModelAdmin):
     list_display = ['name', 'contact_no', 'address', 'referral', 'mailing']
