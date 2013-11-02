@@ -3,46 +3,43 @@ import datetime
 
 class Stock(models.Model):
     name = models.CharField(max_length=50)
-    unit_measure = models.CharField(max_length=10)
+    unit_measure = models.CharField(max_length=40)
     unit_price = models.FloatField()
 
     def __str__(self):
         return "%s - $%s/%s" % (self.name, self.unit_price, self.unit_measure)
 
-    def purchase_sum(self):
+    def purchase_sum(self, d):
         purchased = Purchase.objects.filter(stock=self,
-                                            order__confirm=True)
-        sum = 0
-        for stock in purchased:
-            sum += stock.quantity
-        return sum
+                                            order__confirm=True,
+                                            order__date__lte=d)
+        return sum([stock.quantity for stock in purchased])
 
-    def donate_sum(self):
-        donated = Donate.objects.filter(stock=self)
-        sum = 0
-        for stock in donated:
-            sum += stock.quantity
-        return sum
+    def donate_sum(self, d):
+        donated = Donate.objects.filter(stock=self, donation__date__lte=d)
+        return sum([stock.quantity for stock in donated])
         
-    def distribute_sum(self):
-        distributed = Distribute.objects.filter(stock=self)
-        sum = 0
-        for stock in distributed:
-            sum += stock.quantity
-        return sum
+    def distribute_sum(self, d):
+        distributed = Distribute.objects.filter(stock=self, date__lte=d)
+        return sum([stock.quantity for stock in distributed])
         
-    def transfer_sum(self):
-        transferd = Transfer.objects.filter(stock=self)
-        sum = 0
-        for stock in transferd:
-            sum += stock.quantity
-        return sum
+    def transfer_sum(self, d):
+        transfered = Transfer.objects.filter(stock=self, date__lte=d)
+        return sum([stock.quantity for stock in transfered])
 
-    def current_amt(self): 
-        return self.purchase_sum() + self.donate_sum() - self.transfer_sum() - self.distribute_sum()
+    def query_amt(self, q):
+        q = q.filter(stock=self)
+        return sum([item.quantity for item in q])
 
-    def total_price(self):
-        return self.unit_price * self.current_amt()
+    def query_price(self, q):
+        q = q.filter(stock=self)
+        return "%.2f" % sum([item.cash_value() for item in q])
+        
+    def current_amt(self, d): 
+        return self.purchase_sum(d) + self.donate_sum(d) - self.transfer_sum(d) - self.distribute_sum(d)
+
+    def total_price(self, d):
+        return "%.2f" % (self.unit_price * self.current_amt(d))
 
     def category_slug(self):
         categorys = Category.objects.filter(stock=self)
@@ -51,7 +48,7 @@ class Stock(models.Model):
             if category != '':
                 slug += category.name + ", "
         return slug
-        
+
 class Category(models.Model):
     stock = models.ForeignKey(Stock)
     name = models.CharField(max_length=20)
@@ -93,29 +90,33 @@ class Donor(CommonInfo):
         (REGULAR, 'Regular Donor'),
         (OTHERS, 'Others'),
     )
+    email = models.EmailField()
     mailing = models.BooleanField()
     referral = models.CharField(max_length=1, choices=REFERRAL_TYPES)
 
     def __str__(self):
-        return self.name
+        return "%s, tel: %s" % (self.name, self.contact_no)
 
 class Vendor(CommonInfo):
-
+    email = models.EmailField()
+    
     def __str__(self):
         return "%s, tel: %s" % (self.name, self.contact_no)
 
 ##################################################
 class TransitInfo(models.Model):
-    date = models.DateField(default=datetime.datetime.now())
     quantity = models.IntegerField()
     stock = models.ForeignKey(Stock)
 
     class Meta:
         abstract = True
 
-    def cash_value(self):
-        return self.quantity * self.stock.unit_price
+    def __str__(self):
+        return "%s :%s %s" % (self.stock, self.quantity, self.stock.unit_measure)
         
+    def cash_value(self):
+        return float("%.2f" % (self.quantity * self.stock.unit_price))
+
 class Distribute(TransitInfo):
     TYPE_A = 'A'
     TYPE_B = 'B'
@@ -127,16 +128,23 @@ class Distribute(TransitInfo):
         (TYPE_C, 'Type C'),
         (TYPE_D, 'Type D'),
     )
-
+    date = models.DateField(default=datetime.datetime.now())
     family_type = models.CharField(max_length=1, choices=FAMILY_TYPES)
 
 class Transfer(TransitInfo):
+    date = models.DateField(default=datetime.datetime.now())
     destination = models.ForeignKey(Destination)
     remark = models.CharField(max_length=100)
 
-class Donate(TransitInfo):
+class Donation(models.Model):
     donor = models.ForeignKey(Donor)
+    date = models.DateField(default=datetime.datetime.now())
 
+    def __str__(self):
+        return "%s - %s" % (self.date, self.donor)
+    
+class Donate(TransitInfo):
+    donation = models.ForeignKey(Donation)
 
 class Order(models.Model):
     vendor = models.ForeignKey(Vendor)
@@ -148,16 +156,8 @@ class Order(models.Model):
         
     def total_price(self):
         purchase = [item.cash_value() for item in Purchase.objects.filter(order=self)]
-        return sum(purchase)
+        return "%.2f" % sum(purchase)
         
     
-class Purchase(models.Model):
+class Purchase(TransitInfo):
     order = models.ForeignKey(Order)
-    stock = models.ForeignKey(Stock)
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return "%s :%s %s" % (self.stock, self.quantity, self.stock.unit_measure)
-    
-    def cash_value(self):
-        return self.quantity * self.stock.unit_price

@@ -23,7 +23,11 @@ class DonorAdmin(admin.ModelAdmin):
     ordering = ['name']
 
 class DonateAdmin(admin.ModelAdmin):
-    list_display = ['stock', 'quantity', 'donor', 'date']
+    list_display = ['stock', 'quantity']
+    ordering = ['stock']
+
+class DonationAdmin(admin.ModelAdmin):
+    list_display = ['date', 'donor']
     ordering = ['date']
     
 class DestinationAdmin(admin.ModelAdmin):
@@ -58,6 +62,7 @@ admin.site.register(Donor, DonorAdmin)
 admin.site.register(Destination, DestinationAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Donate, DonateAdmin)
+admin.site.register(Donation, DonationAdmin)
 # admin.site.register(Purchase, PurchaseAdmin)
 admin.site.register(Distribute, DistributeAdmin)
 admin.site.register(Transfer)

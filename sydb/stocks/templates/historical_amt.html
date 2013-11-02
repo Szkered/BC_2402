@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block pagetitle %}Stock Summary{% endblock %}
+{% block pagetitle %}Historical Amount{% endblock %}
 
 {% block autocomplete %}
   {% load static %}
@@ -8,20 +8,27 @@
 {% endblock %}
 
 {% block title %}
-Stock Summary
+Historical Amount Query
 {% endblock %}
 
 {% block content %}
 <h2>Filter</h2>
 <form action="." method="GET">{% csrf_token %}
-<div class="header">
-<label for="">Search by stock name: </label>
-<input type="text" id="stock_name" name="stock_name" value=""/>
 
-<label for="">Search by category: </label>
-<input type="text" id="category" name="category" value=""/>
+<div class="header">
+  
+  {{date_form.as_ul}}
+  
+  <label for="">Search by stock name: </label>
+  <input type="text" id="stock_name" name="stock_name" value=""/>
+
+  <label for="">Search by category: </label>
+  <input type="text" id="category" name="category" value=""/>
+  
 </div>
+
 <input class="button" type="submit" value="Search">
+  
 </form>
 
 <h2>Stock</h2>
@@ -29,9 +36,9 @@ Stock Summary
 <table>
     <tr>
         <th>Stock</th>
-        <th>Category</th>
-        <th>Current Amount</th>
-        <th>Total Value</th>
+        <th>Categroy</th>
+        <th>Quantity</th>
+	<th>Cash Value</th>
     </tr>
 </table>
 </div>
@@ -48,9 +55,5 @@ Stock Summary
 </table>
 </div>
 {% endfor %}
-<form action="/stocks/stock_report/download/" method="GET">{% csrf_token %}
-<input type="hidden" name="category" value="{{category}}"/>
-<input type="hidden" name="stock_name" value="{{stock_name}}"/>
-<input class="button" type="submit" value="Download">
-</form>
+
 {% endblock %}

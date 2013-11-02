@@ -33,8 +33,8 @@ $(document).ready(function () {
 
     function addForm(btn, prefix) {
         var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-        // You can only submit a maximum of 10 stock items 
-        if (formCount < 10) {
+        // You can only submit a maximum of 30 stock items 
+        if (formCount < 30) {
             // Clone a form (without event handlers) from the first form
             var row = $(".item:first").clone(false).get(0);
             // Insert it after the last form

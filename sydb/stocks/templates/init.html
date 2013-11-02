@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Initialization{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+Initialization
+{% endblock %}
+
+{% block content %}
+<form action="." method="POST">{% csrf_token %}
+  {{init_formset.management_form}}
+  
+  {% for init_form in init_formset %}
+    <div class="item">
+      {{init_form.as_ul}}
+      <li><button type="button" class="rounded button"><a class="delete" href="#">-</a></button></li>
+    </div>
+  {% endfor %}
+
+  <p><button type="button" class="rounded button"><a id="add" href="#">+</a></button></p>
+  <div id="button"><input class="button" type="submit" value="Submit"></div>
+</form>
+{% endblock %}

@@ -13,37 +13,34 @@ Transfer Out Summary
 {% endblock %}
 
 {% block content %}
-<h2>Select Date Range</h2>
+<h2>Filter</h2>
 <form action="." method="GET">{% csrf_token %}
 <div class="header">
 {{start_end_date_form.as_ul}}
-</div>
 
-<div class="header">
-<label for="">Search by destination:  </label>
-<input type="text" id="destination" name="destination" value=""/>
+<label for="">Vendor name: </label>
+<input type="text" id="id_name" name="vendor_name" value=""/>
 
-<label for="">Search by stock name: </label>
+<label for="">Stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>
 
-<label for="">Search by category: </label>
+<label for="">Category: </label>
 <input type="text" id="category" name="category" value=""/>
 </div>
-
 
 <div id="button"><input class="button" type="submit" value="Get"></div>
 </form>
 
 <h2>Transfer Out</h2>
 <div class="item">
-<Table id="tableHeader">
+<Table>
       <tr>
       <th>Date</th>
       <th>Stock</th>
-      <th>Unit Measure</th>
       <th>Quantity</th>
       <th>Destination</th>
       <th>Cash Value</th>
+      <th>Remark</th>
       </tr>
 </Table>
 </div>
@@ -52,11 +49,11 @@ Transfer Out Summary
 <Table>
       <tr>
       <th>{{transfer.date}}</th>
-      <th>{{transfer.stock.name}}</th>
-      <th>{{transfer.stock.unit_measure}}</th>
+      <th>{{transfer.stock}}</th>
       <th>{{transfer.quantity}}</th>
       <th>{{transfer.destination.name}}</th>
       <th>${{transfer.cash_value}}</th>
+      <th>{{transfer.remark}}</th>
       </tr>
 </Table>
 </div>

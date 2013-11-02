@@ -13,20 +13,18 @@ Purchase Summary
 {% endblock %}
 
 {% block content %}
-<h2>Select Date Range</h2>
+<h2>Filter</h2>
 <form action="." method="GET">{% csrf_token %}
 <div class="header">
 {{start_end_date_form.as_ul}}
-</div>
 
-<div class="header">
-<label for="">Search by vendor name: </label>
+<label for="">Vendor name: </label>
 <input type="text" id="id_name" name="vendor_name" value=""/>
 
-<label for="">Search by stock name: </label>
+<label for="">Stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>
 
-<label for="">Search by category: </label>
+<label for="">Category: </label>
 <input type="text" id="category" name="category" value=""/>
 </div>
 
@@ -35,9 +33,36 @@ Purchase Summary
 </form>
 
 <h2>Purchase</h2>
+
+
+<div class="item">
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Vendor</th>
+            <th>Stock</th>
+            <th>Quantity</th>
+            <th>Cash Value</th>
+	    <th>Confirm?</th>
+        </tr>
+    </table>
+</div>
+
+
 {% for purchase in purchases %}
 <div class="item">
-Date: {{purchase.date}} Donor: {{purchase.vendor.name}} Stock: {{purchase.stock.name}} Unit Measure: {{purchase.stock.unit_measure}} Quantity: {{purchase.quantity}}Cash Value: ${{purchase.cash_value}}
+
+  
+<table>
+    <tr>
+        <th>{{purchase.order.date}}</th>
+        <th>{{purchase.order.vendor}}</th>
+        <th>{{purchase.stock}}</th>
+        <th>{{purchase.quantity}}</th>
+        <th>{{purchase.cash_value}}</th>
+	<th>{{purchase.order.confirm}}</th>
+    </tr>
+</table>
 </div>
 {% endfor %}
 <form action="/stocks/purchase_report/download/" method="GET">{% csrf_token %}

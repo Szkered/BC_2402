@@ -13,20 +13,18 @@ Distribution Summary
 {% endblock %}
 
 {% block content %}
-<h2>Select Date Range</h2>
+<h2>Filter</h2>
 <form action="." method="GET">{% csrf_token %}
 <div class="header">
 {{start_end_date_form.as_ul}}
-</div>
 
-<div class="header">
-<label for="">Search by family type:  </label>
-<input type="text" id="family_type" name="family_type" value=""/>
+<label for="">Vendor name: </label>
+<input type="text" id="id_name" name="vendor_name" value=""/>
 
-<label for="">Search by stock name: </label>
+<label for="">Stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>
 
-<label for="">Search by category: </label>
+<label for="">Category: </label>
 <input type="text" id="category" name="category" value=""/>
 </div>
 
@@ -36,27 +34,29 @@ Distribution Summary
 
 <h2>Distribution</h2>
 <div class="item">
-<Table id="tableHeader">
+<Table>
       <tr>
-      <th>Date</th>
       <th>Stock</th>
-      <th>Unit Measure</th>
+      <th>Category</th>
       <th>Quantity</th>
-      <th>Family Type</th>
       <th>Cash Value</th>
       </tr>
 </Table>
 </div>
-{% for distribution in distributions %}
+{% for item in results %}
 <div class="item">
 <Table>
       <tr>
-      <th>{{distribution.date}}</th>
-      <th>{{distribution.stock.name}}</th>
-      <th>{{distribution.stock.unit_measure}}</th>
-      <th>{{distribution.quantity}}</th>
-      <th>{{distribution.family_type}}</th>
-      <th>${{distribution.cash_value}}</th>
+	<th>{{item.stock}}</th>
+	<th>{{item.category}}</th>
+	<th>{{item.quantity}}</th>
+	<th>{{item.cash_value}}</th>
+
+      <!-- <th>{{distribution.date}}</th> -->
+      <!-- <th>{{distribution.stock}}</th> -->
+      <!-- <th>{{distribution.quantity}}</th> -->
+      <!-- <th>{{distribution.family_type}}</th> -->
+      <!-- <th>${{distribution.cash_value}}</th> -->
       </tr>
 </Table>
 </div>

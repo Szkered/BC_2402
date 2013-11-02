@@ -19,7 +19,7 @@ class StockInForm(forms.Form):
     stock_name = forms.CharField()
     unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
     unit_measure = forms.CharField(max_length=10)
-    category = forms.CharField()
+    category = forms.CharField(required=False)
     quantity = forms.IntegerField()
 
     def clean(self):
@@ -51,8 +51,8 @@ class DateForm(forms.Form):
     date = forms.DateField()
 
 class StartEndDateForm(forms.Form):
-    start_date = forms.DateField()
-    end_date = forms.DateField()
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
     
 class FamilyForm(forms.Form):
     TYPE_A = 'A'
@@ -120,8 +120,6 @@ class StockForm(forms.ModelForm):
 class CategoryForm(forms.Form):
     category = forms.CharField()
 
-
-            
     
 class AdjustForm(forms.Form):
     stock_name = forms.CharField()
@@ -136,4 +134,20 @@ class RequiredFormSet(BaseFormSet):
         for form in self.forms:
             form.empty_permitted = False # self.forms[0].empty_permitted = False
 
-StockInFormSet = formset_factory(StockInForm, max_num=10, formset=RequiredFormSet)
+StockInFormSet = formset_factory(StockInForm, max_num=30, formset=RequiredFormSet)
+
+OrderFormSet = modelformset_factory(Order, extra=0)
+
+DonationFormSet = modelformset_factory(Donation, extra=0)
+
+DonateFormSet = modelformset_factory(Donate, extra=0)
+
+PurchaseFormSet = modelformset_factory(Purchase, exclude='order' ,extra=0)
+
+DistributeFormSet = modelformset_factory(Distribute, extra=0)
+
+VendorFormSet = modelformset_factory(Vendor, extra=0)
+
+DonorFormSet = modelformset_factory(Donor, extra=0)
+
+StockFormSet = modelformset_factory(Stock, extra=0)

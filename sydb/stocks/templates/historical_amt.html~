@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block pagetitle %}Stock Summary{% endblock %}
+{% block pagetitle %}Historical Amount{% endblock %}
 
 {% block autocomplete %}
   {% load static %}
@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block title %}
-Stock Summary
+Historical Amount Query
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@ Stock Summary
 <table>
     <tr>
         <th>Stock</th>
-        <th>Category</th>
+        <th>Categroy</th>
         <th>Current Amount</th>
         <th>Total Value</th>
     </tr>
@@ -40,10 +40,10 @@ Stock Summary
 <div class="item">
 <table>
     <tr>
-        <th>{{stock.stock}}</th>
-        <th>{{stock.category}}</th>
-        <th>{{stock.quantity}}</th>
-        <th>${{stock.cash_value}}</th>
+        <th>{{stock}}</th>
+        <th>{{stock.category_slug}}</th>
+        <th>{{stock.current_amt}}</th>
+        <th>${{stock.total_price}}</th>
     </tr>
 </table>
 </div>
