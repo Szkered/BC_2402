@@ -134,6 +134,7 @@ ul.errorlist {
 #button input[type=submit]{
 	right:4%;
 	position:absolute;
+	z-index: -1;
 }
 
 
@@ -291,7 +292,7 @@ ul.errorlist {
     padding: 3em 0em 0em 0em;
     border-top: 1px solid #E5E5E5;
     align:center;
-    width:1349px;
+    width:auto;
 }
 
 .ui-widget {
