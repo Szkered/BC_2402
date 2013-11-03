@@ -71,9 +71,9 @@ class Destination(models.Model):
 
 class CommonInfo(models.Model):
     name = models.CharField(max_length=30)
-    address = models.CharField(max_length=100)
     contact_no = models.IntegerField()
-
+    address = models.CharField(max_length=200)
+    
     class Meta:
         abstract = True
 
@@ -90,6 +90,7 @@ class Donor(CommonInfo):
         (REGULAR, 'Regular Donor'),
         (OTHERS, 'Others'),
     )
+
     email = models.EmailField()
     mailing = models.BooleanField()
     referral = models.CharField(max_length=1, choices=REFERRAL_TYPES)
@@ -99,6 +100,8 @@ class Donor(CommonInfo):
 
 class Vendor(CommonInfo):
     email = models.EmailField()
+    fax = models.IntegerField()
+    contact_person_name = models.CharField(max_length=50)
     
     def __str__(self):
         return "%s, tel: %s" % (self.name, self.contact_no)

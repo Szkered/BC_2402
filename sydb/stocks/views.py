@@ -778,6 +778,9 @@ def get_vendors(request):
                 'name': vendor.name,
                 'address': vendor.address,
                 'contact_no': vendor.contact_no,
+                'email': vendor.email,
+                'fax': vendor.fax,
+                'contact_person_name': vendor.contact_person_name,
             } for vendor in vendors]
     data = simplejson.dumps(results)
     mimetype = 'application/json'
