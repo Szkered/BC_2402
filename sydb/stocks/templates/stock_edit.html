@@ -30,6 +30,7 @@ Stock Info Update
 {% for item in zip %}
 <div class="item">
 {{item.0.as_ul}}
+<label for="category">Category: </label>
 <input type="text" id="category" name="{{item.0.name.value}}_{{item.0.unit_measure.value}}" value="{{item.1}}"/>
 </div>
 {% endfor %}

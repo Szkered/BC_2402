@@ -41,6 +41,7 @@ class Stock(models.Model):
     def total_price(self, d):
         return "%.2f" % (self.unit_price * self.current_amt(d))
 
+
     def category_slug(self):
         categorys = Category.objects.filter(stock=self)
         slug = ""
@@ -164,3 +165,7 @@ class Order(models.Model):
     
 class Purchase(TransitInfo):
     order = models.ForeignKey(Order)
+    price = models.FloatField()
+
+    def purchase_price(self):
+        return float("%.2f" % (self.quantity * self.price))

@@ -96,13 +96,14 @@ def purchase(request):
         for purchase_form in purchase_formset:
             s, created = Stock.objects.get_or_create(
                 name=purchase_form.cleaned_data['stock_name'],
-                unit_price=purchase_form.cleaned_data['unit_price'],
-                unit_measure=purchase_form.cleaned_data['unit_measure']
+                unit_measure=purchase_form.cleaned_data['unit_measure'],
+                defaults={'unit_price':purchase_form.cleaned_data['unit_price']},
             )
             purchase = Purchase.objects.create(
                 order=o,
                 quantity=purchase_form.cleaned_data['quantity'],
-                stock=s
+                stock=s,
+                price=purchase_form.cleaned_data['unit_price'],
             )
             category_list = re.split(
                 ', | |,',
@@ -263,6 +264,16 @@ def initialization(request):
                 stock=init_stock,
                 donation=d,
             )
+            category_list = re.split(
+                ', | |,',
+                init_form.cleaned_data['category']
+            )
+            for item in category_list:
+                if item != '':
+                    category, created = Category.objects.get_or_create(
+                        stock=init_stock,
+                        name=item,
+                    )
 
         return HttpResponseRedirect('thanks')
             
@@ -510,10 +521,13 @@ def stock_edit(request):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         q = Stock.objects.filter(pk__in=sList).order_by('name')
+        
     if(stock_name!=''):
         q = q.filter(name=stock_name)
+        
     stock_formset = StockFormSet(request.POST or None, queryset=q)
     cList = [stock.category_slug() for stock in q]
+    
     if(stock_formset.is_valid()):
         stock_formset.save()
         for s in q:
@@ -557,6 +571,7 @@ def stock_summary(request):
     if(stock_name!=''):
         q = q.filter(name=stock_name)
 
+        
     results = [{'stock': stock,
                 'category': stock.category_slug(),
                 'quantity': stock.current_amt(datetime.datetime.now()),
@@ -1111,8 +1126,12 @@ def purchase_order_generate(request, o_id):
 
 def thank_you_letter(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
+    donor_name = request.GET.get('donor_name', '')
 
     q = Donation.objects.exclude(donor__name='init')
+
+    if(donor_name!=''):
+        q = q.filter(donor__name=donor_name)
     
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']

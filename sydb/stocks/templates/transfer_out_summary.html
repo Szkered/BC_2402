@@ -47,14 +47,14 @@ Transfer Out Summary
 {% for transfer in transfers %}
 <div class="item">
 <Table>
-      <tr>
-      <th>{{transfer.date}}</th>
-      <th>{{transfer.stock}}</th>
-      <th>{{transfer.quantity}}</th>
-      <th>{{transfer.destination.name}}</th>
-      <th>${{transfer.cash_value}}</th>
-      <th>{{transfer.remark}}</th>
-      </tr>
+  <tr>
+    <td>{{transfer.date}}</td>
+    <td>{{transfer.stock}}</td>
+    <td>{{transfer.quantity}}</td>
+    <td>{{transfer.destination.name}}</td>
+    <td>${{transfer.cash_value}}</td>
+    <td>{{transfer.remark}}</td>
+  </tr>
 </Table>
 </div>
 {% endfor %}

@@ -17,7 +17,7 @@ class ConfirmForm(forms.Form):
 
 class StockInForm(forms.Form):
     stock_name = forms.CharField()
-    unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
+    unit_price = forms.FloatField()
     unit_measure = forms.CharField(max_length=10)
     category = forms.CharField(required=False)
     quantity = forms.IntegerField()
@@ -142,7 +142,7 @@ DonationFormSet = modelformset_factory(Donation, extra=0)
 
 DonateFormSet = modelformset_factory(Donate, extra=0)
 
-PurchaseFormSet = modelformset_factory(Purchase, exclude='order' ,extra=0)
+PurchaseFormSet = modelformset_factory(Purchase, exclude=['order'] ,extra=0)
 
 DistributeFormSet = modelformset_factory(Distribute, extra=0)
 
@@ -150,4 +150,4 @@ VendorFormSet = modelformset_factory(Vendor, extra=0)
 
 DonorFormSet = modelformset_factory(Donor, extra=0)
 
-StockFormSet = modelformset_factory(Stock, extra=0)
+StockFormSet = modelformset_factory(Stock, exclude='is_donated',extra=0)
