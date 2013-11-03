@@ -1076,3 +1076,60 @@ def donor_report(request):
     response['Content-Disposition'] = 'attachment; filename=donor_report.xls'
     book.save(response)
     return response
+
+##############################################################################
+def purchase_order(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+
+    q = Order.objects.all()
+
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        if(start_date!=None):
+            q = q.filter(date__gte=start_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
+
+
+    purchase_list = [Purchase.objects.filter(order=item) for item in q]
+        
+    return render(request, 'purchase_order.html',
+                  RequestContext(request, {
+                      'zip': zip(q, purchase_list),
+                      'start_end_date_form': start_end_date_form}))
+
+def purchase_order_generate(request, o_id):
+    o = Order.objects.get(pk=o_id)
+    p = Purchase.objects.filter(order=o)
+    return render(request, 'purchase_order_generate.html',
+                  RequestContext(request, {'order': o,
+                                           'purchases':p}))
+
+def thank_you_letter(request):
+    start_end_date_form = StartEndDateForm(request.GET or None)
+
+    q = Donation.objects.exclude(donor__name='init')
+    
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
+        if(start_date!=None):
+            q = q.filter(date__gte=start_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
+
+
+    donate_list = [Donate.objects.filter(donation=item) for item in q]
+        
+    return render(request, 'thank_you_letter.html',
+                  RequestContext(request, {
+                      'zip': zip(q, donate_list),
+                      'start_end_date_form': start_end_date_form}))
+
+def letter_generate(request, d_id):
+    d = Donation.objects.get(pk=d_id)
+    q = Donate.objects.filter(donation=d)
+    return render(request, 'thank_you_letter_generate.html',
+                  RequestContext(request, {'donation':d ,
+                                           'donates':q}))

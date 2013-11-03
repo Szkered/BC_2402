@@ -1,15 +1,9 @@
 {% extends "base.html" %}
 
-{% block pagetitle %}Purchase Edit{% endblock %}
-
-{% block autocomplete %}
-  {% load static %}
-  <script src="{% static "js/autocomplete_purchase.js" %}" type="text/javascript"></script>
-  <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
-{% endblock %}
+{% block pagetitle %}Order Edit{% endblock %}
 
 {% block title %}
-Purchase Edit
+Order Edit
 {% endblock %}
 
 {% block content %}
@@ -29,15 +23,6 @@ Purchase Edit
   
 {{order_formset.management_form}}
   
-<!-- {% for form in order_formset %} -->
-
-<!-- <div class="item"> -->
-<!-- {{form.as_ul}} -->
-<!-- </div> -->
-  
-<!-- {% endfor %} -->
-
-
 {% for item in zip %}
 <div class="item">
 {{item.0.as_ul}}
@@ -48,11 +33,9 @@ Stock: {{purchase.stock}}  Quantity: {{purchase.quantity}}
 </div>
 {% endfor %}
 </div>
-<div id="button">
-<a href="/stocks/p_edit/{{item.1.0.order.pk}}/">
-  <input class="button" type="button" value="Edit">
-</a>
-</div>
+<div id="button"><a href="/stocks/p_edit/{{item.1.0.order.pk}}/">
+<input class="button" type="button" value="Edit">
+</a></div>
 {% endfor %}
 
 <div id="button"><input class="button" type="submit" value="Update"></div>
