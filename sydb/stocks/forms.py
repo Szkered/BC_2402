@@ -32,13 +32,15 @@ class StockInForm(forms.Form):
         if quantity:
             if not quantity > 0:
                 raise forms.ValidationError("Quantity must be positive integer!")
+                
+        if unit_price:
+            if not unit_price > 0:
+                raise forms.ValidationError("Unit price must be positive integer!")
 
-        if not unit_price > 0:
-            raise forms.ValidationError("Unit price must be positive integer!")
-
-        if not re.compile("\d+\w+").search(unit_measure):
-            raise forms.ValidationError(
-                "Unit measure must be the combination of number and characters!")
+        if unit_measure:
+            if not re.compile("\d+\w+").search(unit_measure):
+                raise forms.ValidationError(
+                    "Unit measure must be the combination of number and characters!")
 
         if category_list:
             if 'Standard' not in category_list and 'Non-Standard' not in category_list:
