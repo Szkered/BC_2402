@@ -18,8 +18,8 @@ Transfer Out Summary
 <div class="header">
 {{start_end_date_form.as_ul}}
 
-<label for="">Vendor name: </label>
-<input type="text" id="id_name" name="vendor_name" value=""/>
+<label for="">Destination: </label>
+<input type="text" id="id_name" name="destination" value=""/>
 
 <label for="">Stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>
@@ -47,14 +47,14 @@ Transfer Out Summary
 {% for transfer in transfers %}
 <div class="item">
 <Table>
-  <tr>
-    <td>{{transfer.date}}</td>
-    <td>{{transfer.stock}}</td>
-    <td>{{transfer.quantity}}</td>
-    <td>{{transfer.destination.name}}</td>
-    <td>${{transfer.cash_value}}</td>
-    <td>{{transfer.remark}}</td>
-  </tr>
+      <tr>
+      <th>{{transfer.date}}</th>
+      <th>{{transfer.stock}}</th>
+      <th>{{transfer.quantity}}</th>
+      <th>{{transfer.destination.name}}</th>
+      <th>${{transfer.cash_value}}</th>
+      <th>{{transfer.remark}}</th>
+      </tr>
 </Table>
 </div>
 {% endfor %}

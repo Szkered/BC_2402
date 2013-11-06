@@ -1,64 +1,25 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title> 
-  </head>
-  
-  <body style="font-family:Arial;"><font size="3">
-  <p><b></b><br> <br>       <!-- insert current date here -->
-  SYFR <b>/{{donation.id}} </b>            <!-- insert current date+ID to get a unique id for the letter -->
-  </p>
-  
-  <div >
- <p> <b>{{donation.donor.address}}</b></p>           <!-- insert mailing address here -->
-  </div>
-  
-  <div style="text-align:right">
-  <p ><b>By ShanYou </b>  </p>          <!-- ask user to input??? -->    
-  </div>
-  
-  <div>
-  <p>Dear <b>{{donation.donor.name}}</b></p>             <!-- insert donor name -->
-  <p>On behalf of Shan You Counselling Centre and the programme beneficiaries, I want to extend our heartfelt appreciation for your contribution towards the Food Rations Distribution Service.</p>
-  <p>Each month, our Food Rations Distribution Service provides food items to a total of 300                low income families and needy elderly. They are referrals from the Community Development Councils, Family Service Centres, hospitals and other voluntary welfare organizations.</p>
-  <p>It is through the support of corporate organizations and individual donors that we are able to continue this service for the beneficiaries. </p>
-  <p>We are thankful to receive these items on <b>{{donation.date}}</b>:</p>  <!-- insert donation date here -->
-  </div>
- 
-  <div >
-     <Table style="text-align:center;width:90%;">
-  	<tr>
-  	<th width="50%"><U>Item</U></th>
-  	<th width="50%"><U>Quantity</U></th> 
-  	</tr>
-	
-	{% for donate in donates %}
-  	<div class="item">
+<HTML>
+<HEAD>
+</HEAD>
+<BODY>
+<CENTER>
 
-  	<tr>
-  	<td>{{donate.stock.name}} {{donate.stock.unit_measure}}</td>
-  	<td>{{donate.quantity}}</td>
-  	</tr>
-	
-	</div>
-  	{% endfor %}
-     </Table>
-  </div>
- 
-  
-  <div>
-  <p>Should you have any enquiry, please contact me at 6745 9216/ 9111 6377 (Mobile) or visit our website at www.shanyou.org.sg for monthly updates on our Food Rations Distribution Service.</p>
-  <p>Thank you once again for making our mission a reality and we look forward to your continuing support.</p>
-  </div>
-  
-  <div style="float:left;margin-top:5%;">
-  Elaine Choo<br>
-  Programme Executive<br>
-  Social Service Team (Food Rations)<br>
-  </div>
+{% block content %}
 
-  </font>
-  </body>
-</html>
+<h2>Thank you letter</h2>
+<div class="item">
+<p>
+Date: {{donation.date}} Vendor: {{donation.donor.name}} Address: {{donation.donor.address}} Contact Number: {{donation.donor.contact_no}} Email: {{donation.donor.email}}
+</p>
+</div>
 
+{% for donate in donates %}
+<div class="item">
+Stock: {{donate.stock.name}} Unit Measure: {{donate.stock.unit_measure}} Quantity: {{donate.quantity}}Cash Value: ${{donate.cash_value}}
+</div>
+{% endfor %}
 
+{% endblock %}
+</CENTER>
+</BODY>
+</HTML>  

@@ -11,10 +11,6 @@ Thank you Lettter
 <form action="." method="GET">{% csrf_token %}
 <div class="header">
 {{start_end_date_form.as_ul}}
-
-<label for="">Donor name: </label>
-<input type="text" id="id_name" name="donor_name" value=""/>
-
 </div>
 
 
@@ -34,7 +30,7 @@ Donor: {{item.0.donor.name}} Date:{{item.0.date}}
 
 {% for donate in item.1 %}
 <div class="item">
-Stock: {{donate.stock}}  Quantity: {{donate.quantity}}
+Stock: {{purchase.stock}}  Quantity: {{purchase.quantity}}
 </div>
 {% endfor %}
 </div>
