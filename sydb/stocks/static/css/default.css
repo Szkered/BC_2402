@@ -48,7 +48,6 @@ a:hover {
 
 .container {
     width: auto;
-
     margin-left: 4%;
     margin-right: 4%;
 }
@@ -148,6 +147,11 @@ ul.errorlist {
     -moz-border-radius: 10px;
     border-radius: 10px;
     font-weight: 900;
+    
+}
+
+.rounded a:hover{
+	float:right;
 }
 
 
@@ -287,7 +291,7 @@ ul.errorlist {
     padding: 3em 0em 0em 0em;
     border-top: 1px solid #E5E5E5;
     align:center;
-    width:auto;
+    width:1349px;
 }
 
 .ui-widget {

@@ -42,7 +42,6 @@ Purchase Summary
             <th>Vendor</th>
             <th>Stock</th>
             <th>Quantity</th>
-	    <th>Purchase Price</th>
             <th>Cash Value</th>
 	    <th>Confirm?</th>
         </tr>
@@ -56,13 +55,12 @@ Purchase Summary
   
 <table>
     <tr>
-        <td>{{purchase.order.date}}</td>
-        <td>{{purchase.order.vendor}}</td>
-        <td>{{purchase.stock}}</td>
-        <td>{{purchase.quantity}}</td>
-	<td>${{purchase.price}}</td>
-        <td>${{purchase.purchase_price}}</td>
-	<td>{{purchase.order.confirm}}</td>
+        <th>{{purchase.order.date}}</th>
+        <th>{{purchase.order.vendor}}</th>
+        <th>{{purchase.stock}}</th>
+        <th>{{purchase.quantity}}</th>
+        <th>{{purchase.cash_value}}</th>
+	<th>{{purchase.order.confirm}}</th>
     </tr>
 </table>
 </div>

@@ -34,7 +34,7 @@ Stock: {{purchase.stock}}  Quantity: {{purchase.quantity}}
 </div>
 {% endfor %}
 </div>
-<div id="button"><a href="/stocks/p_order/{{item.1.0.order.pk}}/" target="view_window">
+<div id="button"><a href="/stocks/p_order/{{item.1.0.order.pk}}/">
 <input class="button" type="button" value="Generate">
 </a></div>
 

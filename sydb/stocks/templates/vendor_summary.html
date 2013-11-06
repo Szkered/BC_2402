@@ -9,31 +9,33 @@
 {% endblock %}
 
 {% block title %}
-  Vendor Summary
+Vendor Summary
 {% endblock %}
 
 {% block content %}
-  <div class="item">
-    <Table>
+<div class="item">
+<Table>
       <tr>
-	<th>Name</th>
-	<th>Address</th>
-	<th>Contact Number</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Contact Number</th>
+      <th>Email</th>
       </tr>
-    </Table>
-  </div>
-  {% for vendor in vendors %}
-    <div class="item">
-      <Table>
-	<tr>
-	  <td>{{vendor.name}}</td>
-	  <td>{{vendor.address}}</td>
-	  <td>{{vendor.contact_no}}</td>
-	</tr>
-      </Table>
-    </div>
-  {% endfor %}
-  <form action="/stocks/vendor_report/download/" method="GET">{% csrf_token %}
-  <div id="button"><input class="button" type="submit" value="Download"></div>
-  </form>
+</Table>
+</div>
+{% for vendor in vendors %}
+<div class="item">
+<Table>
+      <tr>
+      <th>{{vendor.name}}</th>
+      <th>{{vendor.address}}</th>
+      <th>{{vendor.contact_no}}</th>
+      <th>{{vendor.email}}</th>
+      </tr>
+</Table>
+</div>
+{% endfor %}
+<form action="/stocks/vendor_report/download/" method="GET">{% csrf_token %}
+<div id="button"><input class="button" type="submit" value="Download"></div>
+</form>
 {% endblock %}
