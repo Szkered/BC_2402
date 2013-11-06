@@ -48,6 +48,7 @@ a:hover {
 
 .container {
     width: auto;
+
     margin-left: 4%;
     margin-right: 4%;
 }
@@ -134,7 +135,6 @@ ul.errorlist {
 #button input[type=submit]{
 	right:4%;
 	position:absolute;
-	z-index: -1;
 }
 
 
@@ -148,11 +148,6 @@ ul.errorlist {
     -moz-border-radius: 10px;
     border-radius: 10px;
     font-weight: 900;
-    
-}
-
-.rounded a:hover{
-	float:right;
 }
 
 
