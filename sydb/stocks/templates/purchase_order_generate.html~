@@ -1,27 +1,126 @@
-<HTML>
-<HEAD>
-</HEAD>
-<BODY>
-<CENTER>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title> 
+  </head>
+  
+  <body>
+  <div><img src="ShanYouLogo.gif" style="float:left" /></div>  
+  <div>
+  <p><font-family="Times New Roman"><font size="5"><b>&nbsp;&nbsp;&nbsp;Shan You Counselling Centre</b><br><br></font></font-family></div>
+  <div style="line-height:120%;"><font-family="Arial Narrow"><font size="2.8">&nbsp; &nbsp; &nbsp;Blk 3, Eunos Crescent #01-2591 (S)400003<br>
+  &nbsp; &nbsp; &nbsp;Tel: 6745 9216  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fax: 6745 9351<br>
+  &nbsp; &nbsp; &nbsp;<b>Email:</b> shanyou@shanyou.org.sg &nbsp; <b>Website:</b> www.shanyou.org.sg</font-family></font></div>
+  </p> 
+  </div>
+ 
+ <!-- 不太理解他们想放什么到下面的company信息，怎么还3个address-->
+ 
+  <div style="font-family:Arial;display:block; border:1px solid black;text-align:left; float:left; width:30%;"><font size="2">
+  <Table style="word-break:break-all;">
+  <tr><td><strong>{{order.vendor.name}}</strong></td></tr>
+  <tr><td>{{order.vendor.address}}</td></tr>
+  <tr><td>Company Address 2</td></tr>
+  <tr><td>Company Address 3</td></tr>
+  <tr><td></td></tr>
+  <tr><td></td></tr>
+  <tr><td></td></tr>
+  <tr><td></td></tr>
+  <tr><td>Contact Person name</td></tr>
+  <tr><td>{{order.vendor.contact_no}}</td></tr>
+  <tr><td>Fax:</td></tr>           <!-- insert tel and fax here -->
+  </Table>
+  </font>
+  </div>
+  
+  <div  style="font-family:Arial;display:block; text-align:center; margin-left:float:left;"><font size="2">
+  <b>Purchase Order No: PO DD.MM.YY-335</b> <br><br><br><br><br>
+  <b>Date:{{order.date}}</b>  <br><br><br><br><br>             <!-- retrieve date from system -->
+  </font>
+  </div>
+  
+  <div style="font-family:Arial;text-align:left;margin-top:1%"><font size="2">
+  <b><i>Please supply and deliver the following items</i></b>
+  </font>
+  </div>
+  
+  <div style="font-family:Arial; ">
+  <Table border="1px solid black" width="100%"><font size="2">
+  <tr>
+  <th width="10%">Item</th>
+  <th width="40%">Description</th>
+  <th width="15%">Quantity</th>
+  <th width="20%">Unit Price</th>
+  <th width="15%">Amount(S$)</th>
+  </tr>
+  <!-- insert the for loop here -->
+  {% for purchase in purchases %}
+  <div class="item">
+  <tr>
+  <td>{{purchase.stock.name}}		</td>
+  <td>{{purchase.stock.unit_measure}}   </td>
+  <td>{{purchase.quantity}}     	</td>
+  <td>{{purchase.stock.unit_price}}     </td>
+  <td>{{purchase.cash_value}}		</td>
+  </tr>
+  
+  </div>
+  {% endfor %}
+  <!-- end of for loop -->
+  
+  <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>sub-total</td>
+  <td>$  </td>             <!-- insert sub-total -->
+  </tr>
+  
+  <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>GST</td>
+  <td>$  </td>             <!-- insert GST -->
+  </tr>
+  
+   <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td><i>Total</i></td>
+  <td style="border:2px solid black;">$  </td>             <!-- insert Total -->
+  </tr>
+  </font>
+  </Table>
+  </div>
+  
+  <div style="font-family:Arial;"><font size="2">
+  <b><i>Kindly acknowledge and return duplicate</i></b><br><br>
+  <b>Date of Delivery :</b><br>
+  <b>Payment Term : </b><br>
+  <b>Your Quotation No :</b><br>
+  </font>
+  </div>
+  
+  <div style="font-family:Arial;margin-top:2%; width:35%; float:left;"><font size="1">
+  <p><b> Confirmed By Supplier (Sign & Fax Back)</b><br><br><br><br><br><br>
+  <hr><br>
+   <div style="text-align:center;margin-top:-1%;"> (Sign & Chop)</div></p>
+  </font>
+  </div>
+  
+   <div style="font-family:Arial;margin-top:2%; width:35%;float:right;"><font size="1">
+  <p><b> For</b><br><br><br><br><br><br>
+  <hr><br>
+   <div style="text-align:center;margin-top:-1%;"> (Authorised Signature)</div></p>
+  </font>
+  </div>
+                                                                  
+                                                       
+  
 
-{% block content %}
-
-<h2>Purchase Order</h2>
-<div class="item">
-<p>
-Date: {{order.date}} Vendor: {{order.vendor.name}}
-</p>
-</div>
-
-{% for purchase in purchases %}
-<div class="item">
-Stock: {{purchase.stock.name}} Unit Measure: {{purchase.stock.unit_measure}} Quantity: {{purchase.quantity}}Cash Value: ${{purchase.cash_value}}
-</div>
-{% endfor %}
-
-{% endblock %}
-</CENTER>
-</BODY>
-</HTML>  
+  </body>
+</html>
 
 

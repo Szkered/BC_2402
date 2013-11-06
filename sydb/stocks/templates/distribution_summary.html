@@ -18,8 +18,8 @@ Distribution Summary
 <div class="header">
 {{start_end_date_form.as_ul}}
 
-<label for="">Family Type: </label>
-<input type="text" id="id_name" name="family_type" value=""/>
+<label for="">Vendor name: </label>
+<input type="text" id="id_name" name="vendor_name" value=""/>
 
 <label for="">Stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>
@@ -47,16 +47,10 @@ Distribution Summary
 <div class="item">
 <Table>
       <tr>
-	<th>{{item.stock}}</th>
-	<th>{{item.category}}</th>
-	<th>{{item.quantity}}</th>
-	<th>{{item.cash_value}}</th>
-
-      <!-- <th>{{distribution.date}}</th> -->
-      <!-- <th>{{distribution.stock}}</th> -->
-      <!-- <th>{{distribution.quantity}}</th> -->
-      <!-- <th>{{distribution.family_type}}</th> -->
-      <!-- <th>${{distribution.cash_value}}</th> -->
+	<td>{{item.stock}}</td>
+	<td>{{item.category}}</td>
+	<td>{{item.quantity}}</td>
+	<td>{{item.cash_value}}</td>
       </tr>
 </Table>
 </div>

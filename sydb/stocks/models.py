@@ -41,6 +41,7 @@ class Stock(models.Model):
     def total_price(self, d):
         return "%.2f" % (self.unit_price * self.current_amt(d))
 
+
     def category_slug(self):
         categorys = Category.objects.filter(stock=self)
         slug = ""
@@ -71,9 +72,9 @@ class Destination(models.Model):
 
 class CommonInfo(models.Model):
     name = models.CharField(max_length=30)
-    address = models.CharField(max_length=100)
     contact_no = models.IntegerField()
-
+    address = models.CharField(max_length=200)
+    
     class Meta:
         abstract = True
 
@@ -90,6 +91,7 @@ class Donor(CommonInfo):
         (REGULAR, 'Regular Donor'),
         (OTHERS, 'Others'),
     )
+
     email = models.EmailField()
     mailing = models.BooleanField()
     referral = models.CharField(max_length=1, choices=REFERRAL_TYPES)
@@ -99,6 +101,8 @@ class Donor(CommonInfo):
 
 class Vendor(CommonInfo):
     email = models.EmailField()
+    fax = models.IntegerField()
+    contact_person_name = models.CharField(max_length=50)
     
     def __str__(self):
         return "%s, tel: %s" % (self.name, self.contact_no)
@@ -161,3 +165,7 @@ class Order(models.Model):
     
 class Purchase(TransitInfo):
     order = models.ForeignKey(Order)
+    price = models.FloatField()
+
+    def purchase_price(self):
+        return float("%.2f" % (self.quantity * self.price))

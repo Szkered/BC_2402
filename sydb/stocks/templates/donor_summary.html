@@ -9,38 +9,36 @@
 {% endblock %}
 
 {% block title %}
-Donor Summary
+  Donor Summary
 {% endblock %}
 
 {% block content %}
 
-<div class="item">
-<Table>
+  <div class="item">
+    <Table>
       <tr>
-      <th>Name</th>
-      <th>Address</th>
-      <th>Contact Number</th>
-      <th>Email</th>
-      <th>Mailing</th>
-      <th>Referral Type</th>
+	<th>Name</th>
+	<th>Address</th>
+	<th>Contact Number</th>
+	<th>Mail</th>
+	<th>Referral Type</th>
       </tr>
-</Table>
-</div>
-{% for donor in donors %}
-<div class="item">
-<Table>
-      <tr>
-      <th>{{donor.name}}</th>
-      <th>{{donor.address}}</th>
-      <th>{{donor.contact_no}}</th>
-      <th>{{donor.email}}</th>
-      <th>{{donor.mailing}}</th>
-      <th>{{donor.referral}}</th>
-      </tr>
-</Table>
-</div>
-{% endfor %}
-<form action="/stocks/donor_report/download/" method="GET">{% csrf_token %}
-<div id="button"><input class="button" type="submit" value="Download"></div>
-</form>
+    </Table>
+  </div>
+  {% for donor in donors %}
+    <div class="item">
+      <Table>
+	<tr>
+	  <td>{{donor.name}}</td>
+	  <td>{{donor.address}}</td>
+	  <td>{{donor.contact_no}}</td>
+	  <td>{{donor.mailing}}</td>
+	  <td>{{donor.referral}}</td>
+	</tr>
+      </Table>
+    </div>
+  {% endfor %}
+  <form action="/stocks/donor_report/download/" method="GET">{% csrf_token %}
+  <div id="button"><input class="button" type="submit" value="Download"></div>
+  </form>
 {% endblock %}

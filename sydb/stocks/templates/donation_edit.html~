@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block pagetitle %}Order Edit{% endblock %}
+{% block pagetitle %}Donation Edit{% endblock %}
 
 {% block title %}
-Order Edit
+Donation Edit
 {% endblock %}
 
 {% block content %}
@@ -18,22 +18,22 @@ Order Edit
 </form>
 
 
-<h2>Orders</h2>
+<h2>Donations</h2>
 <form action="." method="POST">{% csrf_token %}
   
-{{order_formset.management_form}}
+{{donation_formset.management_form}}
   
 {% for item in zip %}
 <div class="item">
 {{item.0.as_ul}}
 
-{% for purchase in item.1 %}
+{% for donate in item.1 %}
 <div class="item">
-Stock: {{purchase.stock}}  Quantity: {{purchase.quantity}}
+Stock: {{donate.stock}}  Quantity: {{donate.quantity}}
 </div>
 {% endfor %}
 </div>
-<div id="button"><a href="/stocks/p_edit/{{item.1.0.order.pk}}/">
+<div id="button"><a href="/stocks/d_edit/{{item.1.0.donation.pk}}/">
 <input class="button" type="button" value="Edit">
 </a></div>
 {% endfor %}

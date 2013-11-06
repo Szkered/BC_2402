@@ -17,7 +17,7 @@ class ConfirmForm(forms.Form):
 
 class StockInForm(forms.Form):
     stock_name = forms.CharField()
-    unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
+    unit_price = forms.FloatField()
     unit_measure = forms.CharField(max_length=10)
     category = forms.CharField(required=False)
     quantity = forms.IntegerField()
@@ -32,13 +32,15 @@ class StockInForm(forms.Form):
         if quantity:
             if not quantity > 0:
                 raise forms.ValidationError("Quantity must be positive integer!")
+                
+        if unit_price:
+            if not unit_price > 0:
+                raise forms.ValidationError("Unit price must be positive integer!")
 
-        if not unit_price > 0:
-            raise forms.ValidationError("Unit price must be positive integer!")
-
-        if not re.compile("\d+\w+").search(unit_measure):
-            raise forms.ValidationError(
-                "Unit measure must be the combination of number and characters!")
+        if unit_measure:
+            if not re.compile("\d+\w+").search(unit_measure):
+                raise forms.ValidationError(
+                    "Unit measure must be the combination of number and characters!")
 
         if category_list:
             if 'Standard' not in category_list and 'Non-Standard' not in category_list:
@@ -142,7 +144,7 @@ DonationFormSet = modelformset_factory(Donation, extra=0)
 
 DonateFormSet = modelformset_factory(Donate, extra=0)
 
-PurchaseFormSet = modelformset_factory(Purchase, exclude='order' ,extra=0)
+PurchaseFormSet = modelformset_factory(Purchase, exclude=['order'] ,extra=0)
 
 DistributeFormSet = modelformset_factory(Distribute, extra=0)
 
@@ -150,4 +152,4 @@ VendorFormSet = modelformset_factory(Vendor, extra=0)
 
 DonorFormSet = modelformset_factory(Donor, extra=0)
 
-StockFormSet = modelformset_factory(Stock, extra=0)
+StockFormSet = modelformset_factory(Stock, exclude='is_donated',extra=0)
