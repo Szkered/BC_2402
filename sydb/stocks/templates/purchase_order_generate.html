@@ -19,21 +19,21 @@
     <Table style="word-break:break-all;">
       <tr><td><strong>{{order.vendor.name}}</strong></td></tr>
       <tr><td>{{order.vendor.address}}</td></tr>
-      <tr><td>Company Address 2</td></tr>
-      <tr><td>Company Address 3</td></tr>
+      <!-- <tr><td>Company Address 2</td></tr> -->
+      <!-- <tr><td>Company Address 3</td></tr> -->
       <tr><td></td></tr>
       <tr><td></td></tr>
       <tr><td></td></tr>
       <tr><td></td></tr>
-      <tr><td>Contact Person name</td></tr>
-      <tr><td>{{order.vendor.contact_no}}</td></tr>
-      <tr><td>Fax:</td></tr>           <!-- insert tel and fax here -->
+      <tr><td>Contact Person Name: {{order.vendor.contact_person_name}}</td></tr>
+      <tr><td>Contact No: {{order.vendor.contact_no}}</td></tr>
+      <tr><td>Fax: {{order.vendor.fax}}</td></tr>           <!-- insert tel and fax here -->
     </Table>
   </font>
   </div>
   
   <div  style="font-family:Arial;display:block; text-align:center; margin-left:float:left;"><font size="2">
-    <b>Purchase Order No: PO DD.MM.YY-335</b> <br><br><br><br><br>
+    <b>Purchase Order No: PO {{order.date.day}}.{{order.date.month}}.{{order.date.year}}-{{order.id}}</b> <br><br><br><br><br>
     <b>Date:{{order.date}}</b>  <br><br><br><br><br>             <!-- retrieve date from system -->
   </font>
 </div>
@@ -59,8 +59,8 @@
 	  <td>{{purchase.stock.name}}		</td>
 	  <td>{{purchase.stock.unit_measure}}   </td>
 	  <td>{{purchase.quantity}}     	</td>
-	  <td>{{purchase.stock.unit_price}}     </td>
-	  <td>{{purchase.cash_value}}		</td>
+	  <td>{{purchase.price}}     </td>
+	  <td>{{purchase.purchase_price}}		</td>
 	</tr>
 	
       </div>
@@ -72,7 +72,7 @@
       <td></td>
       <td></td>
       <td>sub-total</td>
-      <td>$  </td>             <!-- insert sub-total -->
+      <td>${{sub_total}}</td>             <!-- insert sub-total -->
     </tr>
     
     <tr>
@@ -80,7 +80,7 @@
       <td></td>
       <td></td>
       <td>GST</td>
-      <td>$  </td>             <!-- insert GST -->
+      <td>${{gst}}</td>             <!-- insert GST -->
     </tr>
     
     <tr>
@@ -88,7 +88,7 @@
       <td></td>
       <td></td>
       <td><i>Total</i></td>
-      <td style="border:2px solid black;">$  </td>             <!-- insert Total -->
+      <td style="border:2px solid black;">${{total}} </td>             <!-- insert Total -->
     </tr>
   </font>
   </Table>

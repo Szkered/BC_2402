@@ -33,13 +33,13 @@ class Stock(models.Model):
 
     def query_price(self, q):
         q = q.filter(stock=self)
-        return "%.2f" % sum([item.cash_value() for item in q])
+        return "%.3f" % sum([item.cash_value() for item in q])
         
     def current_amt(self, d): 
         return self.purchase_sum(d) + self.donate_sum(d) - self.transfer_sum(d) - self.distribute_sum(d)
 
     def total_price(self, d):
-        return "%.2f" % (self.unit_price * self.current_amt(d))
+        return "%.3f" % (self.unit_price * self.current_amt(d))
 
 
     def category_slug(self):
@@ -119,7 +119,7 @@ class TransitInfo(models.Model):
         return "%s :%s %s" % (self.stock, self.quantity, self.stock.unit_measure)
         
     def cash_value(self):
-        return float("%.2f" % (self.quantity * self.stock.unit_price))
+        return float("%.3f" % (self.quantity * self.stock.unit_price))
 
 class Distribute(TransitInfo):
     TYPE_A = 'A'
@@ -160,7 +160,7 @@ class Order(models.Model):
         
     def total_price(self):
         purchase = [item.cash_value() for item in Purchase.objects.filter(order=self)]
-        return "%.2f" % sum(purchase)
+        return "%.3f" % sum(purchase)
         
     
 class Purchase(TransitInfo):
@@ -168,4 +168,4 @@ class Purchase(TransitInfo):
     price = models.FloatField()
 
     def purchase_price(self):
-        return float("%.2f" % (self.quantity * self.price))
+        return float("%.3f" % (self.quantity * self.price))

@@ -27,11 +27,22 @@ Donation Edit
 <div class="item">
 {{item.0.as_ul}}
 
-{% for donate in item.1 %}
 <div class="item">
-Stock: {{donate.stock}}  Quantity: {{donate.quantity}}
-</div>
+<table>
+    <tr>
+      <th>Stock</th>
+      <th>Quantity</th>
+    </tr>
+{% for donate in item.1 %}
+<tr>
+    <td>{{donate.stock}}</td>
+    <td>{{donate.quantity}}</td>
+</tr>
 {% endfor %}
+</table>
+
+</div>
+
 </div>
 <div id="button"><a href="/stocks/d_edit/{{item.1.0.donation.pk}}/">
 <input class="button" type="button" value="Edit">

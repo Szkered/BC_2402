@@ -3,6 +3,7 @@ from stocks.models import *
 from django.forms.models import modelformset_factory, inlineformset_factory, BaseInlineFormSet
 from django.forms.formsets import formset_factory, BaseFormSet
 import re
+import datetime
 
 class DonorForm(forms.ModelForm):
     class Meta:
@@ -18,7 +19,7 @@ class ConfirmForm(forms.Form):
 class StockInForm(forms.Form):
     stock_name = forms.CharField()
     unit_price = forms.FloatField()
-    unit_measure = forms.CharField(max_length=10)
+    unit_measure = forms.CharField(max_length=40)
     category = forms.CharField(required=False)
     quantity = forms.IntegerField()
 
@@ -37,10 +38,10 @@ class StockInForm(forms.Form):
             if not unit_price > 0:
                 raise forms.ValidationError("Unit price must be positive integer!")
 
-        if unit_measure:
-            if not re.compile("\d+\w+").search(unit_measure):
-                raise forms.ValidationError(
-                    "Unit measure must be the combination of number and characters!")
+        # if unit_measure:
+        #     if not re.compile("\d+\w+").search(unit_measure):
+        #         raise forms.ValidationError(
+        #             "Unit measure must be the combination of number and characters!")
 
         if category_list:
             if 'Standard' not in category_list and 'Non-Standard' not in category_list:
@@ -79,8 +80,9 @@ class DistributionForm(forms.Form):
         cleaned_data = super(DistributionForm, self).clean()
         quantity = cleaned_data.get('quantity')
         stock = Stock.objects.get(pk=cleaned_data.get('stock_id'))
+        now = datetime.datetime.now()
         
-        if quantity > stock.current_amt():
+        if quantity > stock.current_amt(now):
             raise forms.ValidationError("You don't have that much %s!" % stock.name)
 
         if quantity < 0:
@@ -98,9 +100,10 @@ class TransferForm(forms.Form):
     unit_measure = forms.CharField()
     quantity = forms.IntegerField()
     remark = forms.CharField(required=False)
+    now = datetime.datetime.now()
 
     def clean(self):
-        cleaned_data = super(TransferForm, self).clean()
+        cleaned_data = super(TransferForm, self).clean(now)
         quantity = cleaned_data.get('quantity')
         stock = Stock.objects.get(
             name=cleaned_data.get('stock_name'),
@@ -118,6 +121,17 @@ class TransferForm(forms.Form):
 class StockForm(forms.ModelForm):
     class Meta:
         model = Stock
+
+class MergeForm(forms.Form):
+    merge_stock_name = forms.CharField()
+    merge_stock_unit_measure = forms.CharField()
+
+class TargetForm(forms.Form):
+    target_stock_name = forms.CharField()
+    target_stock_unit_measure = forms.CharField()
+
+class MergeCheckForm(forms.Form):
+    confirm = forms.BooleanField()
         
 class CategoryForm(forms.Form):
     category = forms.CharField()

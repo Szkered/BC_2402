@@ -26,12 +26,24 @@ Order Edit
 {% for item in zip %}
 <div class="item">
 {{item.0.as_ul}}
-
-{% for purchase in item.1 %}
 <div class="item">
-Stock: {{purchase.stock}}  Quantity: {{purchase.quantity}} Purchase price: ${{purchase.price}}
+
+<table>
+    <tr>
+      <th>Stock</th>
+      <th>Quantity</th>
+      <th>Purchase Price</th>
+    </tr>
+    {% for purchase in item.1 %}
+    <tr>
+      <td>{{purchase.stock}}</td>
+      <td>{{purchase.quantity}}</td>
+      <td>${{purchase.price}}</td>
+    </tr>
+  {% endfor %}
+</table>
 </div>
-{% endfor %}
+
 </div>
 <div id="button"><a href="/stocks/p_edit/{{item.1.0.order.pk}}/">
 <input class="button" type="button" value="Edit">

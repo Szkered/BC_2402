@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Merge Stock{% endblock %}
+
+{% block autocomplete %}
+  {% load static %}
+<script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}
+  Merge Stock
+{% endblock %}
+
+{% block content %}
+  <h2>Select Stocks to be compared & merged</h2>
+  <form action="." method="GET">{% csrf_token %}
+  <div class="header">
+    {{merge_form.as_ul}}
+  </div>
+  <div class="header">
+    {{target_form.as_ul}}
+
+  </div>
+  <input class="button" type="submit" value="Get">
+  </form>
+
+  <h2>Stock Comparison</h2>
+  <div class="item">
+    <table>
+      <tr>
+	<th> </th>
+        <th>Stock</th>
+        <th>Category</th>
+        <th>Current Amount</th>
+        <th>Total Value</th>
+      </tr>
+    </table>
+  </div>
+
+  <div class="item">
+    <table>
+      <tr>
+	<th>Stock to be merge</th>
+        <td>{{merge_stock}}</td>
+        <td>{{merge_stock.category}}</td>
+        <td>{{merge_stock_quantity}}</td>
+        <td>${{merge_stock_cash_value}}</td>
+
+      </tr>
+    </table>
+  </div>
+
+  <div class="item">
+    <table>
+      <tr>
+	<th>Target Stock</th>
+        <td>{{target_stock}}</td>
+        <td>{{target_stock.category_slug}}</td>
+        <td>{{target_stock_quantity}}</td>
+        <td>${{target_stock_cash_value}}</td>
+      </tr>
+    </table>
+  </div>
+
+    <div class="item">
+    <table>
+      <tr>
+	<th>Results</th>
+        <td></td>
+        <td></td>
+        <td>{{target_stock_quantity|add:merge_stock_quantity}}</td>
+        <td>${{merged_cash_value}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <form action="." method="POST">{% csrf_token %}
+  <div class="item">{{merge_check_form.as_ul}}</div>
+  <input class="button" type="submit" value="Confirm Merge">
+  </form>
+{% endblock %}

@@ -72,7 +72,7 @@ def donation(request):
                         name=item
                     )
         return HttpResponseRedirect('thanks')
-                
+        
     context = RequestContext(request, {'donor_form': donor_form,
                                        'date_form': date_form,
                                        'donate_formset': donate_formset})
@@ -80,7 +80,7 @@ def donation(request):
     data = template.render(context)
     mimetype = "text/html; charset=utf-8"
     return HttpResponse(data, mimetype)
-                  
+    
 def purchase(request):
     vendor_form = VendorForm(request.POST or None)
     purchase_formset = StockInFormSet(request.POST or None)
@@ -126,8 +126,10 @@ def purchase(request):
     return HttpResponse(data, mimetype)
     
 def distribution(request):
+    now = datetime.datetime.now()
     # create formset
     standard_item = [item.stock for item in Category.objects.filter(name="standard")]
+    cList = [item.current_amt(now) for item in standard_item]
     DistributionFormSet = formset_factory(DistributionForm,
                                           extra = len(standard_item),
                                           formset=RequiredFormSet,)
@@ -155,13 +157,13 @@ def distribution(request):
     context = RequestContext(request, {'family_form': family_form,
                                        'date_form': date_form,
                                        'distribution_formset': distribution_formset,
-                                       'zip': zip(standard_item, distribution_formset)})
+                                       'zip': zip(standard_item, distribution_formset, cList)})
     return render(request, 'distribution.html', context)
 
 def transfer(request):
     # create formset
     TransferFormSet = formset_factory(TransferForm, max_num=10, formset=RequiredFormSet)
-            
+    
     # form action handling    
     destination_form = DestinationForm(request.POST or None)
     transfer_formset = TransferFormSet(request.POST or None)
@@ -179,7 +181,7 @@ def transfer(request):
                 r = form.cleaned_data['remark']
             else:
                 r = ''
-            
+                
             transfer = Transfer.objects.create(
                 date=date_form.cleaned_data['date'],
                 quantity=form.cleaned_data['quantity'],
@@ -276,7 +278,7 @@ def initialization(request):
                     )
 
         return HttpResponseRedirect('thanks')
-            
+        
     return render(request, 'init.html',
                   RequestContext(request, {'init_formset': init_formset}))
 
@@ -309,6 +311,94 @@ def historical_amt(request):
                                            'stocks': results}))
     
 
+def merge_stock(request):
+    merge_form = MergeForm(request.GET or None)
+    target_form = TargetForm(request.GET or None)
+    merge_check_form = MergeCheckForm(request.POST or None)
+    now = datetime.datetime.now()
+    
+    if(merge_form.is_valid() and target_form.is_valid()):
+        request.session['merge_stock_unit_measure']=merge_form.cleaned_data['merge_stock_unit_measure']
+        request.session['target_stock_unit_measure']=target_form.cleaned_data['target_stock_unit_measure']
+        request.session['target_stock_name']=target_form.cleaned_data['target_stock_name']
+        request.session['merge_stock_name']=merge_form.cleaned_data['merge_stock_name']
+
+    target_stock_name = request.session.get('target_stock_name', None)
+    target_stock_unit_measure = request.session.get('target_stock_unit_measure', None)
+    merge_stock_name = request.session.get('merge_stock_name', None)
+    merge_stock_unit_measure = request.session.get('merge_stock_unit_measure', None)
+    
+    if(target_stock_name and merge_stock_name and
+       target_stock_unit_measure and merge_stock_unit_measure):
+        target_stock = Stock.objects.get(
+            name=target_stock_name,
+            unit_measure=target_stock_unit_measure
+        )
+        merge_stock = Stock.objects.get(
+            name=merge_stock_name,
+            unit_measure=merge_stock_unit_measure
+        )
+        target_stock_quantity = target_stock.current_amt(now)
+        target_stock_cash_value = float(target_stock.total_price(now))
+        merge_stock_quantity = merge_stock.current_amt(now)
+        merge_stock_cash_value = float(merge_stock.total_price(now))
+        merged_cash_value = "%.2f" % (target_stock_cash_value + merge_stock_cash_value)
+    else:
+        target_stock = None
+        merge_stock = None
+        target_stock_quantity = ''
+        target_stock_cash_value = ''
+        merge_stock_quantity = ''
+        merge_stock_cash_value = ''
+        merged_cash_value = ''
+
+    if(merge_check_form.is_valid()):
+        confirm = merge_check_form.cleaned_data['confirm']
+        if(confirm == True and merge_stock and target_stock):
+            donates = Donate.objects.filter(stock=merge_stock)
+            for item in donates:
+                item.stock = target_stock
+                item.save()
+                
+            purchases = Purchase.objects.filter(stock=merge_stock)
+            for item in purchases:
+                item.stock = target_stock
+                item.save()
+                
+            distributes = Distribute.objects.filter(stock=merge_stock)
+            for item in distributes:
+                item.stock = target_stock
+                item.save()
+                
+            transfers = Transfer.objects.filter(stock=merge_stock)
+            for item in transfers:
+                item.stock = target_stock
+                item.save()
+
+            merge_stock.delete()
+            del request.session['merge_stock_unit_measure']
+            del request.session['target_stock_unit_measure']
+            del request.session['target_stock_name']
+            del request.session['merge_stock_name']
+                
+            return HttpResponseRedirect('thanks')
+                            
+    
+    return render(request, 'merge_stock.html',
+                  RequestContext(request, {'merge_form': merge_form,
+                                           'target_form': target_form,
+                                           'target_stock_quantity': target_stock_quantity,
+                                           'target_stock_cash_value': target_stock_cash_value,
+                                           'merge_stock_quantity': merge_stock_quantity,
+                                           'merge_stock_cash_value': merge_stock_cash_value,
+                                           'merge_check_form': merge_check_form,
+                                           'target_stock': target_stock,
+                                           'merge_stock': merge_stock,
+                                           'merged_cash_value': merged_cash_value}))
+    
+
+
+
 ################################################################################
 # Edit
 ################################################################################
@@ -323,12 +413,12 @@ def donation_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            if(end_date!=None):
+                q = q.filter(date__lte=end_date)
 
 
     donate_list = [Donate.objects.filter(donation=item) for item in q]
-        
+    
     donation_formset = DonationFormSet(request.POST or None, queryset=q)
     
     if(donation_formset.is_valid()):
@@ -340,7 +430,7 @@ def donation_edit(request):
                       'zip': zip(donation_formset, donate_list),
                       'donation_formset': donation_formset,
                       'start_end_date_form': start_end_date_form}))
-            
+    
 def donate_edit(request, d_id):
     d = Donation.objects.get(pk=d_id)
     q = Donate.objects.filter(donation=d)
@@ -380,12 +470,12 @@ def order_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            if(end_date!=None):
+                q = q.filter(date__lte=end_date)
 
 
     purchase_list = [Purchase.objects.filter(order=item) for item in q]
-        
+    
     order_formset = OrderFormSet(request.POST or None, queryset=q)
     if(order_formset.is_valid()):
         order_formset.save()
@@ -421,8 +511,8 @@ def transfer_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            if(end_date!=None):
+                q = q.filter(date__lte=end_date)
 
     if(destination_name!=''):
         q = q.filter(destination__name=destination_name)
@@ -432,6 +522,7 @@ def transfer_edit(request):
     if(transfer_formset.is_valid()):
         transfer_formset.save()
         return HttpResponseRedirect('thanks')
+        
     return render(request, 'transfer_edit.html',
                   RequestContext(request, {'transfer_formset': transfer_formset,
                                            'start_end_date_form': start_end_date_form}))
@@ -457,8 +548,8 @@ def distribute_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)        
+            if(end_date!=None):
+                q = q.filter(date__lte=end_date)        
 
             
     if(family_form.is_valid()):
@@ -508,6 +599,7 @@ def donor_edit(request):
     if(donor_formset.is_valid()):
         donor_formset.save()
         return HttpResponseRedirect('thanks')
+        
     return render(request, 'donor_edit.html',
                   RequestContext(request, {'donor_formset': donor_formset}))
 
@@ -531,7 +623,8 @@ def stock_edit(request):
     if(stock_formset.is_valid()):
         stock_formset.save()
         for s in q:
-            new_cList = re.split(', | |,', request.POST.get("%s_%s" % (s.name, s.unit_measure)))
+            c = "%s_%s" % (s.name, s.unit_measure)
+            new_cList = re.split(', | |,', request.POST.get(c, ''))
             old_cList = re.split(', | |,', s.category_slug())
             for item in new_cList:
                 if item not in old_cList and item != '':
@@ -545,7 +638,7 @@ def stock_edit(request):
                         stock=s,
                         name=item
                     ).delete()
-        return HttpResponseRedirect('thanks')
+            return HttpResponseRedirect('thanks')
     return render(request, 'stock_edit.html',
                   RequestContext(request, {'zip': zip(stock_formset, cList),
                                            'stock_formset': stock_formset}))
@@ -576,7 +669,7 @@ def stock_summary(request):
                 'category': stock.category_slug(),
                 'quantity': stock.current_amt(datetime.datetime.now()),
                 'cash_value': stock.total_price(datetime.datetime.now())} for stock in q]
-        
+    
     return render(request, 'stock_summary.html',
                   RequestContext(request, {'stocks': results,
                                            'category': request.GET.get('category', ''),
@@ -607,12 +700,12 @@ def donation_summary(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(donation__date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(donation__date__lte=end_date)
+            if(end_date!=None):
+                q = q.filter(donation__date__lte=end_date)
 
     stock_list = [d.stock.pk for d in q]
     stocks = Stock.objects.filter(pk__in=stock_list).order_by('name')
-            
+    
     results = [{'stock': stock,
                 'category': stock.category_slug(),
                 'quantity': stock.query_amt(q),
@@ -639,18 +732,18 @@ def purchase_summary(request):
         
     if(stock_name!=''):
         q = q.filter(stock__name=stock_name)
-    if(vendor_name!=''):
-        q = q.filter(vendor__name=vendor_name)
-        
+        if(vendor_name!=''):
+            q = q.filter(vendor__name=vendor_name)
+            
 
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(order__date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(order__date__lte=end_date)
-    
+            if(end_date!=None):
+                q = q.filter(order__date__lte=end_date)
+                
     return render(request, 'Purchase_summary.html',
                   RequestContext(request, {'purchases': q,
                                            'category': request.GET.get('category', ''),
@@ -683,8 +776,8 @@ def distribution_summary(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            if(end_date!=None):
+                q = q.filter(date__lte=end_date)
 
     stock_list = [d.stock.pk for d in q]
     stocks = Stock.objects.filter(pk__in=stock_list).order_by('name')
@@ -705,6 +798,7 @@ def transfer_out_summary(request):
     destination = request.GET.get('destination', '')
     stock_name = request.GET.get('stock_name', '')
     category = re.split(', | |,', request.GET.get('category', ''))
+    start_end_date_form = StartEndDateForm(request.GET or None)
 
     if(category==['']):
         q = Transfer.objects.all().order_by('stock__name')
@@ -716,7 +810,8 @@ def transfer_out_summary(request):
         q = q.filter(stock__name=stock_name)
     if(destination!=''):
         q = q.filter(destination__name=destination)
-    start_end_date_form = StartEndDateForm(request.GET or None)
+            
+
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
@@ -776,14 +871,14 @@ def get_stocks(request):
     catSlug = ''
     for category in categorys:
         catSlug += category + ', '
-    results = [{'value': '%s - $%s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
-                'name': stock.name,
-                'unit_measure': stock.unit_measure,
-                'unit_price': stock.unit_price,
-                'categorys': catSlug,
-            } for stock in stocks]
-    data = simplejson.dumps(results)
-    mimetype = 'application/json'
+        results = [{'value': '%s - $%s/%s' % (stock.name, stock.unit_price, stock.unit_measure),
+                    'name': stock.name,
+                    'unit_measure': stock.unit_measure,
+                    'unit_price': stock.unit_price,
+                    'categorys': catSlug,
+                } for stock in stocks]
+        data = simplejson.dumps(results)
+        mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
 def get_vendors(request):
@@ -840,9 +935,9 @@ def stock_summary_report(request):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         stock = stock.filter(pk__in=sList)
-    if(stock_name != ''):
-        stock = stock.filter(name=stock_name)
-    
+        if(stock_name != ''):
+            stock = stock.filter(name=stock_name)
+            
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -856,7 +951,7 @@ def stock_summary_report(request):
         row = row + 1
         sheet.write(row, 0, item.name)
         sheet.write(row, 1, item.unit_measure)
-        sheet.write(row, 2, item.unit_price)
+        sheet.write(row, 2, "%.3f" % item.unit_price)
         sheet.write(row, 3, item.current_amt(datetime.datetime.now()))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
@@ -870,27 +965,27 @@ def donation_report(request):
     category = re.split(', | |,', request.GET.get('category', ''))
     donation = Donate.objects.all().order_by('stock__name','stock__unit_measure')
     
-    if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
+    if(request.GET.get('start_date', '')!='' and request.GET.get('end_date', '')!=''):
         start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
-            q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            donation = donation.filter(date__gte=start_date)
+            if(end_date!=None):
+                donation = donation.filter(date__lte=end_date)
 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         donation = donation.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        donation = donation.filter(stock__name=stock_name)
-    if(donor_name!=''):
-        donation = donation.filter(donor__name=donor_name)      
-    
+        if(stock_name!=''):
+            donation = donation.filter(stock__name=stock_name)
+            if(donor_name!=''):
+                donation = donation.filter(donor__name=donor_name)      
+                
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Donor', 'Donated Stock', 'Unit Measure', 'Quantity', 'Date']
+    header = ['Donor', 'Donated Stock', 'Unit Measure', 'Price', 'Quantity', 'Date']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
@@ -899,11 +994,11 @@ def donation_report(request):
     for item in donation:
         row = row + 1
         sheet.write(row, 0, Donor.objects.get(id = item.donation.donor_id).name)
-        stock = Stock.objects.get(id = item.stock_id)
-        sheet.write(row, 1, stock.name)
-        sheet.write(row, 2, stock.unit_measure)
-        sheet.write(row, 3, item.quantity)
-        sheet.write(row, 4, item.donation.date.strftime("%Y/%m/%d"))
+        sheet.write(row, 1, item.stock.name)
+        sheet.write(row, 2, item.stock.unit_measure)
+        sheet.write(row, 3, "%.3f" % item.stock.unit_price)
+        sheet.write(row, 4, item.quantity)
+        sheet.write(row, 5, item.donation.date.strftime("%Y/%m/%d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=donation_report.xls'
@@ -916,40 +1011,41 @@ def purchase_report(request):
     category = re.split(', | |,', request.GET.get('category', ''))
     purchase = Purchase.objects.all().order_by('stock__name','stock__unit_measure')
 
-    if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
+    if(request.GET.get('start_date', '')!='' and request.GET.get('end_date', '')!=''):
         start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
-            q = q.filter(order__date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(order__date__lte=end_date)
+            purchase = purchase.filter(order__date__gte=start_date)
+            if(end_date!=None):
+                purchase = purchase.filter(order__date__lte=end_date)
 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         purchase = purchase.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        purchase = purchase.filter(stock__name=stock_name)
-    if(vendor_name!=''):
-        purchase = purchase.filter(vendor__name=vendor_name)
-    
+        if(stock_name!=''):
+            purchase = purchase.filter(stock__name=stock_name)
+            if(vendor_name!=''):
+                purchase = purchase.filter(vendor__name=vendor_name)
+                
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Vendor', 'Purchased Stock', 'Unit Measure','Quantity','Date']
+    header = ['Vendor', 'Purchased Stock','Unit Measure', 'Price','Quantity','Date']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
- 
+    
     for item in purchase:
         row = row + 1
-        sheet.write(row, 0, Vendor.objects.get(id = item.vendor_id).name)
+        sheet.write(row, 0, Vendor.objects.get(id = item.order.vendor.id).name)
         stock = Stock.objects.get(id = item.stock_id)
-        sheet.write(row, 1, stock.name)
-        sheet.write(row, 2, stock.unit_measure)
-        sheet.write(row, 3, item.quantity)
-        sheet.write(row, 4, item.date.strftime("%Y/%m/%d"))
+        sheet.write(row, 1, item.stock.name)
+        sheet.write(row, 2, item.stock.unit_measure)
+        sheet.write(row, 3, "%.3f" % item.price)
+        sheet.write(row, 4, item.quantity)
+        sheet.write(row, 5, item.order.date.strftime("%Y/%m/%d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Purchase_report.xls'
@@ -966,19 +1062,19 @@ def distribution_report(request):
         start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
-            q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
-            
+            distribute = distribute.filter(date__gte=start_date)
+            if(end_date!=None):
+                distribute = distribute.filter(date__lte=end_date)
+                
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         distribute = distribute.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        distribute = distribute.filter(stock__name=stock_name)
-    if(family!=''):
-        distribute = distribute.filter(family=family_type)
-    
+        if(stock_name!=''):
+            distribute = distribute.filter(stock__name=stock_name)
+            if(family!=''):
+                distribute = distribute.filter(family=family_type)
+                
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -1012,18 +1108,18 @@ def transfer_out_report(request):
         start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
-            q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            transfer = transfer.filter(date__gte=start_date)
+            if(end_date!=None):
+                transfer = transfer.filter(date__lte=end_date)
 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         transfer = transfer.filter(pk__in=sList).order_by('stock__name')
-    if(stock_name!=''):
-        transfer = transfer.filter(stock__name=stock_name)
-    if(destination!=''):
-        transfer = transfer.filter(destination__name=destination)
+        if(stock_name!=''):
+            transfer = transfer.filter(stock__name=stock_name)
+            if(destination!=''):
+                transfer = transfer.filter(destination__name=destination)
 
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -1063,6 +1159,7 @@ def vendor_report(request):
         sheet.write(row, 0, item.name)
         sheet.write(row, 1, item.address)
         sheet.write(row, 2, item.contact_no)
+        sheet.write(row, 3, item.email)
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=vendor_report.xls'
@@ -1084,10 +1181,11 @@ def donor_report(request):
         sheet.write(row, 0, item.name)
         sheet.write(row, 1, item.address)
         sheet.write(row, 2, item.contact_no)
+        sheet.write(row, 3, item.email)
         mail = {0:'NO', 1:'YES'}
         sheet.write(row, 3, mail[item.mailing])
         referral_types = {'F':'FM 97.2', 'C':'SYCC Client', 'V':'SYCC Volunteer',
-                    'R':'Regular Donor', 'O':'Others'}
+                          'R':'Regular Donor', 'O':'Others'}
         sheet.write(row, 4, referral_types[item.referral])
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
@@ -1106,12 +1204,12 @@ def purchase_order(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            if(end_date!=None):
+                q = q.filter(date__lte=end_date)
 
 
     purchase_list = [Purchase.objects.filter(order=item) for item in q]
-        
+    
     return render(request, 'purchase_order.html',
                   RequestContext(request, {
                       'zip': zip(q, purchase_list),
@@ -1120,9 +1218,15 @@ def purchase_order(request):
 def purchase_order_generate(request, o_id):
     o = Order.objects.get(pk=o_id)
     p = Purchase.objects.filter(order=o)
+    total = sum([purchase.purchase_price() for purchase in p])
+    sub_total = float("%.3f" % (total/1.07))
+    gst = float("%.3f" % (total - sub_total))
     return render(request, 'purchase_order_generate.html',
                   RequestContext(request, {'order': o,
-                                           'purchases':p}))
+                                           'purchases':p,
+                                           'total': total,
+                                           'sub_total': sub_total,
+                                           'gst': gst}))
 
 def thank_you_letter(request):
     start_end_date_form = StartEndDateForm(request.GET or None)
@@ -1132,26 +1236,31 @@ def thank_you_letter(request):
 
     if(donor_name!=''):
         q = q.filter(donor__name=donor_name)
-    
+        
     if(start_end_date_form.is_valid()):
         start_date = start_end_date_form.cleaned_data['start_date']
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-        if(end_date!=None):
-            q = q.filter(date__lte=end_date)
+            if(end_date!=None):
+                q = q.filter(date__lte=end_date)
 
 
     donate_list = [Donate.objects.filter(donation=item) for item in q]
-        
+    
     return render(request, 'thank_you_letter.html',
                   RequestContext(request, {
                       'zip': zip(q, donate_list),
                       'start_end_date_form': start_end_date_form}))
 
 def letter_generate(request, d_id):
+    now = datetime.datetime.now()
     d = Donation.objects.get(pk=d_id)
     q = Donate.objects.filter(donation=d)
+    letter_id = "%s%s%s" % (now.year, now.month, d.pk)
+    
     return render(request, 'thank_you_letter_generate.html',
                   RequestContext(request, {'donation':d ,
+                                           'now': now,
+                                           'letter_id': letter_id,
                                            'donates':q}))

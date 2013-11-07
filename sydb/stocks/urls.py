@@ -12,6 +12,7 @@ urlpatterns = patterns('',
                        url(r'^adjust/$', adjust),
                        url(r'^init/$', initialization),
                        url(r'^history/$', historical_amt),
+                       url(r'^merge_stock/$', merge_stock),
                        #edit
                        url(r'^donation_edit/$', donation_edit),
                        url(r'^d_edit/(?P<d_id>\d+)/$', donate_edit),
