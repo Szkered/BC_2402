@@ -100,17 +100,17 @@ class TransferForm(forms.Form):
     unit_measure = forms.CharField()
     quantity = forms.IntegerField()
     remark = forms.CharField(required=False)
-    now = datetime.datetime.now()
 
     def clean(self):
-        cleaned_data = super(TransferForm, self).clean(now)
+        now = datetime.datetime.now()
+        cleaned_data = super(TransferForm, self).clean()
         quantity = cleaned_data.get('quantity')
         stock = Stock.objects.get(
             name=cleaned_data.get('stock_name'),
             unit_measure=cleaned_data.get('unit_measure')
         )
         
-        if quantity > stock.current_amt():
+        if quantity > stock.current_amt(now):
             raise forms.ValidationError("You don't have that much %s!" % stock.name)
 
         if quantity < 0:

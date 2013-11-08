@@ -783,12 +783,11 @@ def distribution_summary(request):
     stocks = Stock.objects.filter(pk__in=stock_list).order_by('name')
     
     results = [{'stock': stock,
-                'category': stock.category_slug(),
                 'quantity': stock.query_amt(q),
                 'cash_value': stock.query_price(q)} for stock in stocks]
     
     return render(request, 'distribution_summary.html',
-                  RequestContext(request, {'results': results,
+                  RequestContext(request, {'results': q,
                                            'category': request.GET.get('category', ''),
                                            'stock_name': stock_name,
                                            'family_type': family,

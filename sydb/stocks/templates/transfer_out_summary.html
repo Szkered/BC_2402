@@ -4,7 +4,7 @@
 
 {% block autocomplete %}
   {% load static %}
-  <script src="{% static "js/autocomplete_donation.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/autocomplete_destination.js" %}" type="text/javascript"></script>
   <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
 {% endblock %}
 
@@ -18,8 +18,8 @@ Transfer Out Summary
 <div class="header">
 {{start_end_date_form.as_ul}}
 
-<label for="">Vendor name: </label>
-<input type="text" id="id_name" name="vendor_name" value=""/>
+<label for="">Destination: </label>
+<input type="text" id="id_name" name="destination" value=""/>
 
 <label for="">Stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>

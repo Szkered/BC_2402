@@ -4,7 +4,6 @@
 
 {% block autocomplete %}
   {% load static %}
-  <script src="{% static "js/autocomplete_donation.js" %}" type="text/javascript"></script>
   <script src="{% static "js/autocomplete.js" %}" type="text/javascript"></script>
 {% endblock %}
 
@@ -18,8 +17,14 @@ Distribution Summary
 <div class="header">
 {{start_end_date_form.as_ul}}
 
-<label for="">Vendor name: </label>
-<input type="text" id="id_name" name="vendor_name" value=""/>
+<label for="">Family Type: </label>
+<select name="family_type" id="id_family_type">
+    <option value="A">Type A</option>
+    <option value="B">Type B</option>
+    <option value="C">Type C</option>
+    <option value="D">Type D</option>
+    <option value="L">All</option>
+</select>
 
 <label for="">Stock name: </label>
 <input type="text" id="stock_name" name="stock_name" value=""/>
@@ -48,7 +53,7 @@ Distribution Summary
 <Table>
       <tr>
 	<td>{{item.stock}}</td>
-	<td>{{item.category}}</td>
+	<td>{{item.stock.category_slug}}</td>
 	<td>{{item.quantity}}</td>
 	<td>{{item.cash_value}}</td>
       </tr>
