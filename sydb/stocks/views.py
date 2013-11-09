@@ -413,8 +413,8 @@ def donation_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
 
 
     donate_list = [Donate.objects.filter(donation=item) for item in q]
@@ -470,8 +470,8 @@ def order_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
 
 
     purchase_list = [Purchase.objects.filter(order=item) for item in q]
@@ -511,8 +511,8 @@ def transfer_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
 
     if(destination_name!=''):
         q = q.filter(destination__name=destination_name)
@@ -548,8 +548,8 @@ def distribute_edit(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(date__lte=end_date)        
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)        
 
             
     if(family_form.is_valid()):
@@ -700,8 +700,8 @@ def donation_summary(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(donation__date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(donation__date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(donation__date__lte=end_date)
 
     stock_list = [d.stock.pk for d in q]
     stocks = Stock.objects.filter(pk__in=stock_list).order_by('name')
@@ -732,8 +732,8 @@ def purchase_summary(request):
         
     if(stock_name!=''):
         q = q.filter(stock__name=stock_name)
-        if(vendor_name!=''):
-            q = q.filter(vendor__name=vendor_name)
+    if(vendor_name!=''):
+        q = q.filter(vendor__name=vendor_name)
             
 
     if(start_end_date_form.is_valid()):
@@ -741,8 +741,8 @@ def purchase_summary(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(order__date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(order__date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(order__date__lte=end_date)
                 
     return render(request, 'Purchase_summary.html',
                   RequestContext(request, {'purchases': q,
@@ -756,12 +756,12 @@ def distribution_summary(request):
     stock_name = request.GET.get('stock_name', '')
     category = re.split(', | |,', request.GET.get('category', ''))
 
-    if(category==['']):
-        q = Distribute.objects.all().order_by('stock__name')
-    else:
+    q = Distribute.objects.all().order_by('stock__name')
+    
+    if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
-        q = Distribute.objects.filter(pk__in=sList).order_by('stock__name')
+        q = q.filter(pk__in=sList).order_by('stock__name')
         
     if(stock_name!=''):
         q = q.filter(stock__name=stock_name)
@@ -776,8 +776,8 @@ def distribution_summary(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
 
     stock_list = [d.stock.pk for d in q]
     stocks = Stock.objects.filter(pk__in=stock_list).order_by('name')
@@ -787,7 +787,7 @@ def distribution_summary(request):
                 'cash_value': stock.query_price(q)} for stock in stocks]
     
     return render(request, 'distribution_summary.html',
-                  RequestContext(request, {'results': q,
+                  RequestContext(request, {'results': results,
                                            'category': request.GET.get('category', ''),
                                            'stock_name': stock_name,
                                            'family_type': family,
@@ -934,8 +934,8 @@ def stock_summary_report(request):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         stock = stock.filter(pk__in=sList)
-        if(stock_name != ''):
-            stock = stock.filter(name=stock_name)
+    if(stock_name != ''):
+        stock = stock.filter(name=stock_name)
             
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -969,17 +969,17 @@ def donation_report(request):
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
             donation = donation.filter(date__gte=start_date)
-            if(end_date!=None):
-                donation = donation.filter(date__lte=end_date)
+        if(end_date!=None):
+            donation = donation.filter(date__lte=end_date)
 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         donation = donation.filter(pk__in=sList).order_by('stock__name')
-        if(stock_name!=''):
-            donation = donation.filter(stock__name=stock_name)
-            if(donor_name!=''):
-                donation = donation.filter(donor__name=donor_name)      
+    if(stock_name!=''):
+        donation = donation.filter(stock__name=stock_name)
+    if(donor_name!=''):
+        donation = donation.filter(donor__name=donor_name)      
                 
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -990,6 +990,8 @@ def donation_report(request):
 
     row = 0
 
+    donation.exclude(donation__donor__name='init').exclude(donation__donor__name='adjust')
+    
     for item in donation:
         row = row + 1
         sheet.write(row, 0, Donor.objects.get(id = item.donation.donor_id).name)
@@ -1015,18 +1017,18 @@ def purchase_report(request):
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
             purchase = purchase.filter(order__date__gte=start_date)
-            if(end_date!=None):
-                purchase = purchase.filter(order__date__lte=end_date)
+        if(end_date!=None):
+            purchase = purchase.filter(order__date__lte=end_date)
 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         purchase = purchase.filter(pk__in=sList).order_by('stock__name')
-        if(stock_name!=''):
-            purchase = purchase.filter(stock__name=stock_name)
-            if(vendor_name!=''):
-                purchase = purchase.filter(vendor__name=vendor_name)
-                
+    if(stock_name!=''):
+        purchase = purchase.filter(stock__name=stock_name)
+    if(vendor_name!=''):
+        purchase = purchase.filter(vendor__name=vendor_name)
+        
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
@@ -1062,17 +1064,17 @@ def distribution_report(request):
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
             distribute = distribute.filter(date__gte=start_date)
-            if(end_date!=None):
-                distribute = distribute.filter(date__lte=end_date)
+        if(end_date!=None):
+            distribute = distribute.filter(date__lte=end_date)
                 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         distribute = distribute.filter(pk__in=sList).order_by('stock__name')
-        if(stock_name!=''):
-            distribute = distribute.filter(stock__name=stock_name)
-            if(family!=''):
-                distribute = distribute.filter(family=family_type)
+    if(stock_name!=''):
+        distribute = distribute.filter(stock__name=stock_name)
+    if(family!=''):
+        distribute = distribute.filter(family=family_type)
                 
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -1108,17 +1110,17 @@ def transfer_out_report(request):
         end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
         if(start_date!=None):
             transfer = transfer.filter(date__gte=start_date)
-            if(end_date!=None):
-                transfer = transfer.filter(date__lte=end_date)
+        if(end_date!=None):
+            transfer = transfer.filter(date__lte=end_date)
 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
         sList = [c.stock.pk for c in cL]
         transfer = transfer.filter(pk__in=sList).order_by('stock__name')
-        if(stock_name!=''):
-            transfer = transfer.filter(stock__name=stock_name)
-            if(destination!=''):
-                transfer = transfer.filter(destination__name=destination)
+    if(stock_name!=''):
+        transfer = transfer.filter(stock__name=stock_name)
+    if(destination!=''):
+        transfer = transfer.filter(destination__name=destination)
 
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -1128,6 +1130,8 @@ def transfer_out_report(request):
         sheet.write(0, hcol, hcol_data)
 
     row = 0
+
+    transfer.exclude(destination__name='adjust')
 
     for item in transfer:
         row = row + 1
@@ -1203,8 +1207,8 @@ def purchase_order(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
 
 
     purchase_list = [Purchase.objects.filter(order=item) for item in q]
@@ -1241,8 +1245,8 @@ def thank_you_letter(request):
         end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             q = q.filter(date__gte=start_date)
-            if(end_date!=None):
-                q = q.filter(date__lte=end_date)
+        if(end_date!=None):
+            q = q.filter(date__lte=end_date)
 
 
     donate_list = [Donate.objects.filter(donation=item) for item in q]
