@@ -1032,7 +1032,7 @@ def purchase_report(request):
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Vendor', 'Purchased Stock','Unit Measure', 'Price','Quantity','Date']
+    header = ['Vendor', 'Address', 'Email', 'Contact No', 'Contact Person', 'Fax', 'Purchased Stock','Unit Measure', 'Price','Quantity','Date']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
@@ -1040,13 +1040,19 @@ def purchase_report(request):
     
     for item in purchase:
         row = row + 1
-        sheet.write(row, 0, Vendor.objects.get(id = item.order.vendor.id).name)
-        stock = Stock.objects.get(id = item.stock_id)
-        sheet.write(row, 1, item.stock.name)
-        sheet.write(row, 2, item.stock.unit_measure)
-        sheet.write(row, 3, "%.3f" % item.price)
-        sheet.write(row, 4, item.quantity)
-        sheet.write(row, 5, item.order.date.strftime("%Y/%m/%d"))
+        vendor = Vendor.objects.get(id = item.order.vendor.id)
+        sheet.write(row, 0, vendor.name)
+        sheet.write(row, 1, vendor.address)
+        sheet.write(row, 2, vendor.email)
+        sheet.write(row, 3, vendor.contact_no)
+        sheet.write(row, 4, vendor.contact_person_name)
+        sheet.write(row, 5, vendor.fax)
+        
+        sheet.write(row, 6, item.stock.name)
+        sheet.write(row, 7, item.stock.unit_measure)
+        sheet.write(row, 8, "%.3f" % item.price)
+        sheet.write(row, 9, item.quantity)
+        sheet.write(row, 10, item.order.date.strftime("%Y/%m/%d"))
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=Purchase_report.xls'
