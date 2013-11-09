@@ -733,7 +733,7 @@ def purchase_summary(request):
     if(stock_name!=''):
         q = q.filter(stock__name=stock_name)
     if(vendor_name!=''):
-        q = q.filter(vendor__name=vendor_name)
+        q = q.filter(order__vendor__name=vendor_name)
             
 
     if(start_end_date_form.is_valid()):
@@ -963,14 +963,15 @@ def donation_report(request):
     stock_name = request.GET.get('stock_name', '')
     category = re.split(', | |,', request.GET.get('category', ''))
     donation = Donate.objects.all().order_by('stock__name','stock__unit_measure')
+    start_end_date_form = StartEndDateForm(request.GET or None)
     
-    if(request.GET.get('start_date', '')!='' and request.GET.get('end_date', '')!=''):
-        start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
-        end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
-            donation = donation.filter(date__gte=start_date)
+            donation = donation.filter(donation__date__gte=start_date)
         if(end_date!=None):
-            donation = donation.filter(date__lte=end_date)
+            donation = donation.filter(donation__date__lte=end_date)
 
     if(category!=['']):
         cL = Category.objects.filter(name__in=category)
@@ -979,7 +980,7 @@ def donation_report(request):
     if(stock_name!=''):
         donation = donation.filter(stock__name=stock_name)
     if(donor_name!=''):
-        donation = donation.filter(donor__name=donor_name)      
+        donation = donation.filter(donation__donor__name=donor_name)      
                 
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -1011,10 +1012,11 @@ def purchase_report(request):
     stock_name = request.GET.get('stock_name', '')
     category = re.split(', | |,', request.GET.get('category', ''))
     purchase = Purchase.objects.all().order_by('stock__name','stock__unit_measure')
+    start_end_date_form = StartEndDateForm(request.GET or None)
 
-    if(request.GET.get('start_date', '')!='' and request.GET.get('end_date', '')!=''):
-        start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
-        end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             purchase = purchase.filter(order__date__gte=start_date)
         if(end_date!=None):
@@ -1027,7 +1029,7 @@ def purchase_report(request):
     if(stock_name!=''):
         purchase = purchase.filter(stock__name=stock_name)
     if(vendor_name!=''):
-        purchase = purchase.filter(vendor__name=vendor_name)
+        purchase = purchase.filter(order__vendor__name=vendor_name)
         
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -1064,10 +1066,11 @@ def distribution_report(request):
     stock_name = request.GET.get('stock_name', '')
     category = re.split(', | |,', request.GET.get('category', ''))
     distribute = Distribute.objects.all().order_by('stock__name','stock__unit_measure')
+    start_end_date_form = StartEndDateForm(request.GET or None)
 
-    if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
-        start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
-        end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             distribute = distribute.filter(date__gte=start_date)
         if(end_date!=None):
@@ -1080,7 +1083,7 @@ def distribution_report(request):
     if(stock_name!=''):
         distribute = distribute.filter(stock__name=stock_name)
     if(family!=''):
-        distribute = distribute.filter(family=family_type)
+        distribute = distribute.filter(family_type=family)
                 
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
@@ -1110,10 +1113,11 @@ def transfer_out_report(request):
     stock_name = request.GET.get('stock_name', '')
     category = re.split(', | |,', request.GET.get('category', ''))
     transfer = Transfer.objects.all().order_by('stock__name','stock__unit_measure')
+    start_end_date_form = StartEndDateForm(request.GET or None)
 
-    if(request.GET.get('start_date')!='' and request.GET.get('end_date')!=''):
-        start_date = datetime.datetime.strptime(request.GET.get('start_date'), "%b. %d, %Y")
-        end_date = datetime.datetime.strptime(request.GET.get('end_date'), "%b. %d, %Y")
+    if(start_end_date_form.is_valid()):
+        start_date = start_end_date_form.cleaned_data['start_date']
+        end_date = start_end_date_form.cleaned_data['end_date']
         if(start_date!=None):
             transfer = transfer.filter(date__gte=start_date)
         if(end_date!=None):
@@ -1157,7 +1161,7 @@ def vendor_report(request):
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Name', 'Address', 'Contact Number']
+    header = ['Name', 'Address','Contact Person', 'Contact Number','email']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
@@ -1167,8 +1171,9 @@ def vendor_report(request):
         row = row + 1
         sheet.write(row, 0, item.name)
         sheet.write(row, 1, item.address)
-        sheet.write(row, 2, item.contact_no)
-        sheet.write(row, 3, item.email)
+        sheet.write(row, 2, item.contact_person_name)
+        sheet.write(row, 3, item.contact_no)
+        sheet.write(row, 4, item.email)
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=vendor_report.xls'
@@ -1179,7 +1184,7 @@ def donor_report(request):
     book = xlwt.Workbook(encoding='utf8')
     sheet = book.add_sheet('my_sheet')
 
-    header = ['Name', 'Address', 'Contact Number', 'mailing', 'Referral']
+    header = ['Name', 'Address', 'Contact Number','email' ,'mailing', 'Referral']
     for hcol, hcol_data in enumerate(header):
         sheet.write(0, hcol, hcol_data)
 
@@ -1192,10 +1197,10 @@ def donor_report(request):
         sheet.write(row, 2, item.contact_no)
         sheet.write(row, 3, item.email)
         mail = {0:'NO', 1:'YES'}
-        sheet.write(row, 3, mail[item.mailing])
+        sheet.write(row, 4, mail[item.mailing])
         referral_types = {'F':'FM 97.2', 'C':'SYCC Client', 'V':'SYCC Volunteer',
                           'R':'Regular Donor', 'O':'Others'}
-        sheet.write(row, 4, referral_types[item.referral])
+        sheet.write(row, 5, referral_types[item.referral])
         
     response = HttpResponse(mimetype='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=donor_report.xls'
